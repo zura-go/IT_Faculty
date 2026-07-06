@@ -1,670 +1,1060 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ინფორმაციული ტექნოლოგიების ფაკულტეტი - სპეციალიზაციები</title>
-    <style>
-        :root {
-            --primary-color: #1e3a8a;
-            --secondary-color: #3b82f6;
-            --accent-color: #10b981;
-            --bg-color: #f8fafc;
-            --text-color: #1e293b;
-            --card-bg: #ffffff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IT-ის ფაკულტეტი — სპეციალიზაციების სახელმძღვანელო</title>
+<meta name="description" content="IT ფაკულტეტის შვიდი სპეციალიზაციის ინტერაქტიული დახასიათება">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Georgian:wght@500;600;700&family=Noto+Sans+Georgian:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===================== Design tokens ===================== */
+:root{
+  --canvas:#0E2038;
+  --canvas-2:#15304F;
+  --canvas-3:#1C3C60;
+  --grid-line:rgba(255,255,255,0.055);
+  --paper:#F5F7F5;
+  --paper-2:#E8ECE9;
+  --ink:#182430;
+  --ink-soft:#4B5A66;
+  --ink-faint:#7C8991;
+  --brass:#C99A4A;
+  --line:#D8DED9;
+  --shadow: 0 18px 40px -18px rgba(6,14,26,0.55);
+  --radius:16px;
+  --radius-sm:10px;
+  --maxw:920px;
+  --font-head:'Noto Serif Georgian','Noto Serif',serif;
+  --font-body:'Noto Sans Georgian','Noto Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--canvas);
+  color:var(--paper);
+  font-family:var(--font-body);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 44px);
+  pointer-events:none;
+  z-index:0;
+}
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;}
+img,svg{display:block;max-width:100%;}
+button{font-family:inherit;}
+a{color:inherit;}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.3;
-            padding: 10px;
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+::selection{background:var(--brass);color:var(--canvas);}
 
-        .container {
-            width: 100%;
-            max-width: 1250px;
-            margin: auto;
-            background: var(--card-bg);
-            padding: 12px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
+/* focus visibility */
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px;}
 
-        header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 4px;
-        }
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
 
-        header h1 {
-            color: var(--primary-color);
-            font-size: 1.6rem;
-            margin-bottom: 2px;
-        }
+/* ===================== corner marks signature element ===================== */
+.blueprint-frame{position:relative;}
+.blueprint-frame::before,
+.blueprint-frame::after{
+  content:"";
+  position:absolute;
+  width:16px;height:16px;
+  border:2px solid var(--brass);
+  opacity:0.85;
+  pointer-events:none;
+}
+.blueprint-frame::before{top:-2px;left:-2px;border-right:none;border-bottom:none;}
+.blueprint-frame::after{bottom:-2px;right:-2px;border-left:none;border-top:none;}
 
-        header .slogan {
-            color: var(--secondary-color);
-            font-size: 1rem;
-            font-weight: 600;
-            font-style: italic;
-        }
+/* ===================== top bar ===================== */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px clamp(16px,4vw,40px);
+  gap:12px;
+}
+.topbar__brand{
+  font-family:var(--font-mono);
+  letter-spacing:0.08em;
+  font-size:13px;
+  text-transform:uppercase;
+  color:var(--paper);
+  opacity:0.85;
+  display:flex;align-items:center;gap:8px;
+}
+.topbar__brand .dot{width:7px;height:7px;border-radius:50%;background:var(--brass);display:inline-block;}
 
-        .selection-zone {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
+/* ===================== hero ===================== */
+.hero{
+  padding:clamp(20px,6vw,56px) clamp(16px,4vw,40px) clamp(16px,4vw,28px);
+  text-align:center;
+}
+.hero__title{
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:clamp(30px,6vw,54px);
+  line-height:1.08;
+  margin:0 0 10px;
+  color:#FBF9F3;
+  animation:riseIn .7s ease both;
+}
+.hero__slogan{
+  font-family:var(--font-mono);
+  font-size:clamp(13px,2vw,17px);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin:0;
+  animation:riseIn .7s ease .08s both;
+}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
-        @media (max-width: 850px) {
-            .selection-zone {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-        }
+/* ===================== selection screen ===================== */
+.selection{
+  flex:1;
+  padding:8px clamp(16px,4vw,40px) 40px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  max-width:1180px;
+  width:100%;
+  margin:0 auto;
+}
+.panels{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+@media (max-width:820px){
+  .panels{grid-template-columns:1fr;}
+}
+.panel{
+  background:var(--canvas-2);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:var(--radius);
+  padding:18px 18px 20px;
+}
+.panel__head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.panel__title{
+  font-family:var(--font-head);
+  font-size:clamp(17px,2.4vw,21px);
+  margin:0;
+  color:#FBF9F3;
+}
+.panel__hint{
+  font-size:12.5px;
+  color:rgba(245,247,245,0.55);
+  margin:2px 0 0;
+}
+.panel__all{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  background:transparent;
+  color:var(--brass);
+  border:1px solid rgba(201,154,74,0.55);
+  padding:6px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:background .15s, color .15s;
+  white-space:nowrap;
+}
+.panel__all:hover{background:var(--brass);color:var(--canvas);}
+.panel__all[aria-pressed="true"]{background:var(--brass);color:var(--canvas);}
 
-        .panel {
-            background: #f1f5f9;
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
+.chipgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(150px,1fr));
+  gap:10px;
+}
+.chip{
+  position:relative;
+  display:block;
+  cursor:pointer;
+}
+.chip input{
+  position:absolute;
+  opacity:0;
+  width:1px;height:1px;
+  pointer-events:none;
+}
+.chip__body{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid rgba(255,255,255,0.14);
+  border-radius:var(--radius-sm);
+  padding:10px 12px;
+  transition:border-color .15s, background .15s, transform .1s;
+  min-height:56px;
+}
+.chip:hover .chip__body{border-color:rgba(255,255,255,0.32);}
+.chip input:focus-visible + .chip__body{outline:2px solid var(--brass);outline-offset:2px;}
+.chip input:checked + .chip__body{
+  background:color-mix(in srgb, var(--accent, var(--brass)) 22%, var(--canvas-2));
+  border-color:var(--accent, var(--brass));
+}
+.chip__mark{
+  flex:0 0 auto;
+  width:28px;height:28px;
+  border-radius:8px;
+  background:var(--accent, var(--brass));
+  color:#fff;
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.chip__mark .check{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent, var(--brass));
+  border-radius:8px;
+  opacity:0;
+  transform:scale(.6);
+  transition:opacity .12s, transform .12s;
+}
+.chip input:checked ~ .chip__body .chip__mark .check{opacity:1;transform:scale(1);}
+.chip__text{min-width:0;flex:1;}
+.chip__short{
+  display:none;
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:13px;
+  color:#FBF9F3;
+  align-items:center;
+  gap:6px;
+}
+.chip__full{
+  display:block;
+  font-size:13.5px;
+  line-height:1.3;
+  color:rgba(245,247,245,0.92);
+}
+.chip__infoicon{
+  font-family:var(--font-mono);
+  font-size:10px;
+  width:15px;height:15px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.5);
+  display:inline-flex;align-items:center;justify-content:center;
+  opacity:0.75;
+}
 
-        .panel h3 {
-            color: var(--primary-color);
-            margin-bottom: 6px;
-            font-size: 0.95rem;
-            border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 3px;
-        }
+/* narrow screens: show short codes + tap-to-reveal tooltip, hide full text */
+@media (max-width:680px){
+  .chip__full{display:none;}
+  .chip__short{display:inline-flex;}
+}
 
-        .all-toggle {
-            margin-bottom: 6px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+/* CTA */
+.cta-row{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:10px 0 4px;
+}
+.cta{
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:clamp(17px,2.6vw,21px);
+  background:var(--brass);
+  color:#1B140A;
+  border:none;
+  padding:15px 38px;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:transform .12s, box-shadow .12s, opacity .12s;
+}
+.cta:hover:not(:disabled){transform:translateY(-2px);}
+.cta:disabled{opacity:0.35;cursor:not-allowed;box-shadow:none;}
+.cta-hint{
+  font-size:12.5px;
+  color:rgba(245,247,245,0.55);
+  min-height:16px;
+}
 
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+/* ===================== tooltip ===================== */
+.tooltip{
+  position:fixed;
+  z-index:60;
+  max-width:min(280px, 80vw);
+  background:#FBF9F3;
+  color:var(--ink);
+  font-size:13px;
+  line-height:1.4;
+  padding:10px 12px;
+  border-radius:10px;
+  box-shadow:0 12px 30px -10px rgba(0,0,0,0.5);
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(4px);
+  transition:opacity .12s, transform .12s;
+}
+.tooltip.show{opacity:1;transform:none;}
+.tooltip::after{
+  content:"";
+  position:absolute;
+  top:-5px;left:16px;
+  width:10px;height:10px;
+  background:#FBF9F3;
+  transform:rotate(45deg);
+}
+.tooltip.arrow-top::after{top:auto;bottom:-5px;transform:rotate(225deg);}
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            padding: 4px 8px;
-            border-radius: 5px;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-size: 0.88rem;
-        }
+/* ===================== priority modal ===================== */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(6,12,22,0.72);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  z-index:80;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s;
+}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal{
+  background:var(--canvas-2);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius);
+  max-width:640px;width:100%;
+  padding:26px clamp(18px,4vw,32px) 28px;
+  position:relative;
+  transform:translateY(10px);
+  transition:transform .18s;
+}
+.modal-overlay.open .modal{transform:none;}
+.modal__close{
+  position:absolute;top:14px;right:16px;
+  background:none;border:none;color:rgba(245,247,245,0.6);
+  font-size:20px;cursor:pointer;line-height:1;padding:4px;
+}
+.modal__close:hover{color:#fff;}
+.modal__title{
+  font-family:var(--font-head);
+  font-size:clamp(18px,3vw,23px);
+  margin:0 0 6px;
+  color:#FBF9F3;
+  padding-right:24px;
+}
+.modal__sub{
+  font-size:13.5px;
+  color:rgba(245,247,245,0.6);
+  margin:0 0 20px;
+}
+.modal__options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media (max-width:560px){
+  .modal__options{grid-template-columns:1fr;}
+}
+.modal__option{
+  text-align:left;
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid rgba(255,255,255,0.15);
+  border-radius:var(--radius-sm);
+  padding:16px;
+  cursor:pointer;
+  color:var(--paper);
+  transition:border-color .15s, background .15s;
+}
+.modal__option:hover{border-color:var(--brass);background:rgba(201,154,74,0.1);}
+.modal__option-title{
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:13.5px;
+  letter-spacing:0.03em;
+  color:var(--brass);
+  margin:0 0 6px;
+  text-transform:uppercase;
+}
+.modal__option-desc{
+  font-size:13px;
+  line-height:1.45;
+  color:rgba(245,247,245,0.82);
+  margin:0;
+}
 
-        .checkbox-item:hover {
-            border-color: var(--secondary-color);
-            background: #f8fafc;
-        }
+/* ===================== viewer screen ===================== */
+.viewer{
+  flex:1;
+  display:none;
+  flex-direction:column;
+  padding:0 clamp(14px,4vw,40px) 30px;
+  max-width:var(--maxw);
+  width:100%;
+  margin:0 auto;
+}
+.viewer.active{display:flex;}
+.viewer__bar{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 0 10px;
+}
+.restart-btn{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.04em;
+  background:none;
+  border:1px solid rgba(255,255,255,0.25);
+  color:rgba(245,247,245,0.85);
+  padding:7px 13px;
+  border-radius:999px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:border-color .15s, color .15s;
+}
+.restart-btn:hover{border-color:var(--brass);color:var(--brass);}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:10px;}
+.progress-track{
+  flex:1;height:4px;background:rgba(255,255,255,0.14);border-radius:4px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:var(--brass);border-radius:4px;
+  transition:width .25s ease;
+}
+.progress-count{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:rgba(245,247,245,0.65);
+  white-space:nowrap;
+}
 
-        /* ადაპტური წესები განიერი და ვიწრო ეკრანებისთვის */
-        .text-full {
-            display: block;
-        }
+.viewer__header{
+  display:flex;flex-wrap:wrap;
+  align-items:center;
+  gap:10px 14px;
+  padding:10px 0 18px;
+}
+.badge{
+  position:relative;
+  display:inline-flex;align-items:center;gap:8px;
+  border-radius:999px;
+  padding:8px 14px 8px 8px;
+  cursor:default;
+  border:1.5px solid rgba(255,255,255,0.16);
+  background:rgba(255,255,255,0.04);
+}
+.badge__dot{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--accent,var(--brass));
+  color:#fff;font-family:var(--font-mono);font-weight:700;font-size:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex:0 0 auto;
+}
+.badge__label-full{
+  font-family:var(--font-head);
+  font-size:15px;
+  color:#FBF9F3;
+}
+.badge__label-short{
+  display:none;
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:13px;
+  color:#FBF9F3;
+  align-items:center;gap:5px;
+}
+@media (max-width:680px){
+  .badge__label-full{display:none;}
+  .badge__label-short{display:inline-flex;}
+  .badge{cursor:pointer;}
+}
+.badge__sep{color:rgba(245,247,245,0.35);font-family:var(--font-head);font-size:18px;}
 
-        .text-short-container {
-            display: none;
-        }
+.content-card{
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:clamp(20px,4vw,34px) clamp(20px,4vw,38px);
+  box-shadow:var(--shadow);
+  flex:1;
+  min-height:220px;
+}
+.block{margin:0 0 20px;}
+.block:last-child{margin-bottom:0;}
+.block__label{
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin:0 0 6px;
+  display:block;
+}
+.block p{
+  margin:0 0 10px;
+  font-size:clamp(15px,1.7vw,16.5px);
+  line-height:1.65;
+}
+.block p:last-child{margin-bottom:0;}
+.block--quote{
+  border-left:3px solid var(--brass);
+  padding:4px 0 4px 16px;
+}
+.block--quote p{
+  font-style:italic;
+  color:var(--ink-soft);
+}
+.block--aside p{
+  font-style:italic;
+  color:var(--ink-faint);
+  font-size:14px;
+}
+.block ul{
+  margin:0;padding:0 0 0 20px;
+}
+.block li{
+  font-size:clamp(15px,1.7vw,16.5px);
+  line-height:1.6;
+  margin-bottom:8px;
+}
+.block li:last-child{margin-bottom:0;}
+.content-card__fade{animation:fadeUp .28s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
-        @media (max-width: 768px) {
-            .checkbox-group {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 4px;
-            }
+.viewer__nav{
+  display:flex;
+  gap:12px;
+  padding:20px 0 6px;
+}
+.nav-btn{
+  flex:1;
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:15px;
+  background:var(--canvas-2);
+  color:#FBF9F3;
+  border:1.5px solid rgba(255,255,255,0.18);
+  padding:13px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:border-color .15s, background .15s, opacity .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.nav-btn:hover:not(:disabled){border-color:var(--brass);}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.nav-btn .arrow{font-family:var(--font-mono);}
 
-            .text-full {
-                display: none;
-            }
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
 
-            .text-short-container {
-                display: block;
-                position: relative;
-                cursor: pointer;
-                width: 100%;
-            }
+footer.credit{
+  text-align:center;
+  font-size:11.5px;
+  color:rgba(245,247,245,0.35);
+  padding:10px 0 26px;
+}
 
-            .text-short-container .tooltiptext {
-                visibility: hidden;
-                width: 240px;
-                background-color: #334155;
-                color: #ffffff;
-                text-align: left;
-                border-radius: 6px;
-                padding: 10px;
-                position: absolute;
-                z-index: 999;
-                bottom: 130%;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 0;
-                transition: opacity 0.2s ease-in-out;
-                font-size: 0.85rem;
-                font-weight: normal;
-                line-height: 1.3;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                pointer-events: none;
-            }
-
-            .text-short-container:hover .tooltiptext,
-            .text-short-container:active .tooltiptext {
-                visibility: visible;
-                opacity: 1;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        /* ვერტიკალური სტაბილიზაცია (მყარად ფიქსირებული სიმაღლეები) */
-        /* ----------------------------------------------------------------- */
-        
-        /* ნაგულისხმევი ფიქსირებული სიმაღლე კომპიუტერის FullHD რეჟიმისთვის */
-        .view-card {
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            height: 380px; /* ფიქსირებული სიმაღლე - ღილაკები ადგილს არასდროს შეიცვლიან */
-            overflow-y: auto;
-        }
-
-        /* ფიქსირებული სიმაღლე 1366 x 768 ლეპტოპის ეკრანებისთვის */
-        @media (max-height: 780px) {
-            body { padding: 4px; }
-            .container { padding: 8px 16px; }
-            header { margin-bottom: 6px; padding-bottom: 2px; }
-            header h1 { font-size: 1.35rem; }
-            header .slogan { font-size: 0.88rem; }
-            .selection-zone { gap: 10px; margin-bottom: 6px; }
-            .panel { padding: 6px 10px; }
-            .panel h3 { font-size: 0.85rem; margin-bottom: 4px; }
-            .all-toggle { font-size: 0.8rem; margin-bottom: 4px; }
-            .checkbox-item { padding: 2px 6px; font-size: 0.82rem; gap: 6px; }
-            .action-zone { margin-top: 4px; }
-            
-            .view-card { 
-                padding: 10px 15px; 
-                margin-bottom: 8px; 
-                height: 240px; /* შემცირებული ფიქსირებული სიმაღლე ლეპტოპისთვის */
-            }
-            .view-content-text { font-size: 0.98rem; }
-        }
-
-        /* ფიქსირებული სიმაღლე მობილური მოწყობილობებისთვის */
-        @media (max-width: 768px) {
-            .view-card {
-                height: 320px; /* ფიქსირებული სიმაღლე სმარტფონებისა და ტაბლეტებისთვის */
-            }
-        }
-
-        .action-zone {
-            text-align: center;
-            margin-top: 8px;
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 8px 22px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .btn:hover {
-            background-color: var(--secondary-color);
-        }
-
-        /* მოდალური ფანჯარა */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .modal-content h4 { font-size: 1.1rem; margin-bottom: 15px; }
-        .modal-btns { display: flex; gap: 10px; justify-content: center; }
-        .btn-alt { background-color: #64748b; }
-        .btn-alt:hover { background-color: #475569; }
-
-        /* საპრეზენტაციო ეკრანი */
-        .presentation-zone {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .view-title-box {
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #f1f5f9;
-        }
-
-        /* ორსტრიქონიანი სათაურების სტილები */
-        .title-line-1 {
-            font-size: 1.3rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            display: block;
-        }
-
-        .title-line-2 {
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-            font-weight: 600;
-            margin-top: 3px;
-            display: block;
-        }
-
-        @media (max-height: 780px) {
-            .title-line-1 { font-size: 1.15rem; }
-            .title-line-2 { font-size: 1rem; }
-        }
-
-        @media (max-width: 768px) {
-            .title-line-1, .title-line-2 {
-                border-bottom: 1px dashed var(--secondary-color);
-                display: inline-block;
-            }
-            .title-line-2 { margin-top: 1px; }
-        }
-
-        /* ტექსტის ავტომატური ჰიფენაცია დეფისით */
-        .view-content-text {
-            font-size: 1.05rem;
-            color: var(--text-color);
-            white-space: pre-line;
-            text-align: justify;
-            hyphens: auto;
-            -webkit-hyphens: auto;
-            -ms-hyphens: auto;
-            overflow-wrap: break-word;
-            word-break: break-word;
-        }
-
-        /* ----------------------------------------------------------------- */
-        /* ჰორიზონტალური სტაბილიზაცია (სამსვეტიანი მყარი ბადე) */
-        /* ----------------------------------------------------------------- */
-        .nav-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* ყოველთვის მკაცრად 3 თანაბარი სვეტი */
-            gap: 10px;
-            width: 100%;
-        }
-
-        .nav-controls .btn {
-            width: 100%;
-            padding: 10px 5px;
-            font-size: 0.9rem;
-            text-align: center;
-            white-space: nowrap; /* ტექსტის ერთ ხაზზე შენარჩუნება */
-        }
-
-        /* ღილაკების ზომის კორექცია მცირე მოწყობილობებისთვის გადაადგილების თავიდან ასაცილებლად */
-        @media (max-width: 600px) {
-            .nav-controls {
-                gap: 6px;
-            }
-            .nav-controls .btn {
-                font-size: 0.76rem;
-                padding: 8px 2px;
-            }
-        }
-        /* ----------------------------------------------------------------- */
-    </style>
+</style>
 </head>
 <body>
+<div class="app">
 
-<div class="container">
-    <header id="mainHeader">
-        <h1>ინფორმაციული ტექნოლოგიების ფაკულტეტი</h1>
-        <div class="slogan">ვირჩევთ მომავალს!</div>
-    </header>
+  <div class="topbar">
+    <div class="topbar__brand"><span class="dot"></span> IT ფაკულტეტი</div>
+  </div>
 
-    <div class="selection-zone" id="selectionZone">
-        <div class="panel">
-            <h3>ავირჩიოთ სპეციალიზაციებიდან გასაცნობად!</h3>
-            <label class="all-toggle">
-                <input type="checkbox" id="allSpecs" onchange="toggleAll('specs')"> ყველა სპეციალიზაცია
-            </label>
-            <div class="checkbox-group" id="specsGroup"></div>
+  <div id="heroBlock">
+    <div class="hero">
+      <h1 class="hero__title">IT-ის ფაკულტეტი</h1>
+      <p class="hero__slogan">ვირჩევთ მომავალს!</p>
+    </div>
+  </div>
+
+  <main id="selectionScreen" class="selection">
+    <div class="panels">
+
+      <section class="panel" aria-labelledby="specPanelTitle">
+        <div class="panel__head">
+          <div>
+            <h2 class="panel__title" id="specPanelTitle">სპეციალიზაციები</h2>
+            <p class="panel__hint">ავირჩიოთ, რომელი სპეციალიზაცია გვაინტერესებს — ერთი, რამდენიმე ან ყველა</p>
+          </div>
+          <button type="button" class="panel__all" id="specAll" aria-pressed="false">ყველა</button>
         </div>
+        <div class="chipgrid" id="specGrid"></div>
+      </section>
 
-        <div class="panel">
-            <h3>ავირჩიოთ სპეციალიზაციების აღწერებიდან!</h3>
-            <label class="all-toggle">
-                <input type="checkbox" id="allSections" onchange="toggleAll('sections')"> ყველა სექცია
-            </label>
-            <div class="checkbox-group" id="sectionsGroup"></div>
+      <section class="panel" aria-labelledby="sectionPanelTitle">
+        <div class="panel__head">
+          <div>
+            <h2 class="panel__title" id="sectionPanelTitle">აღწერის სექციები</h2>
+            <p class="panel__hint">ავირჩიოთ, რომელი კუთხით გვაინტერესებს დახასიათება — ერთი, რამდენიმე ან ყველა</p>
+          </div>
+          <button type="button" class="panel__all" id="sectionAll" aria-pressed="false">ყველა</button>
         </div>
+        <div class="chipgrid" id="sectionGrid"></div>
+      </section>
+
     </div>
 
-    <div class="action-zone" id="actionZone">
-        <button class="btn" onclick="startPresentation()">„აბა ვნახოთ!“</button>
+    <div class="cta-row">
+      <button type="button" class="cta" id="goBtn" disabled>აბა ვნახოთ!</button>
+      <p class="cta-hint" id="goHint">აირჩიეთ სულ ცოტა ერთი სპეციალიზაცია და ერთი სექცია</p>
+    </div>
+  </main>
+
+  <section id="viewerScreen" class="viewer" aria-live="polite">
+    <div class="viewer__bar">
+      <button type="button" class="restart-btn" id="restartBtn">↺ ავირჩიოთ თავიდან</button>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-count" id="progressCount">1 / 1</span>
+      </div>
     </div>
 
-    <div class="modal" id="priorityModal">
-        <div class="modal-content">
-            <h4>პრიორიტეტულად განვიხილოთ:</h4>
-            <div class="modal-btns">
-                <button class="btn" onclick="setPriority('specs')">სპეციალიზაციები</button>
-                <button class="btn btn-alt" onclick="setPriority('sections')">აღმწერი სექციები</button>
-            </div>
-        </div>
+    <div class="viewer__header">
+      <span class="badge" id="specBadge" tabindex="0">
+        <span class="badge__dot"></span>
+        <span class="badge__label-full"></span>
+        <span class="badge__label-short"><span class="txt"></span><span class="chip__infoicon">i</span></span>
+      </span>
+      <span class="badge__sep">·</span>
+      <span class="badge" id="sectionBadge" tabindex="0">
+        <span class="badge__dot"></span>
+        <span class="badge__label-full"></span>
+        <span class="badge__label-short"><span class="txt"></span><span class="chip__infoicon">i</span></span>
+      </span>
     </div>
 
-    <div class="presentation-zone" id="presentationZone">
-        <div class="view-card">
-            <div class="view-title-box">
-                <div class="text-full">
-                    <span class="title-line-1" id="pageTitleFullDisplay1">სპეციალიზაცია</span>
-                    <span class="title-line-2" id="pageTitleFullDisplay2">აღწერის სექცია</span>
-                </div>
-                
-                <div class="text-short-container">
-                    <span class="title-line-1" id="pageTitleShortDisplay1">მოკლე სპეციალიზაცია</span>
-                    <span class="title-line-2" id="pageTitleShortDisplay2">მოკლე სექცია</span>
-                    <span class="tooltiptext" id="pageTitleTooltip">სრული სათაური აღწერით</span>
-                </div>
-            </div>
-            <div class="view-content-text" id="pageContent"></div>
-        </div>
+    <div class="content-card blueprint-frame" id="contentCard"></div>
 
-        <div class="nav-controls">
-            <button class="btn btn-alt" id="prevBtn" onclick="navigate(-1)">„წინა აღწერა“</button>
-            <button class="btn" id="resetBtn" onclick="resetApp()">„ავირჩიოთ თავიდან“</button>
-            <button class="btn" id="nextBtn" onclick="navigate(1)">„შემდეგი აღწერა“</button>
-        </div>
+    <div class="viewer__nav">
+      <button type="button" class="nav-btn" id="prevBtn"><span class="arrow">&larr;</span> წინა აღწერა</button>
+      <button type="button" class="nav-btn" id="nextBtn">შემდეგი აღწერა <span class="arrow">&rarr;</span></button>
     </div>
+  </section>
+
+  <footer class="credit">IT ფაკულტეტი &middot; სპეციალიზაციების სახელმძღვანელო</footer>
 </div>
 
-<script>
-    const specialtiesData = {
-        "DS": {
-            short: "DS",
-            full: "DS (Data Science) — მონაცემთა მეცნიერება",
-            sections: {
-                1: "მე ვარ მონაცემთა მეცნიერი — ვმუშაობ დაუმუშავებელ, ხშირად ქაოტურ მონაცემებთან და მათგან გამოვყოფ ნიმუშებს, რომლებიც ბიზნესსა ან საზოგადოებას რეალურ გადაწყვეტილებებში ეხმარება. ჩემი იარაღია სტატისტიკა, მანქანური სწავლება და დიდი მონაცემების დამუშავების ტექნოლოგიები.\nმარტივად: მე „გადავთარგმნი“ რიცხვებს ისეთ ისტორიად, რომელსაც ორგანიზაცია გადაწყვეტილებების მისაღებად გამოიყენებს.",
-                2: "ცენტრალური კითხვა: რა ამბავს მოგვითხრობს ერთი შეხედვით ქაოტური მონაცემები და როგორ ავაგო მოდელი, რომელიც მომავალს იწინასწარმეტყველებს?\nშედარებითი პოზიციონირება: IS&BT-ის სტუდენტისგან განსხვავებით, რომელიც ბიზნეს პროცესს აწესრიგებს არსებული სისტემების დონეზე, DS-ის სტუდენტს არ აკმაყოფილებს არსებული პროცესები, აანალიზებს და მონაცემებიდან ახალ ცოდნას აგენერირებს, ქმნის მოდელს სისტემის სრულყოფისთვის. თანამედროვე ეტაპზე ხელოვნური ინტელექტის და დიდი ენობრივი მოდელების აგენტებსა და AutoML ხელსაწყოებს შეუძლიათ მონაცემთა საძიებო ანალიზი და მოდელის შეარჩევის ავტომატიზაცია, რის გამოც DS-ის სტუდენტის ღირებულება სულ უფრო გადადის ჰიპოთეზის ფორმულირებაზე, მონაცემთა ხარისხის კრიტიკულ შეფასებაზე და მიზეზ-შედეგობრივი დასკვნის გამოტანაზე.",
-                3: "ძირეული ამოცანები: მონაცემთა „დასუფთავება“ და ანალიზისთვის მომზადება, სტატისტიკური ანალიზი, მანქანური სწავლების მოდელების შემუშავება და ვალიდაცია, შედეგების ვიზუალიზაცია გადაწყვეტილების მიმღებებისთვის.\nგაფართოებული ამოცანები: დიდი მონაცემების დამუშავების არქიტექტურები, ღრმა სწავლება რთული ნიმუშების ამოცნობისთვის, A/B ტესტირება და მიზეზობრივი დასკვნა ბიზნეს გადაწყვეტილებებში. აგრეთვე კოდირების ხელოვნური ინტელექტის ასისტენტების (მაგალითად Claude Code, OpenAI Сodex ან ანალოგების) გამოყენება მონაცემთა დასუფთავების, მათი თავისებურების გენერირებისა და ანალიზის ავტომატიზაციისთვის, ასევე დიდი ენობრივი მოდელების ბაზაზე დაფუძნებული ანალიტიკური აგენტების ორქესტრირება რთული, მრავალეტაპიანი კვლევითი სამუშაოსთვის.\nსისტემური კონტექსტი: DS-ის სპეციალისტი მუშაობს პროდუქტის, ანალიტიკის ან კვლევის გუნდის ნაწილად — მისი მუშაობის შედეგები კვებავს ბიზნეს სტრატეგიის, საინჟინრო გუნდის ან მკვლევართა ჯგუფის გადაწყვეტილებებს.",
-                4: "საქმიანობის ტიპი: DS-ის სპეციალისტი იკვლევს და აანალიზებს — ის მუშაობს ჰიპოთეზის ფორმულირებიდან მის ემპირიულ შემოწმებამდე.\nაზროვნების ტიპი: ალბათური და სტატისტიკური აზროვნება — ყოველი დასკვნა ხასიათდება გაურკვევლობით, რომელსაც DS-ის სპეციალისტი ციფრებში ზომავს და ანგარიშგებაში გამჭვირვალედ წარმოაჩენს. ხელოვნური ინტელექტის ხელსაწყოების გავრცელებასთან ერთად მზარდი მნიშვნელობა ენიჭება შეფასებით აზროვნებას — ხელოვნური ინტელექტის მიერ გენერირებული მოდელის თუ დასკვნის სტატისტიკური სანდოობის, მიკერძოების და მცდარი ან ჰალუცინირებული დასკვნების კრიტიკული გადამოწმების უნარს.",
-                5: "მანქანური სწავლების მოდელი ან მოდელების ნაკრები პროცესების იმიტაციისთვის; ანალიტიკური პანელი ან ანგარიში, რომელიც ბიზნეს გადაწყვეტილებას ამყარებს; მონაცემთა დამუშავების კონვეიერი, რომელიც დაუმუშავებელ მონაცემებს გამორჩეული სახით და გამოსადეგ ფორმატში გარდაქმნის.",
-                6: "საწყისი წერტილი: DS-ის სპეციალისტს აბარებენ ბიზნესის კვლევით ამოცანებს და ხშირად დაუმუშავებელ, არასტრუქტურირებულ მონაცემებს.\nსაბოლოო წერტილი: ის გადასცემს ვალიდირებულ მოდელს, დასკვნას ან ვიზუალიზებულ ანგარიშს, რომელზეც გადაწყვეტილების მიმღები პერსონა ან ინჟინერი დააფუძნებს შემდეგ ნაბიჯებს.\nპასუხისმგებლობის ცენტრი: მონაცემებზე დაფუძნებული დასკვნის სიზუსტე და სანდოობა — DS-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ აგებული მოდელების შედეგებს და რჩევებს შეცდომაში არ შეყავდეს გადაწყვეტილების მიმღები.",
-                7: "ტიპიური პოზიციები: Junior Data Analyst/Junior Data Scientist-დან Mid Data Scientist-მდე, შემდეგ Senior, Lead და Staff/Principal დონეებამდე — ასევე სპეციალიზებული როლები: Machine Learning Engineer, Data Engineer და Research Scientist.\nინდუსტრიები და კონტექსტები: საფინანსო სექტორი, ჯანდაცვა, ელექტრონული კომერცია, მარკეტინგი, ლოგისტიკა და სამეცნიერო კვლევები.\nგანვითარების ტრაექტორია: Junior დონეზე მთავარი ამოცანაა მონაცემთა მომზადება და ბაზისური ანალიზი; AutoML-ისა და ხელოვნური ინტელექტის ანალიტიკური ასისტენტების გავრცელებასთან ერთად, აქცენტი თანდათან გადადის ჰიპოთეზის ფორმულირებასა და გენერირებული შედეგების კრიტიკულ შეფასებაზე. Mid-level ეტაპზე სტუდენტი დამოუკიდებლად ატარებს კვლევას ბოლომდე; Senior და მეტადრე Lead დონეზე იღებს მეთოდოლოგიურ გადაწყვეტილებებს; შემდგომში კარიერა იშლება ტექნიკურ ექსპერტიზაში ან მენეჯერულ მიმართულებაში."
-            }
-        },
-        "IS&BT": {
-            short: "IS&BT",
-            full: "IS&BT (Information Systems & Business Tech) — ინფორმაციული სისტემები და ბიზნეს ტექნოლოგიები",
-            sections: {
-                1: "მე ვარ ხიდი ბიზნესსა და ტექნოლოგიას შორის — ვაანალიზებ, როგორ მუშაობს ორგანიზაცია და ვაგებ ან ვაწესრიგებ ციფრულ სისტემებს, რომლებიც მის პროცესებს მართავენ. ჩემი სამუშაოა ERP, CRM და სხვა არსებული კორპორაციული სისტემების კონფიგურირება, ინტეგრირება და მართვა. აგრეთვე ჩემი სამუშაოა ახალი პროგრამული პროდუქტის ინიციირება ორგანიზაციის საკეთილდღეოდ.\nმარტივად: მე ვაქცევ ბიზნესის ამოცანებს მოწესრიგებულ ციფრულ სისტებად.",
-                2: "ცენტრალური კითხვა: როგორ უნდა მოეწყოს არსებული ბიზნეს პროცესი ციფრულ სისტემაში, რომ ის ეფექტური, მართვადი და მასშტაბირებადი იყოს?\nშედარებითი პოზიციონირება: SE-ის სტუდენტისგან განსხვავებით, რომელიც ახალ პროგრამულ პროდუქტს აგებს ნულიდან, IS&BT-ის სტუდენტი ხშირად მუშაობს მზა კორპორაციულ სისტემებთან — მისი ფოკუსია არა კოდირება, არამედ პროცესების მოდელის დაზუსტება. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან ახალი ცოდნის გამოყვანაზე. თანამედროვე კორპორაციული სისტემები თავადვე იყენებენ ჩაშენებულ ხელოვნური ინტელექტის აგენტებს (მაგალითად Microsoft Dynamics Copilot, Salesforce Agentforce, SAP Joule) — შესაბამისად, IS&BT-ის სპეციალისტის ამოცანაა ამ ჩაშენებული ფუნქციების ბიზნეს ლოგიკასთან შეფარდების კონტროლი.",
-                3: "ძირეული ამოცანები: ბიზნესის მხარესგან მოთხოვნების შეგროვება, ბიზნეს პროცესების მოდელების მომზადება იმპლემენტაციისთვის, ERP/CRM სისტემების კონფიგურირება და ინტეგრირება, ადამიან-კომპიუტერის ურთიერთქმედების და სამომხმარებლო გამოცდილების დიზაინის შექმნა, მოთხოვნების „თარგმნა“ ტექნიკური გუნდისთვის.\nგაფართოებული ამოცანები: კომპანიის პროექტების მენეჯმენტი, არსებული სისტემის ციფრული ტრანსფორმაციის სტრატეგია, მონაცემთა მმართველობა კორპორაციის დონეზე. აგრეთვე მოწინავე კომპანიაში ან საწარმოში ხელოვნური ინტელექტის გამოყენების მმართველობის დანერგვა.\nსისტემური კონტექსტი: IS&BT-ის სპეციალისტი მუშაობს ორგანიზაციის საინფორმაციო ტექნოლოგიების და ბიზნეს განყოფილებების გადასაკვეთზე — მისი გადაწყვეტილებები პირდაპირ ეხება კომპანიის ოპერაციულ ეფექტურობას.",
-                4: "საქმიანობის ტიპი: IS&BT-ის სპეციალისტი აანალიზებს და აპროექტებს — ის ბიზნეს მოთხოვნას სისტემურ გადაწყვეტაში გარდაქმნის.\nაზროვნების ტიპი: სისტემური აზროვნება — ორგანიზაცია ერთიან, ერთმანეთზე დამოკიდებულ პროცესთა ქსელად ესახება. სისტემაში ხელოვნური ინტელექტის აგენტების ჩასმასთან ერთად სისტემური აზროვნება მოიცავს იმასაც, თუ როგორ ცვლის ერთი ავტომატიზებული გადაწყვეტილება მთლიანი პროცესის ქცევას.",
-                5: "პროექტის გეგმა ან ციფრული ტრანსფორმაციის სტრატეგია; კონფიგურირებული ან ინტეგრირებული კორპორაციული სისტემა; ბიზნეს პროცესების მოდელირების დიაგრამა; სამომხმარებლო ინტერფეისის დიზაინის სქემა; ტექნიკური დავალება, რომელსაც Software Engineer-ი იღებს პროგრამული უზრუნველყოფის შესაქმნელად.",
-                6: "საწყისი წერტილი: IS&BT-ის სპეციალისტი ჩაიბარებს არაოპტიმალურ ბიზნეს პროცესებს ან მათ არაფორმალურ აღწერას და ბიზნეს მხარის მოთხოვნებს.\nსაბოლოო წერტილი: გადასცემს მუშა, კონფიგურირებულ სისტემას ან ტექნიკურ დავალებას ახალი პროგრამული პროდუქტის ასაგებად.\nპასუხისმგებლობის ცენტრი: ბიზნეს ლოგიკისა და ტექნოლოგიური გადაწყვეტის შესაბამისობა — ის პირადად აგებს პასუხს იმაზე, რომ სისტემა ნამდვილად ემსახურებოდეს ბიზნესის მიზანს.",
-                7: "ტიპიური პოზიციები: Junior Business/Systems Analyst-დან Mid და Senior დონემდე, გადაწყვეტების არქიტექტორის და საინფორმაციო ტექნოლოგიების მენეჯერის ან დირექტორის როლებამდე. აგრეთვე: ERP/CRM Consultant, Product Owner.\nინდუსტრიები: საბანკო და დაზღვევის Sექტორი, საცალო ვაჭრობა, წარმოება, საჯარო სექტორი და კონსალტინგური კომპანიები.\nგანვითარების ტრაექტორია: Junior დონეზე ძირეული ამოცანაა მოთხოვნების ანალიზი; ხელოვნური ინტელექტის აგენტებით აღჭურვილ სისტემებში სტუდენტისგან სულ უფრო ადრე მოითხოვება ჩაშენებული ფუნქციების კონფიგურირება; Mid-level ეტაპზე გადადის პროექტების მართვაზე; Senior დონეზე — საწარმოს მასშტაბის არქიტექტურაზე."
-            }
-        },
-        "SE": {
-            short: "SE",
-            full: "SE (Software Engineering) — პროგრამული უზრუნველყოფის ინჟინერია",
-            sections: {
-                1: "მე ვარ პროგრამული უზრუნველყოფის ინჟინერი — ვმუშაობ და ვქმნი პროგრამულ სისტემებს ნულიდან: ვიაზრებ დასმულ ამოცანას, ვაშენებ პროგრამულ კოდს და ვაბარებ პროდუქტს, რომელიც საიმედოდ მუშაობს რეალური დატვირთვის პირობებში.\nმარტივად: საზოგადოდ მიწოდებენ პროგრამისტს და მე ვაქცევ იდეას ან ტექნიკურ დავალებას მუშა პროგრამულ პროდუქტად.",
-                2: "ცენტრალური კითხვა: როგორ ავაგო პროგრამული სისტემა, რომელიც სწორად მუშაობს, მოხერხებულია მომხმარებლისთვის, მასშტაბირებადია, კითხვადია ჩემი კოლეგებისთვის და მომავალში ადვილად გასაუმჯობესებელი?\nშედარებითი პოზიციონირება: IS&BT-ის სტუდენტისგან განსხვავებით, SE-ის სტუდენტი დასმული ამოცანიდან გამომდინარე წერს კოდს ან ავალებს ამას ხელოვნური ინტელექტის ასისტენტს და ქმნის მუშა პროგრამულ პროდუქტს ნულიდან. Infra-ს სტუდენტისგან განსხვავებით, მას ფოკუსი არა ინფრასტრუქტურის მორგებაზე, არამედ საკუთრივ აპლიკაციის არქიტექტურასა და კოდის ხარისხზე აქვს.",
-                3: "ძირეული ამოცანები: პროგრამული პროდუქტის დაპროექტება, კოდირების ხელოვნური ინტელექტის ასისტენტების ეფექტურად გამოყენება, მუშა კოდის მიღება და კოდის განხილვაში ჩართულობა, ვებ და მობილური აპლიკაციების დეველოპმენტი, ავტომატური ტესტირება.\nგაფართოებული ამოცანები: მასშტაბური სისტემების არქიტექტურა, DevOps პრაქტიკები, მემკვიდრეობითი სისტემების რეფაქტორინგი, ასევე ხელოვნური ინტელექტის ასისტენტებისთვის დავალების პროფესიონალურად ფორმულირება და კოდის ინტეგრაცია.\nსისტემური კონტექსტი: SE-ის სპეციალისტი მუშაობს დეველოპერული გუნდის ნაწილად, ხშირად იღებს IS&BT-ის ჯგუფის ტექნიკურ დავალებას, ხოლო მისი კოდი საბოლოოდ მომხმარებლის ხელში ხვდება.",
-                4: "საქმიანობის ტიპი: SE-ის სპეციალისტი აშენებს — ის აბსტრაქტულ მოთხოვნას კონკრეტულ, მომუშავე სისტემად აქცევს.\nაზროვნების ტიპი: ლოგიკური და სტრუქტურული აზროვნება — პრობლემა იშლება მცირე ლოგიკურ ბლოკებად. ხელოვნური ინტელექტის კოდის ასისტენტების ეპოქაში მზარდი მნიშვნელობა ენიჭება შეფასებით აზროვნებას — გენერირებული კოდის უსაფრთხოების და არქიტექტურული მართებულობის კრიტიკულად გადამოწმებას.",
-                5: "პროგრამული არქიტექტურის დიზაინის დოკუმენტი; მუშა, დატესტილი კოდი ან ვებ/მობილური აპლიკაცია; ავტომატური ტესტების კრებული; ავტომატიზებული დეპლოიმენტის კონვეიერი.",
-                6: "საწყისი წერტილი: Software Engineer ჩაიბარებს ტექნიკურ დავალებას ან მოთხოვნების სპეციფიკაციას.\nსაბოლოო წერტილი: ის გადასცემს დატესტილ და მუშა პროგრამულ სისტემას, რომელიც მზადაა ინფრასტრუქტურაში გასაშვებად.\nპასუხისმგებლობის ცენტრი: კოდის სიწმინდე და საიმედოობა — ის პირადად აგებს პასუხს იმაზე, რომ პროგრამულმა სისტემამ კორექტულად იმუშაოს და არ მოხდეს მისი ავარიული დასრულება სამუშაო გარემოში.",
-                7: "ტიპიური პოზიციები: Junior Software Developer-დან Senior-მდე, Tech Lead, Engineering Manager და Staff/Principal Engineer დონეებამდე. ასევე: Full-Stack, Backend, Frontend და Mobile Developer.\nინდუსტრიები: FinTech, HealthTech, ელექტრონული კომერცია, ტელეკომი, თამაშების ინდუსტრია და საჯარო სექტორი.\nგანვითარების ტრაექტორია: პირველ წლებში ხელით კოდის წერის ნაცვლად, აქცენტი მეტად გადადის ასისტენტების მიერ შემოთავაზებული გადაწყვეტების გააზრებაზე; შემდგომ მუშაობს დამოუკიდებლად და იღებს არქიტექტურულ გადაწყვეტილებებს."
-            }
-        },
-        "Infra": {
-            short: "Infra",
-            full: "Infra (IT Networks & Infrastructure) — საინფორმაციო ტექნოლოგიების ქსელები და ინფრასტრუქტურა",
-            sections: {
-                1: "მე ვარ ინფრასტრუქტურის ინჟინერი — ვაგებ და ვმართავ იმ ტექნიკურ ფუძეს (ქსელები, სერვერები, Cloud რესურსები), რომელზეც ყველა სხვა სისტემა დგას. ჩემი მთავარი ამოცანაა, რომ ეს ფუძე ყოველთვის ხელმისაწვდომი და მასშტაბირებადი იყოს.\nმარტივად: მე ვაგებ პირობითად „ისეთ გზებსა და ხიდებს“, რომლებზეც ყველა სახის პროგრამული სისტემა მოძრაობს.",
-                2: "ცენტრალური კითხვა: როგორ ავაგო და შევინარჩუნო ინფრასტრუქტურა, რომელიც ხარვეზის გარეშე, უსაფრთხოდ და მასშტაბირებადად აწვდის რესურსს ყველა ლეგალურ სისტემას?\nშედარებითი პოზიციონირება: Cyber-ის სტუდენტისგან განსხვავებით, Infra-ს სტუდენტი ფოკუსირებულია საკუთრივ ინფრასტრუქტურის აშენებაზე, ექსპლუატაციასა და ხელმისაწვდომობაზე — უსაფრთხოება მისთვის ერთ-ერთი ასპექტია ბევრს შორის. თუმცა, AIOps-ის გავრცელებასთან ერთად, მისთვის მნიშვნელოვან უნარად ყალიბდება ხელოვნური ინტელექტის მიერ გენერირებული რეკომენდაციების სისწორის შეფასება.",
-                3: "ძირეული ამოცანები: ქსელების დაგეგმვა და კონფიგურირება (Cisco CCNA დონე), სერვერების კონფიგურირება და Linux ადმინისტრირება, Cloud რესურსების მართვა (AWS, Azure).\nგაფართოებული ამოცანები: Cloud სერვისის მოდელების დონეზე არქიტექტურა, ვირტუალიზაცია, ინფრასტრუქტურა როგორც კოდი (IaC), მაღალი ხელმისაწვდომობის და კატასტროფისგან აღდგენის სქემები. AIOps პლატფორმების ამუშავება ანომალიების აღმოჩენისთვის.\nსისტემური კონტექსტი: მუშაობს IT ოპერაციების გუნდში — მისი მოღვაწეობა ფუნდამენტს ქმნის Software Engineer-ის აპლიკაციების მუშაობისთვის.",
-                4: "საქმიანობის ტიპი: Infra-ს სპეციალისტი აშენებს და მართავს — ქმნის სისტემის ფუნქციონირების ფიზიკურ ან ვირტუალურ ფუძეს.\nაზროვნების ტიპი: სისტემური და პროცედურული აზროვნება — ყოველი კომპონენტი განიხილება ერთიანი მექანიზმის ნაწილად. ამასთან, ემატება ვალდებულება, რომ ხელოვნური ინტელექტის მიერ გენერირებული განგაშები კრიტიკულად გადამოწმდეს ცრუ-დადებითი შემთხვევების გამოსარიცხავად.",
-                5: "კონფიგურირებული სერვერი და მუშა ქსელური ან Cloud ინფრასტრუქტურა; ინფრასტრუქტურის როგორც კოდის სკრიპტები; მონიტორინგისა და განგაშის სისტემა; კატასტროფისგან აღდგენის გეგმა და დოკუმენტაცია.",
-                6: "საწყისი წერტილი: ჩაიბარებს მოთხოვნას სისტემის ან აპლიკაციის ასამუშავებლად საჭირო რესურსებზე.\nსაბოლოო წერტილი: გადასცემს მზა, კონფიგურირებულ სერვერსა და მუშა გარემოს, სადაც პროგრამა სტაბილურად იმუშავებს.\nპასუხისმგებლობის ცენტრი: სისტემის ხელმისაწვდომობა (Uptime) — ის პირადად აგებს პასუხს იმაზე, რომ ინფრასტრუქტურა არ ჩავარდეს.",
-                7: "ტიპიური პოზიციები: Junior System/Network Administrator-დან DevOps/System Engineer-მდე, Senior DevOps/SRE, Infrastructure Architect და Head of Infrastructure. ასევე: Cloud Engineer, SRE.\nინდუსტრიები: ტელეკომი, ღრუბლოვანი პროვაიდერები, ფინტექი, ელექტრონული კომერცია და მსხვილი კორპორაციები.\nგანვითარების ტრაექტორია: Junior დონეზე მთავარია მონიტორინგი; AIOps-ის გავრცელებასთან ერთად, მოეთხოვება root-cause ანალიზი; მომდევნო ეტაპებზე კი მასშტაბირების გლობალურ არქიტექტურაზე მუშაობა."
-            }
-        },
-        "Cyber": {
-            short: "Cyber",
-            full: "Cyber (CyberSecurity) — კიბერუსაფრთხოება",
-            sections: {
-                1: "მე ვარ კიბერუსაფრთხოების სპეციალისტი — ერთადერთი ინჟინერი ვარ, ვინც სისტემას ერთდროულად ორი კუთხით ხედავს: მცველის და თავდამსხმელის. ჩემი ამოცანაა სისტემის სუსტი წერტილი მანამდე ვიპოვო, სანამ მას სხვა გამოიყენებს.\nმარტივად: მე ვფიქრობ როგორც თავდამსხმელი, რათა ავაგო დაცვა, რომელსაც ჰაკერი ვერ გადალახავს.",
-                2: "ცენტრალური კითხვა: სად არის არსებული სისტემის სუსტი წერტილი, რომელსაც მოწინააღმდეგე გამოიყენებს, და როგორ ავაგო დაცვა მის წინააღმდეგ?\nშედარებითი პოზიციონირება: Infra-ს სპეციალისტისგან განსხვავებით, Cyber-ის სტუდენტი ვარაუდობს, რომ ინფრასტრუქტურა აქტიური თავდასხმის ობიექტი იქნება — მისი მოქმედება შეჯიბრებითია. დღეს უკვე მოწინააღმდეგეც ხშირად იყენებს ხელოვნურ ინტელექტს (მაგალითად ავტომატიზებული ფიშინგი, სკანირება), ამიტომ Cyber-ის სტუდენტმა უნდა გაითვალისწინოს დაცვის უახლესი მეთოდები.",
-                3: "ძირეული ამოცანები: სისუსტეების სკანირება და შეფასება, წვდომის კონტროლისა და ავთენტიფიკაციის კონფიგურირება, უსაფრთხოების ინციდენტების მონიტორინგი.\nგაფართოებული ამოცანები: ეთიკური ჰაკერინგი (Pentesting), კრიპტოგრაფიული სისტემების დიზაინი, ინციდენტებზე რეაგირება და ციფრული კრიმინალისტიკა. სულ უფრო მნიშვნელოვან ადგილს იკავებს ხელოვნური ინტელექტის სისტემების უსაფრთხოება (LLM Security) — prompt injection და jailbreak-ის წინააღმდეგ დაცვა.\nსისტემური კონტექსტი: უსაფრთხოების გუნდი იცავს სხვა ინჟინრების მიერ შექმნილ სისტემებს მარეგულირებელ მოთხოვნებთან კავშირში.",
-                4: "საქმიანობის ტიპი: Cybersecurity-ის სპეციალისტი იცავს — მუდმივად აფასებს საფრთხეს და აძლიერებს დაცვის ხაზს.\nაზროვნების ტიპი: დაპირისპირებითი აზროვნება — ყოველი სისტემა განიხილება იმ კუთხით, თუ როგორ შეიძლება მისი ბოროტად გამოყენება. ეს ვრცელდება ხელოვნური ინტელექტის სისტემებზეც. შევთანხმდეთ, რომ მითია მოსაზრება, თითქოს „ამ სპეციალიზაციას ირჩევს ის, ვისთვისაც პარანოია პროფესიული სათნოებაა“.",
-                5: "სისუსტეების შეფასების ანგარიში; პენტესტის შედეგების დოკუმენტი; დაცვის კონფიგურირება (firewall წესები, წვდომის პოლიტიკა); ინციდენტზე რეაგირების ანგარიში და ფორენზიკის დასკვნა.",
-                6: "საწყისი წერტილი: ჩაიბარებს მუშა სისტემას ან ინფრასტრუქტურას, რომლის უსაფრთხოების დონე გასაზომი და გასაძლიერებელია.\nსაბოლოო წერტილი: გადასცემს დაცვის ხარისხის შეფასებას, გამოვლენილ სისუსტეებს და კონკრეტულ რეკომენდაციებს.\nპასუხისმგებლობის ცენტრი: სისტემის გადარჩენადობა მოწინააღმდეგის წინაშე — ის პასუხისმგებელია, რომ შემოტევა დროულად იქნება შეკავებული.",
-                7: "ტიპიური პოზიციები: Junior SOC Analyst-დან Mid Security Engineer-მდე, Senior, Security Architect და CISO დონეებამდე. ასევე: Penetration Tester, Incident Responder, AI/LLM Security Specialist.\nინდუსტრიები: საბანკო სექტორი, სამთავრობო და თავდაცვითი სტრუქტურები, ჯანდაცვა, ტელეკომი და აუდიტორული კომპანიები.\nგანვითარების ტრაექტორია: Junior დონეზე ძირეული ამოცანაა მონიტორინგი; ახალი გამოწვევების გამო, სტუდენტისგან ადრეულად მოითხოვება ორმხრივი აზროვნება; დროთა განმავლობაში გადადის საფრთხის გლობალურ მოდელირებაზე."
-            }
-        },
-        "CE": {
-            short: "CE",
-            full: "CE (Computer Engineering) — კომპიუტერული ინჟინერია",
-            sections: {
-                1: "მე ვარ კომპიუტერული ინჟინერი — ვმუშაობ იქ, სადაც პროგრამული უზრუნველყოფა შეხვდება ფიზიკურ მოწყობილობას. ვაკონფიგურირებ სერვერის აპარატურულ და პროგრამულ უზრუნველყოფას კომპანიების პრობლემებიდან გამომდინარე. ვაგებ ჩაშენებულ სისტემებს და ჭკვიანი მოწყობილობების IoT-ეკოსისტემებს. ჩემი ცოდნა ერთნაირად მოიცავს ელექტრონიკას და კოდს.\nმარტივად: მე ვღებულობ ოპტიმალურ ტექნიკურ გადაწყვეტილებებს და ვაძლევ \"ინტელექტს\" ფიზიკურ მოწყობილობებს.",
-                2: "ცენტრალური კითხვა: როგორ ავაწყო კომპანიების ოპტიმალური კომპიუტერული კომპლექსი ან როგორ ავაგო სისტემა, რომელიც ფიზიკური რესურსების (ენერგია, მეხსიერება) მკაცრი შეზღუდვის პირობებში ამუშავდება?\nშედარებითი პოზიციონირება: SE-ის სტუდენტისგან განსხვავებით, რომელიც მუშაობს გარემოში, სადაც რესურსები ნაკლებად შეზღუდულია, CE მუშაობს მკაცრ ჩარჩოებში. R&A-ისგან განსხვავებით, ფოკუსი აქ არ არის მექანიკურ მოძრაობაზე, არამედ ჩიპის დონის პროგრამულ-აპარატურულ ინტეგრაციაზე. სპეციალიზებული ხელოვნური ინტელექტის აქსელერატორების ეპოქაში, შეზღუდვა გულისხმობს მოდელის ჩიპებზე გაშვების მაქსიმალურ ოპტიმიზაციას.",
-                3: "ძირეული ამოცანები: სერვერების აპარატურული და პროგრამული უზრუნველყოფის კონფიგურირება, ჩაშენებული სისტემების პროგრამირება (firmware), მიკროკონტროლერების კონფიგურირება, სენსორებთან ინტერფეისის შექმნა.\nგაფართოებული ამოცანები: კომპიუტერული კომპლექსის დაპროექტება, აპარატურის დიზაინი, სიგნალების ციფრული დამუშავება, „ჭკვიანი სახლის“ აგება, Edge AI მოდელების ოპტიმიზაცია. ასევე ხელოვნური ინტელექტის გამოყენება ჩიპის და firmware-ის დაპროექტებაში.\nსისტემური კონტექსტი: ნაშრომი ინტეგრირდება კომპლექსურ პროექტში ან ფიზიკურ მოწყობილობაში — ავტომობილი, IoT სენსორი, სამედიცინო აპარატურა.",
-                4: "საქმიანობის ტიპი: CE-ის სპეციალისტი აპროექტებს და აშენებს — ის ერთდროულად მუშაობს პროგრამული ლოგიკისა და ფიზიკური აპარატურის საზღვარზე.\nაზროვნების ტიპი: რესურსზე ორიენტირებული, ზუსტი ინჟინერული აზროვნება — ყოველი გადაწყვეტილება ფასდება ტექნიკის, ენერგიის, მეხსიერებისა და დროის მკაცრი ბალანსით.",
-                5: "ჩაშენებული სისტემის firmware ან კონტროლერის კოდი; აპარატურულ-პროგრამული ინტეგრაციის სქემა; ოპტიმიზებული AI მოდელი, რომელიც ჩიპზე ამუშავდება; ტექნიკური დოკუმენტაცია მოწყობილობის არქიტექტურაზე.",
-                6: "საწყისი წერტილი: ჩაიბარებს სისტემის ტექნიკურ პირობებს, აპარატურის სპეციფიკაციას ან მოწყობილობის ფუნქციურ მოთხოვნებს.\nსაბოლოო წერტილი: გადასცემს საპროექტო დოკუმენტაციას, firmware-ს ან ჩაშენებულ სისტემას, რომელიც მზადაა მასობრივი წარმოებისთვის.\nპასუხისმგებლობის ცენტრი: დამკვეთის მოთხოვნების შესრულება და საიმედოობა ფიზიკური შეზღუდვების პირობებში — ის პასუხისმგებელია კომპლექსის გამართულ მუშაობაზე.",
-                7: "ტიპიური პოზიციები: Junior Hardware/Embedded Engineer-დან Mid, Senior, Hardware Architect და Head of Hardware Engineering დონემდე. როლები: Firmware Engineer, IoT Engineer, FPGA/ASIC Engineer.\nინდუსტრიები: ელექტრონული პროდუქციის მწარმოებლები, ავტომობილების ინდუსტრია, IoT, სამედიცინო აპარატურა და Semiconductor კომპანიები.\nგანვითარების ტრაექტორია: საწყის დონეზე მთავარია ტესტირება და დებაგინგი; Mid-level ეტაპზე ახდენს სისტემის დიზაინს და მოდელების ოპტიმიზაციას; Senior დონეზე კი სრულ არქიტექტურულ გადაწყვეტილებებზე გადადის."
-            }
-        },
-        "R&A": {
-            short: "R&A",
-            full: "R&A (Robotics & Automation) — რობოტები და ავტომატიზაცია",
-            sections: {
-                1: "მე ვარ რობოტიკისა და ავტომატიზაციის ინჟინერი — ვაგებ სისტემებს, რომლებიც ფიზიკურ სამყაროში მოძრაობენ, აანალიზებენ გარემოს და მოქმედებენ ადამიანის უწყვეტი ჩარევის გარეშე. ჩემი სამუშაოა რობოტების პროგრამირება, ინდუსტრიული პროცესების ავტომატიზაცია და გარემოს აღქმის სისტემები.\nმარტივად: მე ვაგებ „მექანიზმებს“, რომლებსაც საკუთარი თავის მართვა შეუძლიათ.",
-                2: "ცენტრალური კითხვა: როგორ ავაგო სისტემა ან გავაწყო მექანიზმი, რომელიც ფიზიკურ გარემოს აღიქვამს, გადაწყვეტილებას იღებს და ზუსტად მოქმედებს რეალურ დროში?\nშედარებითი პოზიციონირება: CE-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ჩიპის არქიტექტურაზე, R&A ფოკუსირებულია მთლიან სისტემაზე, რომელიც ფიზიკურ სამყაროსთან ურთიერთქმედებს. DS-ისგან განსხვავებით, აქცენტია მოდელის ფიზიკურ ქმედებად გარდაქმნა. თანამედროვე მიდგომებში ეს არის Vision-Language-Action (VLA) მოდელები, რომლებიც ხედვას და ფიზიკურ მოქმედებას ერთ სისტემაში აერთიანებენ.",
-                3: "ძირეული ამოცანები: რობოტების პროგრამირება (Robot Operating System), ინდუსტრიული კონტროლერების (PLC) პროგრამირება, სენსორული მონაცემების დამუშავება რეალურ დროში.\nგაფართოებული ამოცანები: SCADA სისტემების დიზაინი, Computer Vision ნავიგაციისთვის, ავტონომიური სისტემების კოორდინირება, ნივთების ინდუსტრიული ინტერნეტი და Industry 4.0. ფიზიკური სამყაროს ხელოვნური ინტელექტის მოდელების გამოყენება ამოცანის დაგეგმვისთვის.\nსისტემური კონტექსტი: მუშაობს საწარმოო, ლოგისტიკურ ან კვლევით გარემოში, სადაც უსაფრთხოება და ზუსტი მოქმედება კრიტიკულია.",
-                4: "საქმიანობის ტიპი: R&A-ის სპეციალისტი აპროექტებს და აშენებს — ის ქმნის სისტემას, რომელიც გარემოს აღქმიდან მოქმედებამდე უწყვეტ ციკლში მუშაობს.\nაზროვნების ტიპი: სისტემური და რეალურ დროში ორიენტირებული აზროვნება — ყოველი გადაწყვეტილება ფასდება ფიზიკური შეზღუდვების ფონზე. დამატებითი ყურადღება ეთმობა ხელოვნურ ინტელექტზე დაფუძნებული გადაწყვეტილების გადამოწმებას ფიზიკურ გარემოში გადატანამდე.",
-                5: "დაპროგრამებული რობოტული სისტემა (საწარმოო ხაზი ან ავტონომიური პლატფორმა); PLC-ზე დაფუძნებული ავტომატიზაციის გადაწყვეტა; SCADA მონიტორინგისა და კონტროლის სისტემა; ინტეგრირებული Computer Vision მოდული.",
-                6: "საწყისი წერტილი: ჩაიბარებს ფიზიკური ამოცანის ან საწარმოო პროცესის სპეციფიკაციას, რომელიც ავტომატიზაციას მოითხოვს.\nსაბოლოო წერტილი: გადასცემს მუშა, ტესტირებულ რობოტულ ან ავტომატიზებულ სისტემას, რომელიც მზადაა რეალურ გარემოში ინტეგრაციისთვის.\nპასუხისმგებლობის ცენტრი: სისტემის ფიზიკური უსაფრთხოება და სიზუსტე — ის პირადად აგებს პასუხს იმაზე, რომ ავტონომიური მოქმედება უსაფრთხოდ შესრულდება.",
-                7: "ტიპიური პოზიციები: Junior Robotics/Automation Engineer-დან Mid, Senior, Robotics/Automation Architect და Head of Robotics დონეებამდე. როლები: Computer Vision Engineer, Controls Engineer, Industrial Automation Engineer.\nინდუსტრიები: წარმოება და ლოგისტიკა (Industry 4.0), ავტომობილების ინდუსტრია (ავტონომიური მართვა), სამედიცინო რობოტიკა, სოფლის მეურნეობა და თავდაცვა.\nგანვითარების ტრაექტორია: საწყის ეტაპზე ახდენს ტესტირებას და კალიბრაციას; ახალი ტექნოლოგიების ეპოქაში მას მოეთხოვება ამ რთული მოდელების გადამოწმება; Mid-level და Senior ეტაპებზე კი დამოუკიდებელ ინტეგრაციასა და გლობალურ დიზაინს ხელმძღვანელობს."
-            }
-        }
-    };
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button type="button" class="modal__close" id="modalCancel" aria-label="დახურვა">&times;</button>
+    <h3 class="modal__title" id="modalTitle">პრიორიტეტულად განვიხილოთ:</h3>
+    <p class="modal__sub">რამდენიმე სპეციალიზაცია და რამდენიმე სექციაა არჩეული — რომელი მიმართულებით მოვაწყოთ თანმიმდევრობა?</p>
+    <div class="modal__options">
+      <button type="button" class="modal__option" id="optSpec">
+        <p class="modal__option-title">სპეციალიზაციები</p>
+        <p class="modal__option-desc">ჯერ ერთი სპეციალობის ყველა არჩეული სექცია, შემდეგ — მომდევნო სპეციალობა.</p>
+      </button>
+      <button type="button" class="modal__option" id="optSection">
+        <p class="modal__option-title">აღწერის სექციები</p>
+        <p class="modal__option-desc">ჯერ ერთი სექციის მიხედვით შევადაროთ ყველა არჩეული სპეციალიზაცია, შემდეგ — მომდევნო სექცია.</p>
+      </button>
+    </div>
+  </div>
+</div>
 
-    const sectionsInfo = {
-        1: { short: "1.ვინ ვარ", full: "1. სპეციალიზაციის იდენტობა — «ვინ ვარ?»" },
-        2: { short: "2.განსხვავება", full: "2. სპეციალიზაციის მთავარი განმასხვავებელი" },
-        3: { short: "3.პრობლემები", full: "3. სპეციალისტის პრობლემური სივრცე" },
-        4: { short: "4.ფიქრი&საქმე", full: "4. საქმიანობის ტიპი და აზროვნება" },
-        5: { short: "5.პროდუქტი", full: "5. სპეციალისტის პროდუქტი" },
-        6: { short: "6.პასუხისმგებლობა", full: "6. პასუხისმგებლობის ზონა" },
-        7: { short: "7.კარიერა", full: "7. კარიერული პერსპექტივა" }
-    };
+<div class="tooltip" id="tooltip" role="tooltip"></div>
 
-    function initUI() {
-        const specsGroup = document.getElementById('specsGroup');
-        const sectionsGroup = document.getElementById('sectionsGroup');
-
-        for (let key in specialtiesData) {
-            specsGroup.innerHTML += `
-                <label class="checkbox-item">
-                    <input type="checkbox" class="spec-checkbox" value="${key}"> 
-                    <span class="text-full">${specialtiesData[key].full}</span>
-                    <span class="text-short-container">
-                        <span class="text-short">${specialtiesData[key].short}</span>
-                        <span class="tooltiptext">${specialtiesData[key].full}</span>
-                    </span>
-                </label>
-            `;
-        }
-
-        for (let key in sectionsInfo) {
-            sectionsGroup.innerHTML += `
-                <label class="checkbox-item">
-                    <input type="checkbox" class="section-checkbox" value="${key}"> 
-                    <span class="text-full">${sectionsInfo[key].full}</span>
-                    <span class="text-short-container">
-                        <span class="text-short">${sectionsInfo[key].short}</span>
-                        <span class="tooltiptext">${sectionsInfo[key].full}</span>
-                    </span>
-                </label>
-            `;
-        }
-    }
-
-    function toggleAll(type) {
-        if (type === 'specs') {
-            const isChecked = document.getElementById('allSpecs').checked;
-            document.querySelectorAll('.spec-checkbox').forEach(cb => cb.checked = isChecked);
-        } else {
-            const isChecked = document.getElementById('allSections').checked;
-            document.querySelectorAll('.section-checkbox').forEach(cb => cb.checked = isChecked);
-        }
-    }
-
-    let selectedSpecs = [];
-    let selectedSections = [];
-    let presentationQueue = [];
-    let currentIndex = 0;
-
-    function startPresentation() {
-        selectedSpecs = Array.from(document.querySelectorAll('.spec-checkbox:checked')).map(cb => cb.value);
-        selectedSections = Array.from(document.querySelectorAll('.section-checkbox:checked')).map(cb => parseInt(cb.value));
-
-        if (selectedSpecs.length === 0 || selectedSections.length === 0) {
-            alert("გთხოვთ აირჩიოთ მინიმუმ ერთი სპეციალიზაცია და მინიმუმ ერთი აღმწერი სექცია!");
-            return;
-        }
-
-        if (selectedSpecs.length > 1 && selectedSections.length > 1) {
-            document.getElementById('priorityModal').style.display = 'flex';
-        } else {
-            buildQueue('specs');
-        }
-    }
-
-    function setPriority(priority) {
-        document.getElementById('priorityModal').style.display = 'none';
-        buildQueue(priority);
-    }
-
-    function buildQueue(priority) {
-        presentationQueue = [];
-        currentIndex = 0;
-
-        if (priority === 'specs') {
-            selectedSpecs.forEach(spec => {
-                selectedSections.forEach(sec => {
-                    presentationQueue.push({ specKey: spec, sectionKey: sec });
-                });
-            });
-        } else {
-            selectedSections.forEach(sec => {
-                selectedSpecs.forEach(spec => {
-                    presentationQueue.push({ specKey: spec, sectionKey: sec });
-                });
-            });
-        }
-
-        document.getElementById('selectionZone').style.display = 'none';
-        document.getElementById('actionZone').style.display = 'none';
-        document.getElementById('presentationZone').style.display = 'block';
-
-        renderCurrentPage();
-    }
-
-    function renderCurrentPage() {
-        if (presentationQueue.length === 0) return;
-
-        const currentItem = presentationQueue[currentIndex];
-        const specInfo = specialtiesData[currentItem.specKey];
-        const secInfo = sectionsInfo[currentItem.sectionKey];
-
-        document.getElementById('pageTitleFullDisplay1').innerText = specInfo.full;
-        document.getElementById('pageTitleFullDisplay2').innerText = secInfo.full;
-
-        document.getElementById('pageTitleShortDisplay1').innerText = specInfo.short;
-        document.getElementById('pageTitleShortDisplay2').innerText = secInfo.short;
-        
-        document.getElementById('pageTitleTooltip').innerHTML = specInfo.full + "<br><br>" + secInfo.full;
-        
-        document.getElementById('pageContent').innerText = specInfo.sections[currentItem.sectionKey];
-
-        document.getElementById('prevBtn').disabled = (currentIndex === 0);
-        document.getElementById('nextBtn').disabled = (currentIndex === presentationQueue.length - 1);
-        
-        document.getElementById('prevBtn').style.opacity = (currentIndex === 0) ? "0.5" : "1";
-        document.getElementById('nextBtn').style.opacity = (currentIndex === presentationQueue.length - 1) ? "0.5" : "1";
-        
-        document.querySelector('.view-card').scrollTop = 0;
-    }
-
-    function navigate(direction) {
-        currentIndex += direction;
-        if (currentIndex >= 0 && currentIndex < presentationQueue.length) {
-            renderCurrentPage();
-        }
-    }
-
-    function resetApp() {
-        document.getElementById('presentationZone').style.display = 'none';
-        document.getElementById('selectionZone').style.display = 'grid';
-        document.getElementById('actionZone').style.display = 'block';
-    }
-
-    window.onload = initUI;
+<script id="app-data" type="application/json">
+{"specializations": [{"id": "DS", "short": "DS", "full": "DS (Data Science) — მონაცემთა მეცნიერება", "color": "#178F86"}, {"id": "ISBT", "short": "IS&BT", "full": "IS&BT (Information Systems & Business Tech) — ინფორმაციული სისტემები და ბიზნეს ტექნოლოგიები", "color": "#7C4FA0"}, {"id": "SE", "short": "SE", "full": "SE (Software Engineering) — პროგრამული უზრუნველყოფის ინჟინერია", "color": "#2F5FC4"}, {"id": "Infra", "short": "Infra", "full": "Infra (IT Networks & Infrastructure) — ინფოტექნოლოგიების ქსელები და ინფრასტრუქტურა", "color": "#4B6B80"}, {"id": "Cyber", "short": "Cyber", "full": "Cyber (CyberSecurity) — კიბერუსაფრთხოება", "color": "#B8362E"}, {"id": "CE", "short": "CE", "full": "CE (Computer Engineering) — კომპიუტერული ინჟინერია", "color": "#C97223"}, {"id": "RA", "short": "R&A", "full": "R&A (Robotics & Automation) — რობოტები და ავტომატიზაცია", "color": "#2F7D42"}], "sections": [{"id": 1, "short": "1. ვინ ვარ", "full": "1. სპეციალიზაციის იდენტობა — «ვინ ვარ?»"}, {"id": 2, "short": "2. სხვაობა", "full": "2. სპეციალიზაციის მთავარი განმასხვავებელი"}, {"id": 3, "short": "3. პრობლემები", "full": "3. სპეციალისტის პრობლემური სივრცე"}, {"id": 4, "short": "4. ფიქრი & საქმე", "full": "4. საქმიანობის ტიპი და აზროვნება"}, {"id": 5, "short": "5. პროდუქტი", "full": "5. სპეციალისტის პროდუქტი"}, {"id": 6, "short": "6. მოვალეობა", "full": "6. პასუხისმგებლობის ზონა"}, {"id": 7, "short": "7. კარიერა", "full": "7. კარიერული პერსპექტივა"}], "content": {"DS": {"1": [{"type": "p", "label": null, "text": "მე ვარ მონაცემთა მეცნიერი — ვმუშაობ დაუმუშავებელ, ხშირად ქაოტურ მონაცემებთან და მათგან გამოვყოფ ნიმუშებს, რომლებიც ბიზნესსა ან საზოგადოებას რეალურ გადაწყვეტილებებში ეხმარება. ჩემი იარაღია სტატისტიკა, მანქანური სწავლება და დიდი მონაცემების დამუშავების ტექნოლოგიები."}, {"type": "quote", "label": "მარტივად", "text": "მე „გადავთარგმნი“ რიცხვებს ისეთ ისტორიად, რომელსაც ორგანიზაცია გადაწყვეტილებების მისაღებად გამოიყენებს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "რა ამბავს მოგვითხრობს ერთი შეხედვით ქაოტური მონაცემები და როგორ ავაგო მოდელი, რომელიც მომავალს იწინასწარმეტყველებს?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "IS&BT-ს სტუდენტისგან განსხვავებით, რომელიც ბიზნეს პროცესს აწესრიგებს არსებული სისტემების დონეზე, DS-ის სტუდენტს არ აკმაყოფილებს არსებული პროცესები, აანალიზებს და მონაცემებიდან ახალ ცოდნას აგენერირებს, ქმნის მოდელს სისტემის სრულყოფისთვის. თანამედროვე ეტაპზე AI/LLM აგენტებსა და AutoML ხელსაწყოებს შეუძლიათ მონაცემთა საძიებო ანალიზი (EDA — Exploratory Data Analysis) და მოდელის შერჩევის ავტომატიზაცია, რის გამოც DS-ის სტუდენტის ღირებულება სულ უფრო გადადის ჰიპოთეზის ფორმულირებაზე, მონაცემთა ხარისხის კრიტიკულ შეფასებაზე და მიზეზ-შედეგობრივი დასკვნის გამოტანაზე."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "მონაცემთა „დასუფთავება“ და ანალიზისთვის მომზადება, სტატისტიკური ანალიზი, მანქანური სწავლების მოდელების შემუშავება და ვალიდაცია, შედეგების ვიზუალიზაცია გადაწყვეტილების მიმღებებისთვის."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "დიდი მონაცემების (Big Data) დამუშავების არქიტექტურები, ღრმა სწავლება (Deep Learning) რთული ნიმუშების ამოცნობისთვის, A/B ტესტირება და მიზეზობრივი დასკვნა (causal inference) ბიზნეს გადაწყვეტილებებში. აგრეთვე კოდირების AI-ასისტენტების (მაგ. Claude Code, OpenAI Codex ან ანალოგების) გამოყენება მონაცემთა დასუფთავების, მათი თავისებურების (feature) გენერირებისა და ანალიზის ავტომატიზაციისთვის, ასევე LLM-ზე დაფუძნებული ანალიტიკური აგენტების ორქესტრირება რთული, მრავალეტაპიანი კვლევითი სამუშაოსთვის."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "DS-ის სპეციალისტი მუშაობს პროდუქტის, ანალიტიკის ან კვლევის გუნდის ნაწილად — მისი მუშაობის შედეგები კვებავს ბიზნეს სტრატეგიის, საინჟინრო გუნდის ან მკვლევართა ჯგუფის გადაწყვეტილებებს."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "DS-ის სპეციალისტი იკვლევს და აანალიზებს — ის მუშაობს ჰიპოთეზის ფორმულირებიდან მის ემპირიულ შემოწმებამდე."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "ალბათური და სტატისტიკური აზროვნება — ყოველი დასკვნა ხასიათდება გაურკვევლობით, რომელსაც DS-ის სპეციალისტი ციფრებში ზომავს და ანგარიშგებაში გამჭვირვალედ წარმოაჩენს. AI-ხელსაწყოების გავრცელებასთან ერთად მზარდი მნიშვნელობა ენიჭება შეფასებით აზროვნებას — AI-ის მიერ გენერირებული მოდელის თუ დასკვნის სტატისტიკური სანდოობის, მიკერძოების (bias) და მცდარი/ჰალუცინირებული (hallucinated) დასკვნების კრიტიკული გადამოწმების უნარს."}], "5": [{"type": "list", "label": null, "text": "მანქანური სწავლების (ML) მოდელი ან მოდელების ნაკრები პროცესების იმიტაციისთვის; ანალიტიკური პანელი (dashboard) ან ანგარიში, რომელიც ბიზნეს გადაწყვეტილებას ამყარებს; მონაცემთა დამუშავების კონვეიერი (pipeline), რომელიც „ნედლ“ მონაცემებს გამორჩეული (extraction) სახით და გამოსადეგ ფორმატში გარდაქმნის."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "DS-ის სპეციალისტს აბარებენ ბიზნესის კვლევით ამოცანებს და ხშირად დაუმუშავებელ („ნედლ“), არასტრუქტურირებულ მონაცემებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს ვალიდირებულ (შემოწმებულ) მოდელს, დასკვნას ან ვიზუალიზებულ ანგარიშს, რომელზეც გადაწყვეტილების მიმღები პერსონა ან ინჟინერი დააფუძნებს შემდეგ ნაბიჯებს."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "მონაცემებზე დაფუძნებული დასკვნის სიზუსტე და სანდოობა — DS-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ აგებული მოდელების შედეგებს და რჩევებს შეცდომაში არ შეყავდეს გადაწყვეტილების მიმღები."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Data Analyst/Junior Data Scientist-დან (მონაცემთა დასუფთავება და ბაზისური ანალიზი მენტორის ზედამხედველობით) Mid Data Scientist-მდე (დამოუკიდებელი მოდელირება და ჰიპოთეზის ფორმულირება), შემდეგ Senior Data Scientist, Lead Data Scientist და Staff/Principal Data Scientist დონეებამდე — ასევე სპეციალიზებული როლები: Machine Learning Engineer, Data Engineer და Research Scientist."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "DS-ის სპეციალისტი მოთხოვნადია პრაქტიკულად ყველგან, სადაც მონაცემები გროვდება — საფინანსო სექტორი (რისკის მოდელირება, fraud detection ანუ თაღლითობის გამოვლენა), ჯანდაცვა, ელექტრონული კომერცია (რეკომენდაციის სისტემები), მარკეტინგი, ლოგისტიკა და სამეცნიერო კვლევები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე მთავარი ამოცანაა მონაცემთა მომზადება და ბაზისური ანალიზი; AutoML-ისა და AI-ანალიტიკური ასისტენტების გავრცელებასთან ერთად, აქცენტი თანდათან გადადის ჰიპოთეზის ფორმულირებასა და AI-გენერირებული შედეგების კრიტიკულ შეფასებაზე — ანუ ფუნდამენტური სტატისტიკური ცოდნა Junior დონეზეც სულ უფრო მნიშვნელოვანი ხდება, რათა შესაძლებელი იყოს ავტომატური ხელსაწყოს მიერ მოწოდებული შედეგის სანდოობის შეფასება; Mid-level ეტაპზე სტუდენტი დამოუკიდებლად ატარებს კვლევას ბოლომდე; Senior და მეტადრე Lead დონეზე იღებს მეთოდოლოგიურ გადაწყვეტილებებს და ხელმძღვანელობს გუნდს; შემდგომში კარიერა იშლება ტექნიკურ ექსპერტიზაში (Staff/Principal Data Scientist) ან მენეჯერულ მიმართულებაში (Head of Data Science/Analytics)."}]}, "ISBT": {"1": [{"type": "p", "label": null, "text": "მე ვარ ხიდი ბიზნესსა და ტექნოლოგიას შორის — ვაანალიზებ, როგორ მუშაობს ორგანიზაცია და ვაგებ ან ვაწესრიგებ ციფრულ სისტემებს, რომლებიც მის პროცესებს მართავენ. ჩემი სამუშაოა ERP (Enterprise Resource Planning — კომპანიის რესურსების დაგეგმვა/მართვა), CRM (Customer Relationship Management — კლიენტებთან ურთიერთობების მართვა) და სხვა არსებული კორპორაციული სისტემების კონფიგურირება, ინტეგრირება და მართვა ისე, რომ ბიზნესს ნამდვილად ემსახურონ. აგრეთვე ჩემი სამუშაოა ახალი პროგრამული პროდუქტის ინიციირება ორგანიზაციის საკეთილდღეოდ."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაქცევ ბიზნესის ამოცანებს მოწესრიგებულ ციფრულ სისტემად."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ უნდა მოეწყოს არსებული ბიზნეს პროცესი ციფრულ სისტემაში, რომ ის ეფექტური, მართვადი და მასშტაბირებადი იყოს?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "SE-ის სტუდენტისგან განსხვავებით, რომელიც ახალ პროგრამულ პროდუქტს აგებს ნულიდან, IS&BT-ის სტუდენტი ხშირად მუშაობს მზა კორპორაციულ სისტემებთან (ERP, CRM) — მისი ფოკუსია არა კოდირება, არამედ პროცესების მოდელის დაზუსტება, სისტემის კონფიგურირება და ბიზნეს ლოგიკასა და ტექნოლოგიას შორის თანხვედრის მოძებნა. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან ახალი ცოდნის გამოყვანაზე, არამედ არსებული პროცესების და DS-ისგან მიღებული მოდელების ციფრულად ორგანიზებაზე. გასათვალისწინებელია, რომ თანამედროვე კორპორაციული სისტემები თავადვე იყენებენ ჩაშენებულ AI აგენტებს (Microsoft Dynamics Copilot, Salesforce Agentforce, SAP Joule) — შესაბამისად, IS&BT-ის სპეციალისტის ამოცანაა არა მხოლოდ მოდულის კონფიგურირება, არამედ ამ ჩაშენებული AI ფუნქციების ბიზნეს ლოგიკასთან შეფარდების კონტროლი."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "ბიზნესის მხარესგან მოთხოვნების შეგროვება, ბიზნეს პროცესების მოდელების მომზადება იმპლემენტაციისთვის, ERP/CRM სისტემების კონფიგურირება და ინტეგრირება, ადამიან-კომპიუტერის ურთიერთქმედების და სამომხმარებლო გამოცდილების (HCI/UX — Human–Computer Interaction/User Experience) დიზაინის შექმნა, მოთხოვნების „თარგმნა“ ტექნიკური გუნდისთვის, რათა ბიზნეს ლოგიკა გამოყენებად პროდუქტად იქცეს."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "კომპანიის IT პროექტების მენეჯმენტი, არსებული სისტემის ციფრული ტრანსფორმაციის სტრატეგია, მონაცემთა მმართველობა (Data Governance) კორპორაციის დონეზე.\n\nაგრეთვე მოწინავე კომპანიაში/საწარმოში AI-ის გამოყენების მმართველობის (AI Governance) დანერგვა დაწყებული რუტინული/რობოტული პროცესების ავტომატიზაციით (RPA), შემდეგ ინტელექტუალური პროცესების ავტომატიზაციით (Intelligent Process Automation) და დამთავრებული სრული მასშტაბის ავტომატიზაციით (Hyperautomation)."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "IS&BT-ის სპეციალისტი მუშაობს ორგანიზაციის IT და ბიზნეს განყოფილებების გადასაკვეთზე — მისი გადაწყვეტილებები პირდაპირ ეხება კომპანიის ოპერაციულ ეფექტურობას და ციფრულ სტრატეგიას."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "IS&BT-ის სპეციალისტი აანალიზებს და აპროექტებს — ის ბიზნეს მოთხოვნას სისტემურ გადაწყვეტაში გარდაქმნის."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური აზროვნება — ორგანიზაცია ერთიან, ერთმანეთზე დამოკიდებულ პროცესთა ქსელად ესახება, სადაც ერთი ცვლილება მთელ სტრუქტურას ამოძრავებს. სისტემაში AI აგენტების ჩასმასთან ერთად სისტემური აზროვნება მოიცავს იმასაც, თუ როგორ ცვლის ერთი ავტომატიზებული გადაწყვეტილება მთლიანი პროცესის ქცევას."}], "5": [{"type": "list", "label": null, "text": "IT პროექტის გეგმა ან ციფრული ტრანსფორმაციის სტრატეგია; კონფიგურირებული ან ინტეგრირებული კორპორაციული სისტემა (ERP/CRM); BPMN დიაგრამა (Business Process Model and Notation — ბიზნეს პროცესის მოდელი და ნოტაცია); HCI/UX დიზაინის სქემა; ტექნიკური დავალება (Technical Specification), რომელსაც Software Engineer-ი იღებს პროგრამული უზრუნველყოფის შესაქმნელად."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "IS&BT-ის სპეციალისტი ჩაიბარებს არაოპტიმალურ ბიზნეს პროცესებს ან მათ არაფორმალურ აღწერას და ბიზნეს მხარის მოთხოვნებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "გადასცემს ორი ფორმით — (ა) მუშა, კონფიგურირებულ სისტემას, რომელიც ბიზნესის ყოველდღიურ ოპერაციებში ინტეგრირებულია, ან (ბ) ტექნიკურ დავალებას, რომელსაც Software Engineer იღებს ახალი პროგრამული პროდუქტის ასაგებად."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "ბიზნეს ლოგიკისა და ტექნოლოგიური გადაწყვეტის შესაბამისობა — IS&BT-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ შედგენილი ტექნიკური დავალება ან მოქმედი სისტემა ნამდვილად ემსახურებოდეს ბიზნესის მიზანს ნაცვლად უსარგებლო ტექნოლოგიური სირთულეებისა."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "ანალიტიკოსის Junior Business/Systems Analyst-დან (მოთხოვნების შეგროვება გამოცდილი კოლეგის ზედამხედველობით) Mid და Senior Business Analyst-მდე ან IT Consultant-ამდე (დამოუკიდებელი პროცესის დაპროექტება), შემდეგ Senior Consultant-ის, გადაწყვეტების არქიტექტორის (Solution Architect) და IT Manager/Director-ის დონემდე. ასევე არსებობს სპეციალიზებული როლები: ERP/CRM Consultant, პროცესების ავტომატიზაციის სპეციალისტი (Process Automation Specialist), პროდუქტის მფლობელი (Product Owner)."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "IS&BT-ის სპეციალისტი საჭიროა ნებისმიერ საშუალო ან მსხვილ ორგანიზაციაში, რომელსაც სჭირდება ციფრული ტრანსფორმაცია — საბანკო და დაზღვევის სექტორი, საცალო ვაჭრობა, წარმოება, საჯარო სექტორი და კონსალტინგური კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა ბიზნეს მოთხოვნების ანალიზი და დოკუმენტირება; AI-აგენტებითა და ჰიპერავტომატიზაციის ფუნქციებით აღჭურვილ ERP/CRM სისტემებში (Copilot, Agentforce და სხვა) სტუდენტისგან სულ უფრო ადრე მოითხოვება ჩაშენებული AI ფუნქციების კონფიგურირებისა და ბიზნეს ლოგიკასთან შეჯერების უნარი; Mid-level ეტაპზე აიწევს პროექტების დამოუკიდებლად მართვაზე; Senior დონეზე — საწარმოს მასშტაბის არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Solution/Enterprise Architect) ან მენეჯერულ (IT Director) მიმართულებებად."}]}, "SE": {"1": [{"type": "p", "label": null, "text": "მე ვარ პროგრამული უზრუნველყოფის ინჟინერი (Software Engineer) — ვქმნი პროგრამულ სისტემებს ნულიდან: ვიაზრებ რა დასმულ ამოცანას, ვაშენებ პროგრამულ კოდს და ვაბარებ პროგრამულ პროდუქტს, რომელიც საიმედოდ მუშაობს რეალურ მომხმარებლებთან რეალური დატვირთვის პირობებში.\n\nჩემი სამუშაოა პროგრამული კომპლექსის არქიტექტურა, მისი ცალკეული მოდულების, ვებ და მობილური აპლიკაციების პროგრამირება, მათი ტესტირება და გამართვა, თანხლება და შემდგომი განვითარება."}, {"type": "quote", "label": "მარტივად", "text": "საზოგადოდ მიწოდებენ პროგრამისტს და მე ვაქცევ იდეას ან ტექნიკურ დავალებას მუშა პროგრამულ პროდუქტად."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო პროგრამული სისტემა, რომელიც სწორად მუშაობს, მოხერხებულია მომხმარებლისთვის, მასშტაბირებადია, კითხვადია ჩემი კოლეგა-პროგრამისტებისთვის და მომავალში ადვილად გასაუმჯობესებელი?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "IS&BT-ის სტუდენტისგან განსხვავებით, რომელიც ბიზნეს ლოგიკას სისტემურ დონეზე აწესრიგებს და ხშირად მზა კორპორაციულ სისტემებს აკონფიგურირებს, SE-ის სტუდენტი დასმული ამოცანიდან გამომდინარე წერს კოდს ან ავალებს ამას AI-ის ასისტენტს და ქმნის მუშა პროგრამულ პროდუქტს ნულიდან ან შეაქვს ცვლილებები არსებულ მომუშავე სისტემაში. Infra-ს სტუდენტისგან განსხვავებით, მას ფოკუსი არა ინფრასტრუქტურის მორგებაზე აქვს პროგრამების ექსპლუატაციისას, არამედ საკუთრივ პროგრამული აპლიკაციის არქიტექტურის, ლოგიკისა და კოდის ხარისხზე."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "პროგრამული პროდუქტის დაპროექტება, კოდირების AI-ასისტენტების ეფექტურად გამოყენება, მუშა კოდის მიღება და კოდის/პროდუქტის განხილვაში (Code Review) ჩართულობა, ვებ და მობილური აპლიკაციების დეველოპმენტი, ტესტირება ავტომატურ რეჟიმში (unit, integration და სხვა ტესტები), ვერსიების კონტროლი და გუნდური თანაშრომლობა Software Engineering-ის განყოფილებაში."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "მასშტაბური სისტემების პროგრამული არქიტექტურა, DevOps პრაქტიკები (CI/CD — Continuous Integration / Continuous Delivery ან Deployment, უწყვეტი ინტეგრაცია / უწყვეტი მიწოდება ან განთავსება), მემკვიდრეობითი სისტემების (legacy systems) რეფაქტორინგი ან ჩანაცვლება, ასევე AI-ასისტენტებისთვის (Claude Code, OpenAI Codex ან ანალოგებს) დავალების პროფესიონალურად ფორმულირება, მათ მიერ გენერირებული კოდის გადამოწმება და საბოლოო ინტეგრაცია."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "SE-ის სპეციალისტი მუშაობს დეველოპერული გუნდის ნაწილად, ხშირად IS&BT-ის ჯგუფის ტექნიკურ დავალებას ან პროდუქტის მენეჯერის მოთხოვნებს იღებს შესასრულებლად, ხოლო მისი კოდი საბოლოოდ რეალური მომხმარებლების ხელში ხვდება."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "SE-ის სპეციალისტი აშენებს — ის აბსტრაქტულ ან დოკუმენტურ მოთხოვნას კონკრეტულ, მომუშავე სისტემად აქცევს."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "ლოგიკური და სტრუქტურული აზროვნება — პრობლემა იშლება მცირე, ერთმანეთთან დაკავშირებულ ლოგიკურ ბლოკებად, სადაც ყოველი ნაბიჯი ცალსახად გამომდინარეობს წინიდან. AI კოდის ასისტენტების გავრცელებასთან ერთად, მზარდი მნიშვნელობა ენიჭება შეფასებით (evaluative) აზროვნებას — გენერირებული გადაწყვეტილებების სისწორის, უსაფრთხოებისა და არქიტექტურული მართებულობის კრიტიკულად გადამოწმების უნარს."}], "5": [{"type": "list", "label": null, "text": "პროგრამული არქიტექტურის დიზაინის დოკუმენტი; მუშა, დატესტილი კოდი ან ვებ/მობილური აპლიკაცია; ავტომატური ტესტების კრებული; CI/CD pipeline (უწყვეტი ინტეგრაცია+მიწოდების კონვეიერი), რომელიც კოდის დეპლოიმენტს (სამუშაოდ განთავსებას) ავტომატიზებს."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "Software Engineer ჩაიბარებს ტექნიკურ დავალებას ან მოთხოვნების სპეციფიკაციას (ხშირად IS&BT-ის ჯგუფისგან ან ბიზნესის მხარესგან)."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს დატესტილ და მუშა (და შესაძლოა, CI/CD-ით დეპლოირებულ) პროგრამულ სისტემას, რომელიც მომხმარებლისთვის ან შემდეგი ეტაპის გუნდისთვის (DevOps/Infra-სთვის) მზადაა."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "კოდის სიწმინდე და საიმედოობა — SE-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ პროგრამულმა სისტემამ კორექტულად იმუშაოს ისე, როგორც განზრახული იყო, და არ მოხდეს მისი ავარიულად დასრულება რეალურ სამუშაო გარემოში."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Software Developer-დან (კოდის შექმნა მენტორის ზედამხედველობით) Software Engineer-მდე ან Senior Software Engineer-მდე (დამოუკიდებელი არქიტექტურული გადაწყვეტილებები), შემდეგ Tech Lead, Engineering Manager და Staff/Principal Engineer დონეებამდე. ასევე არსებობს Full-Stack, Backend, Frontend და Mobile Developer-ის სპეციალიზებული როლები."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "SE ერთ-ერთი ყველაზე უნივერსალური IT სპეციალიზაციაა — Software Engineer საჭიროა არა მხოლოდ ტექ-კომპანიებში, არამედ ყველგან, სადაც ციფრული პროდუქტი იქმნება: საფინანსო სექტორი (FinTech), ჯანდაცვა (HealthTech), ელექტრონული კომერცია, ტელეკომი, თამაშების ინდუსტრია და საჯარო სექტორი."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "პირველ 1-2 წელში (Junior Software Engineer) მთავარი ამოცანა თანდათან იცვლება — წმინდა, ხელით კოდის წერის ნაცვლად, აქცენტი მეტად გადადის კოდირების AI ასისტენტების (Claude Code, OpenAI Codex და სხვა) მიერ შემოთავაზებული გადაწყვეტების გააზრებაზე, გადამოწმებასა და არსებულ არქიტექტურაში ინტეგრირებაზე — ანუ Junior დონეზე უფრო ადრე მოითხოვება არქიტექტურული წიგნიერება და კოდის კრიტიკული შეფასების უნარი, თუმცა ფუნდამენტური უნარები (ალგორითმები, დებაგინგი, კოდის წაკითხვა) ისევ წინაპირობად რჩება ამის საიმედოდ შესასრულებლად; 2-4 წელში (Mid Software Engineer) სტუდენტი დამოუკიდებლად მუშაობს ცალკეულ ფუნქციონალზე ბოლომდე; 4-7 წელში (Senior) იღებს არქიტექტურულ გადაწყვეტილებებს და ხელმძღვანელობს code review-ებს, ხშირად — AI-გენერირებული კოდის ხარისხის კონტროლსაც; 7-10+ წელში კარიერა იშლება ორ მიმართულებად — ტექნიკური ექსპერტიზის გაღრმავება (Staff/Principal Engineer) ან მენეჯერული ხელმძღვანელობა (Tech Lead/Engineering Manager). მნიშვნელოვანია აღინიშნოს, რომ AI-ის პოტენციალის ზრდის ეპოქაში შრომით „ბაზარზე“ ცვლილებების შესაძლებლობაც იზრდება."}]}, "Infra": {"1": [{"type": "p", "label": null, "text": "მე ვარ ინფრასტრუქტურის ინჟინერი — ვაგებ და ვმართავ იმ ტექნიკურ ფუძეს (ქსელები, სერვერები, Cloud ანუ ღრუბლოვანი რესურსები), რომელზეც ყველა სხვა სისტემა დგას. ჩემი მთავარი ამოცანაა, რომ ეს ფუძე ყოველთვის ხელმისაწვდომი, სტაბილური და მასშტაბირებადი იყოს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაგებ პირობითად „ისეთ გზებსა და ხიდებს“ რომლებზეც ყველა სახის პროგრამული სისტემა მოძრაობს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო და შევინარჩუნო ინფრასტრუქტურა, რომელიც ხარვეზის გარეშე, უსაფრთხოდ და მასშტაბირებადად აწვდის რესურსს ყველა ლეგალურ სისტემას?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "Cyber-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ინფრასტრუქტურაში არსებული საფრთხეების აღმოჩენასა და მათგან დაცვაზე, Infra-ს სტუდენტი ფოკუსირებულია საკუთრივ ინფრასტრუქტურის აშენებაზე, ექსპლუატაციაზე და ხელმისაწვდომობაზე — უსაფრთხოება მისთვის ერთერთი ასპექტია ბევრს შორის (ხელმისაწვდომობასთან, წარმადობასთან და მასშტაბირებასთან ერთად) და არა ერთადერთი ცენტრალური. თუმცა, AIOps-ის (AI-ით გაძლიერებული მონიტორინგი და ანომალიის პრედიქტული დეტექციის) გავრცელებასთან ერთად, Infra-ს სტუდენტისთვის მნიშვნელოვან უნარად ყალიბდება AI-გენერირებული რეკომენდაციების სისწორის შეფასება."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "ქსელების დაგეგმვა და კონფიგურირება (Cisco-ს CCNA დონის ამოცანები), სერვერების კონფიგურირება და ოპერაციული სისტემების (Linux) ადმინისტრირება, Cloud რესურსების მართვა (მსგავსად AWS ან Azure)."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "Cloud სერვისის მოდელების (IaaS/PaaS/SaaS — Infrastructure/Platform/Software as a Service) დონეზე არქიტექტურის დაგეგმვა, ვირტუალიზაცია და კონტეინერიზაცია მასშტაბურ გარემოში, ინფრასტრუქტურის როგორც კოდის (IaC — Infrastructure as Code) პრაქტიკები, მაღალი ხელმისაწვდომობის (High Availability) და კატასტროფისგან აღდგენის (Disaster Recovery) არქიტექტურები. AIOps პლატფორმების (Datadog AI, New Relic AI) ამუშავება ტექნიკური ანომალიების პრედიქტული აღმოჩენისთვის და ახალი სიმძლავრეების დაგეგმვისთვის (capacity planning), ასევე AI-ის გამოყენება IaC სკრიპტების (Terraform/Ansible) გენერირებისა და ვალიდაციისთვის."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "Infra-ს სპეციალისტი მუშაობს IT ოპერაციების გუნდის ნაწილად — მისი მოღვაწეობა ფუნდამენტს ქმნის Software Engineer-ის მიერ მოწოდებული აპლიკაციების მუშაობისთვის და Cyber-ის ინჟინრისთვის უსაფრთხოების გასაკონტროლებლად."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "Infra-ს სპეციალისტი აშენებს და მართავს — Infra-ს სპეციალისტი ქმნის სისტემის ფუნქციონირების ფიზიკურ ან ვირტუალურ ფუძეს და მუდმივად უზრუნველყოფს მის გამართულობას."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური და პროცედურული აზროვნება — ყოველი კომპონენტი (სერვერი, ქსელი, საცავი) განიხილება ერთიანი, ერთმანეთზე დამოკიდებული მექანიზმის ნაწილებად, სადაც ერთ წერტილში ავარია მთლიან სისტემაზე სასტიკად მოქმედებს. ამასთან, ემატება ვალდებულება, რომ AI-გენერირებული განგაშები და რეკომენდაციები კრიტიკულად გადამოწმდეს ცრუ-დადებითი (false positive) შემთხვევების გამოსარიცხავად."}], "5": [{"type": "list", "label": null, "text": "კონფიგურირებული სერვერი და მუშა ქსელური ან Cloud ინფრასტრუქტურა (IaaS/PaaS/SaaS დონეზე); ინფრასტრუქტურის როგორც კოდის (IaC) სკრიპტები; მონიტორინგისა და განგაშის (alerting) სისტემა; კატასტროფისგან აღდგენის (Disaster Recovery) გეგმა და დოკუმენტაცია."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "Infra-ს სპეციალისტი ჩაიბარებს მოთხოვნას სისტემის ან აპლიკაციის ასამუშავებლად საჭირო რესურსებზე (სერვერი, ქსელი, Cloud გარემო)."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "გადასცემს მზა, კონფიგურირებულ სერვერსა და მუშა ინფრასტრუქტურულ გარემოს, სადაც Software Engineer-ის პროგრამა განთავსებას შეძლებს და სტაბილურად იმუშავებს."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის ხელმისაწვდომობა (Uptime — უპრობლემოდ მუშაობის დრო) — Infra-ს სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ ინფრასტრუქტურა არ ჩავარდეს და ყოველთვის ხელმისაწვდომი იყოს ექსპლუატაციაში მყოფი სისტემებისთვის."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior System/Network Administrator-დან (სერვერებისა და ქსელის მონიტორინგი ხელმძღვანელის თანდასწრებით) DevOps/System Engineer-მდე (დამოუკიდებელი ინფრასტრუქტურის მართვა), შემდეგ Senior DevOps/SRE Engineer, Infrastructure Architect და Head of Infrastructure/IT Operations დონეებამდე — ასევე არსებობს სპეციალიზებული როლები: Cloud Engineer, სისტემების საიმედოობის ინჟინერი (SRE — Site Reliability Engineer), Network Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "Infra-ს სპეციალისტი აუცილებელია ნებისმიერ ორგანიზაციაში, რომელსაც აქვს ციფრული სერვისი — ტელეკომი, ღრუბლოვანი სერვისების პროვაიდერები, ფინტექი, ელექტრონული კომერცია და მსხვილი კორპორაციების IT დეპარტამენტები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე მთავარი ამოცანაა მონიტორინგი და ინციდენტებზე საფეხურეობრივი რეაგირება; AIOps-ის გავრცელებასთან ერთად, სტუდენტისგან სულ უფრო ადრე მოითხოვება AI-გენერირებული განგაშების ინტერპრეტირებისა და root-cause ანალიზის უნარი — ავტომატური დეტექციის მიღმა მდებარე რეალური მიზეზის პოვნა; Mid-level ეტაპზე ეწევა ინფრასტრუქტურის დამოუკიდებლად დაგეგმვასა და IaC-ის წერას; Senior დონეზე — მაღალი ხელმისაწვდომობისა და მასშტაბირების არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Infrastructure/Cloud Architect) ან მენეჯერულ (Head of Infrastructure) მიმართულებებად."}]}, "Cyber": {"1": [{"type": "p", "label": null, "text": "მე ვარ კიბერუსაფრთხოების (Cybersecurity-ის) სპეციალისტი — ერთადერთი ინჟინერი ვარ, ვინც სისტემას ერთდროულად ორი კუთხით ხედავს: მცველის და თავდამსხმელის. ჩემი ამოცანაა სისტემის სუსტი წერტილი მანამდე ვიპოვო, სანამ მას სხვა გამოიყენებს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვფიქრობ როგორც თავდამსხმელი რათა ავაგო დაცვა, რომელსაც ჰაკერი ვერ გადალახავს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "სად არის არსებული სისტემის სუსტი წერტილი, რომელსაც მოწინააღმდეგე გამოიყენებს, და როგორ ავაგო დაცვა მის წინააღმდეგ?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "Infra-ს სტუდენტისგან განსხვავებით, რომელიც ინფრასტრუქტურას აგებს და მის ხელმისაწვდომობაზე ზრუნავს, Cyber-ის სტუდენტი ვარაუდობს, რომ ეს ინფრასტრუქტურა აქტიური თავდასხმის ობიექტი იქნება — მისი მოქმედება შეჯიბრებითია (მოწინააღმდეგის პერსპექტივიდან გამომდინარე), ხოლო Infra-ს სპეციალისტის მოქმედება ძირეულად ოპერაციულია (გამართულობაზე ფოკუსირებული). დღეს უკვე მოწინააღმდეგეც სულ უფრო ხშირად AI-ის იყენებს, მაგალითად AI-გენერირებული ფიშინგს (phishing), მოწყვლადობის ავტომატური სკანირებას, ამიტომ Cyber-ის სტუდენტმაც საჭიროა გაითვალისწინოს დაცვისა და თავდასხმის ორივე მხარეს AI-ით გაძლიერებული მეთოდები."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "სისუსტეების სკანირება და შეფასება, წვდომის კონტროლისა და ავთენტიფიკაციის სისტემების კონფიგურირება, უსაფრთხოების ინციდენტების მონიტორინგი."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "პენტესტინგი (Ethical Hacking) და წინსწრებით დაგეგმილი თავდასხმის სიმულაცია, კრიპტოგრაფიული სისტემების დიზაინი და ანალიზი, ინციდენტებზე რეაგირება (Incident Response) და ციფრული კრიმინალისტიკა (Forensics) მსხვილ ან კრიტიკულ შემოტევებზე. გაფართოებულ ამოცანებში სულ უფრო მნიშვნელოვან ადგილს იკავებს AI სისტემების უსაფრთხოება (LLM Security) — prompt injection-ის, adversarial machine learning-ისა და AI მოდელის jailbreak-ის წინააღმდეგ დაცვის მექანიზმების დაგეგმვა."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "Cyber-ის ინჟინერი მუშაობს უსაფრთხოების გუნდის ნაწილად — მისი მუშაობა იცავს Infra-ს მიერ აშენებულ სისტემებს და Software Engineer-ის მიერ შექმნილ აპლიკაციებს მოწინააღმდეგისგან, ხშირად საკანონმდებლო და მარეგულირებელ მოთხოვნებთან კავშირში."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "Cybersecurity-ის სპეციალისტი იცავს — კიბერუსაფრთხოების ინჟინერი მუდმივად აფასებს საფრთხეს და აგებს ან აძლიერებს დაცვის ხაზს შემოტევების წინააღმდეგ."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "დაპირისპირებითი (adversarial) აზროვნება — ყოველი სისტემა განიხილება არა მისი დანიშნულებიდან, არამედ იმ კუთხით, თუ როგორ შეიძლება მისი ბოროტად გამოყენება ან გატეხვა მოწინააღმდეგის მიერ და შესაბამისად როგორ დავუპირისპირდეთ მას. ეს ადვერსარიალური აზროვნება დღეს ვრცელდება თავად AI სისტემებზეც — Cyber-ის სპეციალისტმა უნდა იფიქროს, როგორ შეიძლება მოწინააღმდეგემ AI მოდელი თავად გაიტყუოს თავის მხარეს და ბოროტად გამოიყენოს."}, {"type": "aside", "label": null, "text": "თუმცა მაინც ნუ დავიჯერებთ, რომ „ამ სპეციალიზაციას ირჩევს ის, ვისთვისაც პარანოია პროფესიული სათნოებაა“."}], "5": [{"type": "list", "label": null, "text": "სისუსტეების შეფასების ანგარიში (Vulnerability Assessment Report); პენტესტის შედეგების დოკუმენტი თავდასხმის სცენარებითა და რეკომენდაციებით; დაცვის კონფიგურირება ან კონტროლის მექანიზმის შექმნა (firewall წესები, წვდომის პოლიტიკა); ინციდენტზე რეაგირების ანგარიში და ციფრული ფორენზიკის (Forensics) დასკვნა."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "კიბერუსაფრთხოების ინჟინერი ჩაიბარებს მუშა სისტემას ან ინფრასტრუქტურას, რომლის უსაფრთხოების დონე გასაზომი, შესამოწმებელი და გასაძლიერებელია."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს დაცვის ხარისხის შეფასებას, გამოვლენილი სისუსტეების ჩამონათვალს და კონკრეტულ რეკომენდაციას ან გამოსწორებულ კონფიგურაციას."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის გადარჩენადობა (Resilience) მოწინააღმდეგის წინაშე — CyberSecurity-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ შემოტევა იქნება დროულად აღმოჩენილი და შეკავებული ან თავიდანვე დაექვემდებარება აცილებას წინასწარ მიღებული ზომების შედეგად."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "უსაფრთხოების ოპერაციების ცენტრის დამწყები ანალიტიკოსი ანუ Junior SOC (Security Operations Center) Analyst-დან (განგაშების მონიტორინგი თავდაცვის ხელმძღვანელის ზედამხედველობით) Mid Security Engineer/Analyst-მდე (საფრთხის დამოუკიდებლად შეფასება), შემდეგ Senior Security Engineer, Security Architect და CISO (Chief Information Security Officer) დონეებამდე — ასევე სპეციალიზებული როლები: Penetration Tester/Red Teamer, Incident Responder, AI/LLM Security Specialist."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "Cyber-ის სპეციალისტი მოთხოვნადია ყველგან, სადაც დასაცავი მონაცემი ან სისტემა არსებობს — საბანკო და საფინანსო სექტორი, სამთავრობო და თავდაცვითი სტრუქტურები, ჯანდაცვა, ტელეკომი და კონსალტინგური/აუდიტორული კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა განგაშების მონიტორინგი და თავდასხმის საფეხურეობრივი ანალიზი; AI-ით გაძლიერებული შემოტევებისა და AI სისტემების უსაფრთხოების (LLM Security) მზარდი მნიშვნელობის გამო, სტუდენტისგან სულ უფრო ადრე მოითხოვება ორმხრივი — როგორც დამცველის, ისე მოწინააღმდეგის — პერსპექტივიდან აზროვნება; Mid-level ეტაპზე აიწევს დამოუკიდებლად ინციდენტებზე რეაგირებასა და საფრთხის მოდელირებაზე; Senior დონეზე — საწარმოს მასშტაბის უსაფრთხოების არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Security Architect/Principal) ან მენეჯერულ (CISO) მიმართულებებად."}]}, "CE": {"1": [{"type": "p", "label": null, "text": "მე ვარ კომპიუტერული ინჟინერი — ვმუშაობ იქ, სადაც პროგრამული უზრუნველყოფა შეხვდება ფიზიკურ მოწყობილობას. ვაკონფიგურირებ სერვერის აპარატურულ/პროგრამულ უზრუნველყოფას კომპანიების პრობლემებიდან გამომდინარე. ვაგებ ჩაშენებულ (embedded) სისტემებს — მცირე, სპეციალიზებულ კომპიუტერებს, რომლებიც სენსორებში, ჩიპებსა და მოწყობილობებში ამუშავდება, ვაპროექტებ ჭკვიანი, ქსელში ჩართული მოწყობილობების ერთიან IoT-ეკოსისტემებს (საგნების/ნივთების ინტერნეტი). მოკლედ, ჩემი ცოდნა ერთნაირად მოიცავს ელექტრონიკას და კოდს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვღებულობ ოპტიმალურ ტექნიკურ გადაწყვეტილებებს და ვაძლევ „ინტელექტს“ ფიზიკურ მოწყობილობებს და სისტემებს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაწყო კომპანიების ოპტიმალური კომპიუტერული კომპლექსი ან როგორ ავაგო სისტემა, რომელიც ფიზიკური რესურსების (ენერგია, მეხსიერება, დამუშავების სიჩქარე) მკაცრი შეზღუდვის პირობებში ამუშავდება?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "SE-ის სტუდენტისგან განსხვავებით, რომელიც კოდს ქმნის პლატფორმისთვის, სადაც რესურსები ნაკლებად შეზღუდულია, CE-ის სტუდენტი მუშაობს მკაცრად შეზღუდულ გარემოში. R&A-ის სტუდენტისგან განსხვავებით, ფოკუსი აქ არ არის მექანიკურ მოძრაობაზე, არამედ ჩიპის/მოწყობილობის არქიტექტურასა და დეტალური/„დაბალი“ დონის პროგრამულ-აპარატურულ ინტეგრაციაზე. AI-აქსელერატორების (NPU/TPU) გავრცელებასთან ერთად, CE-ის სტუდენტისთვის „მკაცრი შეზღუდვა“ სულ უფრო კონკრეტულად AI მოდელის ჩიპებზე გაშვების ოპტიმიზაციას გულისხმობს."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "სერვერების აპარატურულ/პროგრამული უზრუნველყოფის კონფიგურირება, ჩაშენებული სისტემების პროგრამირება (firmware), მიკროკონტროლერების კონფიგურირება, სენსორებთან და პერიფერიულ მოწყობილობებთან ინტერფეისის შექმნა."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "ოპტიმალური კომპიუტერული კომპლექსის დაპროექტება კომპანიებისთვის, აპარატურის (hardware) დიზაინი დეტალური დონის ოპტიმიზაციისთვის, სიგნალების ციფრული დამუშავება (DSP — Digital Signal Processing), „ჭკვიანი სახლის“ აგება, Edge AI-ის (პერიფერიული ხელოვნური ინტელექტის) მანქანური სწავლების მოდელების ოპტიმიზაცია და გაშვება AI-ჩიპებზე რესურსების მინიმალური ხარჯვით. აქ გამოიყენება AI-მოდელების სპეციალური (quantization და pruning) ტექნიკები რესურსდამზოგი გაშვებისთვის. გაფართოებულ ამოცანებში ასევე შედის AI-ის (Synopsys.ai, Cadence AI) გამოყენება ჩიპის/firmware-ის დაპროექტებაში."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "CE-ის სპეციალისტი მუშაობს პროდუქტის გუნდის ნაწილად, სადაც მისი ნაშრომი ან კომპანიის კომპლექსურ პროექტში ან ფიზიკურ მოწყობილობაში ინტეგრირდება — ავტომობილი, IoT სენსორი, სამედიცინო აპარატურა — და საბოლოოდ წარმოებაში გადადის."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "CE-ის სპეციალისტი აპროექტებს და აშენებს — ის ერთდროულად მუშაობს პროგრამული ლოგიკისა და ფიზიკური აპარატურის საზღვარზე."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "რესურსზე ორიენტირებული, ზუსტი ინჟინერული აზროვნება — ყოველი გადაწყვეტილება ფასდება ტექნიკის, ენერგიის, მეხსიერებისა და დროის მკაცრი ბალანსით."}], "5": [{"type": "list", "label": null, "text": "ჩაშენებული სისტემის firmware ან კონტროლერის კოდი; აპარატურულ-პროგრამული ინტეგრაციის სქემა; ოპტიმიზებული AI მოდელი, რომელიც ჩიპზე ამუშავდება; ტექნიკური დოკუმენტაცია მოწყობილობის არქიტექტურაზე, კომპიუტერული კომპლექსის ტექნიკური სპეციფიკაცია."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "CE-ის სპეციალისტი ჩაიბარებს სისტემის ტექნიკურ პირობებს, აპარატურის სპეციფიკაციას ან მოწყობილობის ფუნქციურ მოთხოვნებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს სისტემის საპროექტო დოკუმენტაციას ან მუშა firmware-ს ან ჩაშენებულ სისტემას, რომელიც მზადაა ინტეგრაციისთვის უფრო დიდ პროდუქტში ან მასობრივი წარმოებისთვის."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "დამკვეთის მოთხოვნების შესრულება და სისტემის საიმედოობა ფიზიკური შეზღუდვების პირობებში — CE-ის სპეციალისტი აგებს პასუხს იმაზე, რომ ტექნიკურმა კომპლექსმა თუ ცალკეულმა მოწყობილობამ იმუშაოს გამართულად გამოყოფილი რესურსის ფარგლებში."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Hardware/Embedded Engineer-დან (სქემების ტესტირება და firmware-ის გამართვა გამოცდილი ინჟინრის ხელმძღვანელობით) Mid Hardware/Embedded Systems Engineer-მდე (დამოუკიდებელი დიზაინი), შემდეგ Senior Hardware/Embedded Engineer, Hardware Architect და Head of Hardware Engineering-ის დონეებამდე. ასევე არსებობს სპეციალიზებული როლები: Firmware Engineer, IoT Engineer, FPGA/ASIC Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "CE-ის სპეციალისტი საჭიროა ფიზიკური პროდუქტის შემქმნელ ნებისმიერ ინდუსტრიაში — AI-ზე ორიენტირებული ელექტრონული პროდუქციის დამპროექტებელი და მწარმოებელი კომპანიები, ავტომობილების ინდუსტრია, IoT და „ჭკვიანი“ მოწყობილობების მწარმოებლები, სამედიცინო აპარატურის, ტელეკომუნიკაციური აღჭურვილობის და ნახევარ-გამტარული (Semiconductor) კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა არსებული სქემების ტესტირება და firmware-ის გამართვა; Mid-level ეტაპზე ეწევა დამოუკიდებლად სისტემის დიზაინს, AI-მოდელების ჩიპზე ოპტიმიზაციის (quantization/pruning) ოპერაციებს; Senior დონეზე — მუშაობს პროდუქტის (AI-აქსელერატორების NPU/TPU-ს ანალოგების) არქიტექტურულ გადაწყვეტილებებზე, უზრუნველყოფს პროექტებში აპარატურულ-პროგრამული ბალანსის დაცვას. შემდგომში კარიერა იშლება ტექნიკურ (Hardware/Chip Architect) ან მენეჯერულ (Head of Hardware) მიმართულებებად."}]}, "RA": {"1": [{"type": "p", "label": null, "text": "მე ვარ რობოტიკისა და ავტომატიზაციის ინჟინერი — ვაგებ სისტემებს, რომლებიც ფიზიკურ სამყაროში მოძრაობენ, აანალიზებენ გარემოს და მოქმედებენ ადამიანის უწყვეტი ჩარევის გარეშე. ჩემი სამუშაოა რობოტების პროგრამირება, ინდუსტრიული პროცესების ავტომატიზაცია და სისტემების აგება, რომლებიც აღიქვამენ გარემოს, ღებულობენ გადაწყვეტილებებს და მოქმედებენ."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაგებ „მექანიზმებს“ რომლებსაც საკუთარი თავის მართვა შეუძლიათ."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო სისტემა ან გავაწყო მექანიზმი, რომელიც ფიზიკურ გარემოს აღიქვამს, გადაწყვეტილებას იღებს და ზუსტად მოქმედებს რეალურ დროში?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "CE-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ჩიპისა და მოწყობილობის დეტალური დონის არქიტექტურაზე, R&A-ის სტუდენტი ფოკუსირებულია მთლიან სისტემაზე, რომელიც ფიზიკურად მოძრაობს და ურთიერთქმედებს გარემოსთან — აღქმა, გადაწყვეტილების მიღება და მექანიკური მოქმედება ერთიან ციკლში. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან მოდელის აგებაზე, არამედ იმ მოდელის ფიზიკურ ქმედებად გარდაქმნაზე. თანამედროვე მიდგომებში ეს „მოდელი“ სულ უფრო ხშირად ფუნდამენტური (foundation) AI მოდელია — ე.წ. Vision-Language-Action (VLA) მოდელები, რომლებიც ხედვას, ენას და ფიზიკურ მოქმედებას ერთ სისტემაში აერთიანებენ."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "რობოტების პროგრამირება (Robot Operating System — ROS-ის გამოყენებით), ინდუსტრიული კონტროლერების (PLC — Programmable Logic Controller) კონფიგურირება და პროგრამირება, სენსორებიდან მიღებული მონაცემების დამუშავება რეალურ დროში გადაწყვეტილების მისაღებად."}, {"type": "p", "label": "გაფართოებული ამოცანები (Industry 4.0)", "text": "SCADA (Supervisory Control And Data Acquisition) სისტემების დიზაინი მსხვილი ინდუსტრიული პროცესების მონიტორინგისა და კონტროლისთვის, Computer Vision-ის ინტეგრირება რობოტის ნავიგაციისთვის და ობიექტების ამოცნობისთვის, ავტონომიური სისტემების კოორდინირება მულტირობოტიან გარემოში, ნივთების ინდუსტრიული ინტერნეტის („IIoT — Industrial IoT & Building Automation“) და რობოტიზებული ხაზების ინტეგრირება ქარხნებში (Industry 4.0). გაფართოებულ ამოცანებში შედის ფიზიკური სამყაროს AI მოდელების (Physical AI) გამოყენება ამოცანის დაგეგმვისთვის (task planning) და განხორციელებისთვის (implementation), აგრეთვე ბუნებრივი ენით რობოტთან საიმედო თანამშრომლობის უზრუნველყოფა."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "R&A-ის სპეციალისტი მუშაობს საწარმოო, ლოგისტიკურ ან კვლევით გარემოში — მისი სისტემა ხშირად ინტეგრირდება უფრო ფართო საწარმოო ხაზში ან ავტონომიურ პლატფორმაში, სადაც უსაფრთხოება და ზუსტი მოქმედება კრიტიკულია."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "R&A-ის სპეციალისტი აპროექტებს და აშენებს — ის ქმნის სისტემას, რომელიც გარემოს აღქმიდან მოქმედებამდე უწყვეტ ციკლში მუშაობს."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური და რეალურ-დროში-ორიენტირებული აზროვნება — ყოველი გადაწყვეტილება განიხილება დროითი და ფიზიკური შეზღუდვების ფონზე, სადაც დაგვიანებული ან არაზუსტი მოქმედება უარყოფით ფიზიკურ შედეგს გამოიწვევს. დამატებითი ყურადღების ღირსია AI-ზე დაფუძნებული გადაწყვეტილების დროულად გადამოწმება მისი გადატანის წინ ფიზიკურ გარემოში."}], "5": [{"type": "list", "label": null, "text": "დაპროგრამებული რობოტული სისტემა (საწარმოო ხაზი ან ავტონომიური პლატფორმა); PLC-ზე დაფუძნებული ავტომატიზაციის გადაწყვეტა; SCADA მონიტორინგისა და კონტროლის სისტემა; ინტეგრირებული Computer Vision მოდული ნავიგაციისთვის ან ობიექტების ამოცნობისთვის."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "R&A-ის სპეციალისტი ჩაიბარებს ფიზიკური ამოცანის ან საწარმოო პროცესის სპეციფიკაციას, რომელიც ავტომატიზაციას ან რობოტიზებულ გადაწყვეტას მოითხოვს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს მუშა, ტესტირებულ რობოტულ ან ავტომატიზებულ სისტემას, რომელიც საწარმოო ხაზში ან რეალურ გარემოში ინტეგრაციისთვის მზადაა."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის ფიზიკური უსაფრთხოება და სიზუსტე — R&A სპეციალისტი აგებს პასუხს იმაზე, რომ ავტონომიური მოქმედება ზუსტად და უსაფრთხოდ შესრულდება."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Robotics/Automation Engineer-დან (არსებული რობოტული სისტემების ტესტირება და კალიბრაცია ხელმძღვანელის ზედამხედველობით) Mid Robotics Engineer-მდე (სისტემის დამოუკიდებლად დიზაინი და რობოტების სწავლება), შემდეგ Senior Robotics Engineer, Robotics/Automation Architect და Head of Robotics დონეებამდე — ასევე სპეციალიზებული როლები: Computer Vision Engineer, Controls Engineer, Industrial Automation Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "R&A-ის სპეციალისტი მოთხოვნადია წარმოებასა და ლოგისტიკაში (Industry 4.0), ავტომობილების ინდუსტრიაში (ავტონომიური მართვა), სამედიცინო რობოტიკაში, სოფლის მეურნეობაში, სამხედრო სფეროში და სამეცნიერო/კვლევით ლაბორატორიებში."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა არსებული სისტემის ტესტირება და კალიბრაცია; ფუნდამენტური AI მოდელების (Physical AI, VLA) გავრცელებასთან ერთად, მას უკვე მოეთხოვება ამ მოდელების გადამოწმება მათი გადატანის წინ ფიზიკურ გარემოში; Mid-level ეტაპზე ის ეწევა სისტემის დამოუკიდებლად ინტეგრაციას; Senior დონეზე ღებულობს საწარმოო ხაზის მასშტაბის არქიტექტურულ გადაწყვეტილებებს. შემდგომში კარიერა იშლება ტექნიკურ (Robotics Architect/Principal) ან მენეჯერულ (Head of Robotics/Automation) მიმართულებებად."}]}}}
 </script>
+<script>
+(function () {
+  "use strict";
 
+  var DATA = JSON.parse(document.getElementById("app-data").textContent);
+  var SPECS = DATA.specializations;
+  var SECTIONS = DATA.sections;
+  var CONTENT = DATA.content;
+
+  var specById = {};
+  SPECS.forEach(function (s) { specById[s.id] = s; });
+  var sectionById = {};
+  SECTIONS.forEach(function (s) { sectionById[s.id] = s; });
+
+  var state = {
+    spec: new Set(),
+    section: new Set(),
+    priority: null, // 'spec' | 'section'
+    queue: [],
+    idx: 0
+  };
+
+  // ---------- DOM refs ----------
+  var el = {
+    specGrid: document.getElementById("specGrid"),
+    sectionGrid: document.getElementById("sectionGrid"),
+    specAll: document.getElementById("specAll"),
+    sectionAll: document.getElementById("sectionAll"),
+    goBtn: document.getElementById("goBtn"),
+    goHint: document.getElementById("goHint"),
+    selectionScreen: document.getElementById("selectionScreen"),
+    heroBlock: document.getElementById("heroBlock"),
+    viewerScreen: document.getElementById("viewerScreen"),
+    modalOverlay: document.getElementById("modalOverlay"),
+    modalCancel: document.getElementById("modalCancel"),
+    optSpec: document.getElementById("optSpec"),
+    optSection: document.getElementById("optSection"),
+    progressFill: document.getElementById("progressFill"),
+    progressCount: document.getElementById("progressCount"),
+    restartBtn: document.getElementById("restartBtn"),
+    specBadge: document.getElementById("specBadge"),
+    sectionBadge: document.getElementById("sectionBadge"),
+    contentCard: document.getElementById("contentCard"),
+    prevBtn: document.getElementById("prevBtn"),
+    nextBtn: document.getElementById("nextBtn"),
+    tooltip: document.getElementById("tooltip")
+  };
+
+  // ---------- helpers ----------
+  function el_(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------- tooltip ----------
+  var tooltipOpenFor = null;
+  function showTooltip(anchor, text) {
+    var tip = el.tooltip;
+    tip.textContent = text;
+    tip.classList.add("show");
+    var rect = anchor.getBoundingClientRect();
+    var tipRect;
+    tip.style.left = "0px";
+    tip.style.top = "0px";
+    // measure after content set
+    tipRect = tip.getBoundingClientRect();
+    var left = rect.left + rect.width / 2 - tipRect.width / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - tipRect.width - 8));
+    var top = rect.bottom + 10;
+    var arrowTop = true;
+    if (top + tipRect.height > window.innerHeight - 8) {
+      top = rect.top - tipRect.height - 10;
+      arrowTop = false;
+    }
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+    tip.classList.toggle("arrow-top", !arrowTop);
+    // arrow horizontal position relative to tooltip box
+    var arrowLeft = rect.left + rect.width / 2 - left - 5;
+    tip.style.setProperty("--arrow-left", arrowLeft + "px");
+    tooltipOpenFor = anchor;
+  }
+  function hideTooltip() {
+    el.tooltip.classList.remove("show");
+    tooltipOpenFor = null;
+  }
+  function attachTooltip(node, fullText) {
+    node.addEventListener("mouseenter", function () {
+      if (window.matchMedia("(hover: hover)").matches) showTooltip(node, fullText);
+    });
+    node.addEventListener("mouseleave", function () {
+      if (window.matchMedia("(hover: hover)").matches) hideTooltip();
+    });
+    node.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      if (tooltipOpenFor === node) { hideTooltip(); }
+      else { showTooltip(node, fullText); }
+    });
+    node.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        if (tooltipOpenFor === node) { hideTooltip(); } else { showTooltip(node, fullText); }
+      }
+    });
+  }
+  document.addEventListener("click", function () { hideTooltip(); });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape") hideTooltip();
+  });
+
+  // ---------- build selection chips ----------
+  function buildChip(kind, item) {
+    var label = el_("label", "chip");
+    var short = kind === "spec" ? item.short : item.short;
+    var full = item.full;
+    label.style.setProperty("--accent", kind === "spec" ? item.color : "#8A94A6");
+
+    var idVal = item.id; // string for specs, number for sections
+    var input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = String(idVal);
+    input.dataset.kind = kind;
+    input.dataset.id = String(idVal);
+
+    var body = el_("span", "chip__body");
+    var mark = el_("span", "chip__mark", escapeHtml(kind === "spec" ? item.short.replace("&", "") : String(item.id)));
+    var check = el_("span", "check", "✓");
+    mark.appendChild(check);
+
+    var text = el_("span", "chip__text");
+    var shortSpan = el_("span", "chip__short");
+    shortSpan.appendChild(document.createTextNode(short));
+    var infoIcon = el_("span", "chip__infoicon", "i");
+    shortSpan.appendChild(infoIcon);
+    var fullSpan = el_("span", "chip__full", escapeHtml(full));
+
+    text.appendChild(shortSpan);
+    text.appendChild(fullSpan);
+
+    body.appendChild(mark);
+    body.appendChild(text);
+
+    label.appendChild(input);
+    label.appendChild(body);
+
+    // tooltip only meaningfully needed on narrow screens (short visible there)
+    attachTooltip(shortSpan, full);
+
+    input.addEventListener("change", function () {
+      if (kind === "spec") {
+        if (input.checked) state.spec.add(idVal); else state.spec.delete(idVal);
+        syncAllButton(el.specAll, state.spec.size, SPECS.length);
+      } else {
+        if (input.checked) state.section.add(idVal); else state.section.delete(idVal);
+        syncAllButton(el.sectionAll, state.section.size, SECTIONS.length);
+      }
+      updateGoState();
+    });
+
+    return label;
+  }
+
+  function syncAllButton(btn, count, total) {
+    var allChecked = count === total;
+    btn.setAttribute("aria-pressed", allChecked ? "true" : "false");
+    btn.textContent = allChecked ? "გაუქმება" : "ყველა";
+  }
+
+  function renderGrids() {
+    SPECS.forEach(function (s) {
+      el.specGrid.appendChild(buildChip("spec", s));
+    });
+    SECTIONS.forEach(function (s) {
+      el.sectionGrid.appendChild(buildChip("section", s));
+    });
+  }
+
+  function toggleAll(kind) {
+    var grid = kind === "spec" ? el.specGrid : el.sectionGrid;
+    var setRef = kind === "spec" ? state.spec : state.section;
+    var total = kind === "spec" ? SPECS.length : SECTIONS.length;
+    var shouldCheck = setRef.size !== total;
+    var inputs = grid.querySelectorAll('input[type="checkbox"]');
+    if (!shouldCheck) {
+      setRef.clear();
+    }
+    inputs.forEach(function (inp) {
+      inp.checked = shouldCheck;
+      if (shouldCheck) {
+        setRef.add(kind === "spec" ? inp.dataset.id : parseInt(inp.dataset.id, 10));
+      }
+    });
+    if (kind === "spec") syncAllButton(el.specAll, state.spec.size, SPECS.length);
+    else syncAllButton(el.sectionAll, state.section.size, SECTIONS.length);
+    updateGoState();
+  }
+
+  el.specAll.addEventListener("click", function () { toggleAll("spec"); });
+  el.sectionAll.addEventListener("click", function () { toggleAll("section"); });
+
+  function updateGoState() {
+    var ok = state.spec.size > 0 && state.section.size > 0;
+    el.goBtn.disabled = !ok;
+    if (ok) {
+      el.goHint.textContent = "";
+    } else {
+      el.goHint.textContent = "აირჩიეთ სულ ცოტა ერთი სპეციალიზაცია და ერთი სექცია";
+    }
+  }
+
+  // ---------- queue building ----------
+  function buildQueue(priority) {
+    var specsArr = SPECS.filter(function (s) { return state.spec.has(s.id); });
+    var sectionsArr = SECTIONS.filter(function (s) { return state.section.has(s.id); });
+    var q = [];
+    if (priority === "section") {
+      sectionsArr.forEach(function (sec) {
+        specsArr.forEach(function (sp) { q.push({ spec: sp.id, section: sec.id }); });
+      });
+    } else {
+      specsArr.forEach(function (sp) {
+        sectionsArr.forEach(function (sec) { q.push({ spec: sp.id, section: sec.id }); });
+      });
+    }
+    return q;
+  }
+
+  // ---------- viewer rendering ----------
+  function renderBlock(block) {
+    var wrap = el_("div", "block" + (block.type === "quote" ? " block--quote" : block.type === "aside" ? " block--aside" : ""));
+    if (block.label) {
+      wrap.appendChild(el_("span", "block__label", escapeHtml(block.label)));
+    }
+    if (block.type === "list") {
+      var ul = document.createElement("ul");
+      block.text.split(/;\s*/).map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (item) {
+        var clean = item.replace(/\.$/, "");
+        ul.appendChild(el_("li", null, escapeHtml(clean) + "."));
+      });
+      wrap.appendChild(ul);
+    } else {
+      block.text.split(/\n\n+/).forEach(function (para) {
+        wrap.appendChild(el_("p", null, escapeHtml(para)));
+      });
+    }
+    return wrap;
+  }
+
+  function renderCurrent() {
+    var item = state.queue[state.idx];
+    if (!item) return;
+    var spec = specById[item.spec];
+    var section = sectionById[item.section];
+
+    // badges
+    el.specBadge.style.setProperty("--accent", spec.color);
+    el.specBadge.querySelector(".badge__dot").textContent = spec.short.replace("&", "");
+    el.specBadge.querySelector(".badge__label-full").textContent = spec.full;
+    el.specBadge.querySelector(".badge__label-short .txt").textContent = spec.short;
+    el.specBadge.dataset.full = spec.full;
+
+    el.sectionBadge.querySelector(".badge__dot").textContent = String(section.id);
+    el.sectionBadge.querySelector(".badge__label-full").textContent = section.full;
+    el.sectionBadge.querySelector(".badge__label-short .txt").textContent = section.short;
+    el.sectionBadge.dataset.full = section.full;
+
+    // content
+    el.contentCard.innerHTML = "";
+    var inner = el_("div", "content-card__fade");
+    var blocks = CONTENT[item.spec][String(item.section)];
+    blocks.forEach(function (b) { inner.appendChild(renderBlock(b)); });
+    el.contentCard.appendChild(inner);
+    window.scrollTo(0, 0);
+
+    // progress
+    var total = state.queue.length;
+    el.progressFill.style.width = ((state.idx + 1) / total * 100) + "%";
+    el.progressCount.textContent = (state.idx + 1) + " / " + total;
+
+    el.prevBtn.disabled = state.idx === 0;
+    el.nextBtn.disabled = state.idx === total - 1;
+  }
+
+  function showViewer() {
+    el.heroBlock.style.display = "none";
+    el.selectionScreen.style.display = "none";
+    el.viewerScreen.classList.add("active");
+    state.idx = 0;
+    renderCurrent();
+  }
+
+  function showSelection() {
+    el.viewerScreen.classList.remove("active");
+    el.heroBlock.style.display = "";
+    el.selectionScreen.style.display = "";
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  el.prevBtn.addEventListener("click", function () {
+    if (state.idx > 0) { state.idx--; renderCurrent(); }
+  });
+  el.nextBtn.addEventListener("click", function () {
+    if (state.idx < state.queue.length - 1) { state.idx++; renderCurrent(); }
+  });
+  el.restartBtn.addEventListener("click", showSelection);
+
+  document.addEventListener("keydown", function (ev) {
+    if (!el.viewerScreen.classList.contains("active")) return;
+    if (el.modalOverlay.classList.contains("open")) return;
+    if (ev.key === "ArrowLeft") { el.prevBtn.click(); }
+    if (ev.key === "ArrowRight") { el.nextBtn.click(); }
+  });
+
+  // badge tap-to-reveal on narrow screens
+  [el.specBadge, el.sectionBadge].forEach(function (badge) {
+    function toggleBadgeTooltip(ev) {
+      ev.stopPropagation();
+      if (!window.matchMedia("(max-width: 680px)").matches) return;
+      var full = badge.dataset.full || "";
+      if (tooltipOpenFor === badge) hideTooltip();
+      else showTooltip(badge, full);
+    }
+    badge.addEventListener("click", toggleBadgeTooltip);
+    badge.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        toggleBadgeTooltip(ev);
+      }
+    });
+  });
+
+  // ---------- modal ----------
+  function openModal() {
+    el.modalOverlay.classList.add("open");
+  }
+  function closeModal() {
+    el.modalOverlay.classList.remove("open");
+  }
+  el.modalCancel.addEventListener("click", closeModal);
+  el.modalOverlay.addEventListener("click", function (ev) {
+    if (ev.target === el.modalOverlay) closeModal();
+  });
+  el.optSpec.addEventListener("click", function () {
+    state.priority = "spec";
+    state.queue = buildQueue("spec");
+    closeModal();
+    showViewer();
+  });
+  el.optSection.addEventListener("click", function () {
+    state.priority = "section";
+    state.queue = buildQueue("section");
+    closeModal();
+    showViewer();
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && el.modalOverlay.classList.contains("open")) closeModal();
+  });
+
+  el.goBtn.addEventListener("click", function () {
+    if (state.spec.size > 1 && state.section.size > 1) {
+      openModal();
+    } else {
+      state.priority = null;
+      state.queue = buildQueue(null);
+      showViewer();
+    }
+  });
+
+  // ---------- init ----------
+  renderGrids();
+  updateGoState();
+})();
+
+</script>
 </body>
 </html>
