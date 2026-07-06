@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT-ის ფაკულტეტი - სპეციალიზაციები</title>
+    <title>ინფორმაციული ტექნოლოგიების ფაკულტეტი - სპეციალიზაციები</title>
     <style>
         :root {
             --primary-color: #1e3a8a;
@@ -24,36 +24,41 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.6;
-            padding: 20px;
+            line-height: 1.3;
+            padding: 10px;
             overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 1250px;
+            margin: auto;
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 16px;
+            padding: 12px 20px;
+            border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
+            padding-bottom: 4px;
         }
 
         header h1 {
             color: var(--primary-color);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 2px;
         }
 
         header .slogan {
             color: var(--secondary-color);
-            font-size: 1.3rem;
+            font-size: 1rem;
             font-weight: 600;
             font-style: italic;
         }
@@ -61,56 +66,59 @@
         .selection-zone {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 850px) {
             .selection-zone {
                 grid-template-columns: 1fr;
+                gap: 8px;
             }
         }
 
         .panel {
             background: #f1f5f9;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
             border: 1px solid #e2e8f0;
         }
 
         .panel h3 {
             color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
             border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 8px;
+            padding-bottom: 3px;
         }
 
         .all-toggle {
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             cursor: pointer;
+            font-size: 0.85rem;
         }
 
         .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 4px;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: white;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 4px 8px;
+            border-radius: 5px;
             border: 1px solid #e2e8f0;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
+            font-size: 0.88rem;
         }
 
         .checkbox-item:hover {
@@ -118,47 +126,41 @@
             background: #f8fafc;
         }
 
-        /* ----------------------------------------------------------------- */
-        /* ადაპტური ჩვენების წესები: განიერი ეკრანი (PC) vs ვიწრო ეკრანი (მობილური) */
-        /* ----------------------------------------------------------------- */
-        
-        /* ნაგულისხმევად განიერ ეკრანებზე ვახენთ სრულ ტექსტს, მოკლეს კი ვმალავთ */
+        /* ადაპტური წესები განიერი და ვიწრო ეკრანებისთვის */
         .text-full {
-            display: inline-block;
+            display: block;
         }
 
         .text-short-container {
             display: none;
         }
 
-        /* ვიწრო ეკრანების წესები (ტაბლეტები და სმარტფონები) */
         @media (max-width: 768px) {
+            .checkbox-group {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
+            }
+
             .text-full {
                 display: none;
             }
 
             .text-short-container {
-                display: inline-block;
+                display: block;
                 position: relative;
                 cursor: pointer;
+                width: 100%;
             }
 
-            .text-short {
-                font-weight: 600;
-                color: var(--primary-color);
-                border-bottom: 1px dashed var(--secondary-color);
-                padding: 2px 4px;
-            }
-
-            /* ამოტივტივებული ფანჯრის (Tooltip) სტილები სენსორული ეკრანებისთვის */
             .text-short-container .tooltiptext {
                 visibility: hidden;
-                width: 260px;
+                width: 240px;
                 background-color: #334155;
                 color: #ffffff;
                 text-align: left;
-                border-radius: 8px;
-                padding: 12px;
+                border-radius: 6px;
+                padding: 10px;
                 position: absolute;
                 z-index: 999;
                 bottom: 130%;
@@ -166,34 +168,50 @@
                 transform: translateX(-50%);
                 opacity: 0;
                 transition: opacity 0.2s ease-in-out;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 font-weight: normal;
-                line-height: 1.4;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                line-height: 1.3;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                 pointer-events: none;
             }
 
-            /* თითით შეხებისას ან Hover-ისას გამოჩენის ლოგიკა */
             .text-short-container:hover .tooltiptext,
             .text-short-container:active .tooltiptext {
                 visibility: visible;
                 opacity: 1;
             }
         }
-        /* ----------------------------------------------------------------- */
+
+        /* ოპტიმიზაცია 1366 x 768 ლეპტოპის ეკრანებისთვის */
+        @media (max-height: 780px) {
+            body { padding: 4px; }
+            .container { padding: 8px 16px; }
+            header { margin-bottom: 6px; padding-bottom: 2px; }
+            header h1 { font-size: 1.35rem; }
+            header .slogan { font-size: 0.88rem; }
+            .selection-zone { gap: 10px; margin-bottom: 6px; }
+            .panel { padding: 6px 10px; }
+            .panel h3 { font-size: 0.85rem; margin-bottom: 4px; }
+            .all-toggle { font-size: 0.8rem; margin-bottom: 4px; }
+            .checkbox-item { padding: 2px 6px; font-size: 0.82rem; gap: 6px; }
+            .btn { padding: 6px 18px; font-size: 0.88rem; }
+            .action-zone { margin-top: 4px; }
+            .view-card { padding: 10px 15px; margin-bottom: 8px; min-height: 180px; max-height: 50vh; }
+            .view-content-text { font-size: 0.98rem; }
+        }
 
         .action-zone {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 8px;
         }
 
         .btn {
             background-color: var(--primary-color);
             color: white;
-            padding: 12px 30px;
+            padding: 8px 22px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.2s;
@@ -203,7 +221,7 @@
             background-color: var(--secondary-color);
         }
 
-        /* პრიორიტეტის მოდალური ფანჯარა */
+        /* მოდალური ფანჯარა */
         .modal {
             display: none;
             position: fixed;
@@ -219,77 +237,87 @@
 
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
-            max-width: 450px;
+            max-width: 400px;
             width: 90%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .modal-content h4 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
+        .modal-content h4 { font-size: 1.1rem; margin-bottom: 15px; }
+        .modal-btns { display: flex; gap: 10px; justify-content: center; }
+        .btn-alt { background-color: #64748b; }
+        .btn-alt:hover { background-color: #475569; }
 
-        .modal-btns {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .btn-alt {
-            background-color: #64748b;
-        }
-        .btn-alt:hover {
-            background-color: #475569;
-        }
-
-        /* საპრეზენტაციო ხედის ზონა */
+        /* საპრეზენტაციო ეკრანი */
         .presentation-zone {
             display: none;
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .view-card {
             background: #ffffff;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            min-height: 250px;
-            max-height: 65vh;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            min-height: 220px;
+            max-height: 56vh;
             overflow-y: auto;
         }
 
         .view-title-box {
-            margin-bottom: 20px;
-            padding-bottom: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #f1f5f9;
         }
 
-        .view-title-box h2.text-full {
-            font-size: 1.6rem;
+        /* სტილები ახალი ორსტრიქონიანი სათაურებისთვის */
+        .title-line-1 {
+            font-size: 1.3rem;
             color: var(--primary-color);
+            font-weight: 700;
+            display: block;
         }
 
-        .view-title-box .text-short {
-            font-size: 1.4rem;
-            display: inline-block;
+        .title-line-2 {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-top: 3px;
+            display: block;
         }
 
+        @media (max-height: 780px) {
+            .title-line-1 { font-size: 1.15rem; }
+            .title-line-2 { font-size: 1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .title-line-1, .title-line-2 {
+                border-bottom: 1px dashed var(--secondary-color);
+                display: inline-block;
+            }
+            .title-line-2 { margin-top: 1px; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /* ტექსტის ავტომატური ჰიფენაცია (დეფისით გადატანა მომდევნო ხაზზე) */
+        /* ----------------------------------------------------------------- */
         .view-content-text {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: var(--text-color);
             white-space: pre-line;
             text-align: justify;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
+        /* ----------------------------------------------------------------- */
 
         .nav-controls {
             display: flex;
@@ -302,7 +330,7 @@
         @media (max-width: 580px) {
             .nav-controls .btn {
                 width: 100%;
-                margin-bottom: 5px;
+                margin-bottom: 4px;
             }
         }
     </style>
@@ -311,7 +339,7 @@
 
 <div class="container">
     <header id="mainHeader">
-        <h1>IT-ის ფაკულტეტი</h1>
+        <h1>ინფორმაციული ტექნოლოგიების ფაკულტეტი</h1>
         <div class="slogan">ვირჩევთ მომავალს!</div>
     </header>
 
@@ -321,8 +349,7 @@
             <label class="all-toggle">
                 <input type="checkbox" id="allSpecs" onchange="toggleAll('specs')"> ყველა სპეციალიზაცია
             </label>
-            <div class="checkbox-group" id="specsGroup">
-                </div>
+            <div class="checkbox-group" id="specsGroup"></div>
         </div>
 
         <div class="panel">
@@ -330,8 +357,7 @@
             <label class="all-toggle">
                 <input type="checkbox" id="allSections" onchange="toggleAll('sections')"> ყველა სექცია
             </label>
-            <div class="checkbox-group" id="sectionsGroup">
-                </div>
+            <div class="checkbox-group" id="sectionsGroup"></div>
         </div>
     </div>
 
@@ -349,19 +375,24 @@
         </div>
     </div>
 
+    <!-- საპრეზენტაციო ეკრანი -->
     <div class="presentation-zone" id="presentationZone">
         <div class="view-card">
             <div class="view-title-box">
-                <h2 class="text-full" id="pageTitleFullDisplay">სრული სათაური</h2>
+                <!-- განიერი ეკრანის სათაური - თითოეული კომპონენტი ახალი ხაზიდან -->
+                <div class="text-full">
+                    <span class="title-line-1" id="pageTitleFullDisplay1">სპეციალიზაცია</span>
+                    <span class="title-line-2" id="pageTitleFullDisplay2">აღწერის სექცია</span>
+                </div>
                 
-                <span class="text-short-container">
-                    <h2 class="text-short" id="pageTitleShortDisplay">მოკლე სათაური</h2>
+                <!-- ვიწრო ეკრანის სათაური - თითოეული კომპონენტი ახალი ხაზიდან + Tooltip -->
+                <div class="text-short-container">
+                    <span class="title-line-1" id="pageTitleShortDisplay1">მოკლე სპეც</span>
+                    <span class="title-line-2" id="pageTitleShortDisplay2">მოკლე სექცია</span>
                     <span class="tooltiptext" id="pageTitleTooltip">სრული სათაური აღწერით</span>
-                </span>
+                </div>
             </div>
-            <div class="view-content-text" id="pageContent">
-                აქ გამოჩნდება შერჩეული აღწერის ტექსტი...
-            </div>
+            <div class="view-content-text" id="pageContent"></div>
         </div>
 
         <div class="nav-controls">
@@ -373,19 +404,18 @@
 </div>
 
 <script>
-    // მონაცემთა ბაზა, სადაც ქართული შემოკლებები სრულად არის გასწორებული
     const specialtiesData = {
         "DS": {
             short: "DS",
             full: "DS (Data Science) — მონაცემთა მეცნიერება",
             sections: {
                 1: "მე ვარ მონაცემთა მეცნიერი — ვმუშაობ დაუმუშავებელ, ხშირად ქაოტურ მონაცემებთან და მათგან გამოვყოფ ნიმუშებს, რომლებიც ბიზნესსა ან საზოგადოებას რეალურ გადაწყვეტილებებში ეხმარება. ჩემი იარაღია სტატისტიკა, მანქანური სწავლება და დიდი მონაცემების დამუშავების ტექნოლოგიები.\nმარტივად: მე „გადავთარგმნი“ რიცხვებს ისეთ ისტორიად, რომელსაც ორგანიზაცია გადაწყვეტილებების მისაღებად გამოიყენებს.",
-                2: "ცენტრალური კითხვა: რა ამბავს მოგვითხრობს ერთი შეხედვით ქაოტური მონაცემები და როგორ ავაგო მოდელი, რომელიც მომავალს იწინასწარმეტყველებს?\nშედარებითი პოზიციონირება: IS&BT-ის სტუდენტისგან განსხვავებით, რომელიც ბიზნეს პროცესს აწესრიგებს არსებული სისტემების დონეზე, DS-ის სტუდენტს არ აკმაყოფილებს არსებული პროცესები, აანალიზებს და მონაცემებიდან ახალ ცოდნას აგენერირებს, ქმნის მოდელს სისტემის სრულყოფისთვის. თანამედროვე ეტაპზე ხელოვნური ინტელექტის და დიდი ენობრივი მოდელების აგენტებსა და AutoML ხელსაწყოებს შეუძლიათ მონაცემთა საძიებო ანალიზი და მოდელის შერჩევის ავტომატიზაცია, რის გამოც DS-ის სტუდენტის ღირებულება სულ უფრო გადადის ჰიპოთეზის ფორმულირებაზე, მონაცემთა ხარისხის კრიტიკულ შეფასებაზე და მიზეზ-შედეგობრივი დასკვნის გამოტანაზე.",
+                2: "ცენტრალური კითხვა: რა ამბავს მოგვითხრობს ერთი შეხედვით ქაოტური მონაცემები და როგორ ავაგო მოდელი, რომელიც მომავალს იწინასწარმეტყველებს?\nშედარებითი პოზიციონირება: IS&BT-ის სტუდენტისგან განსხვავებით, რომელიც ბიზნეს პროცესს აწესრიგებს არსებული სისტემების დონეზე, DS-ის სტუდენტს არ აკმაყოფილებს არსებული პროცესები, აანალიზებს და მონაცემებიდან ახალ ცოდნას აგენერირებს, ქმნის მოდელს სისტემის სრულყოფისთვის. თანამედროვე ეტაპზე ხელოვნური ინტელექტის და დიდი ენობრივი მოდელების აგენტებსა და AutoML ხელსაწყოებს შეუძლიათ მონაცემთა საძიებო ანალიზი და მოდელის შეარჩევის ავტომატიზაცია, რის გამოც DS-ის სტუდენტის ღირებულება სულ უფრო გადადის ჰიპოთეზის ფორმულირებაზე, მონაცემთა ხარისხის კრიტიკულ შეფასებაზე და მიზეზ-შედეგობრივი დასკვნის გამოტანაზე.",
                 3: "ძირეული ამოცანები: მონაცემთა „დასუფთავება“ და ანალიზისთვის მომზადება, სტატისტიკური ანალიზი, მანქანური სწავლების მოდელების შემუშავება და ვალიდაცია, შედეგების ვიზუალიზაცია გადაწყვეტილების მიმღებებისთვის.\nგაფართოებული ამოცანები: დიდი მონაცემების დამუშავების არქიტექტურები, ღრმა სწავლება რთული ნიმუშების ამოცნობისთვის, A/B ტესტირება და მიზეზობრივი დასკვნა ბიზნეს გადაწყვეტილებებში. აგრეთვე კოდირების ხელოვნური ინტელექტის ასისტენტების (მაგალითად Claude Code, OpenAI Сodex ან ანალოგების) გამოყენება მონაცემთა დასუფთავების, მათი თავისებურების გენერირებისა და ანალიზის ავტომატიზაციისთვის, ასევე დიდი ენობრივი მოდელების ბაზაზე დაფუძნებული ანალიტიკური აგენტების ორქესტრირება რთული, მრავალეტაპიანი კვლევითი სამუშაოსთვის.\nსისტემური კონტექსტი: DS-ის სპეციალისტი მუშაობს პროდუქტის, ანალიტიკის ან კვლევის გუნდის ნაწილად — მისი მუშაობის შედეგები კვებავს ბიზნეს სტრატეგიის, საინჟინრო გუნდის ან მკვლევართა ჯგუფის გადაწყვეტილებებს.",
                 4: "საქმიანობის ტიპი: DS-ის სპეციალისტი იკვლევს და აანალიზებს — ის მუშაობს ჰიპოთეზის ფორმულირებიდან მის ემპირიულ შემოწმებამდე.\nაზროვნების ტიპი: ალბათური და სტატისტიკური აზროვნება — ყოველი დასკვნა ხასიათდება გაურკვევლობით, რომელსაც DS-ის სპეციალისტი ციფრებში ზომავს და ანგარიშგებაში გამჭვირვალედ წარმოაჩენს. ხელოვნური ინტელექტის ხელსაწყოების გავრცელებასთან ერთად მზარდი მნიშვნელობა ენიჭება შეფასებით აზროვნებას — ხელოვნური ინტელექტის მიერ გენერირებული მოდელის თუ დასკვნის სტატისტიკური სანდოობის, მიკერძოების და მცდარი ან ჰალუცინირებული დასკვნების კრიტიკული გადამოწმების უნარს.",
                 5: "მანქანური სწავლების მოდელი ან მოდელების ნაკრები პროცესების იმიტაციისთვის; ანალიტიკური პანელი ან ანგარიში, რომელიც ბიზნეს გადაწყვეტილებას ამყარებს; მონაცემთა დამუშავების კონვეიერი, რომელიც დაუმუშავებელ მონაცემებს გამორჩეული სახით და გამოსადეგ ფორმატში გარდაქმნის.",
                 6: "საწყისი წერტილი: DS-ის სპეციალისტს აბარებენ ბიზნესის კვლევით ამოცანებს და ხშირად დაუმუშავებელ, არასტრუქტურირებულ მონაცემებს.\nსაბოლოო წერტილი: ის გადასცემს ვალიდირებულ მოდელს, დასკვნას ან ვიზუალიზებულ ანგარიშს, რომელზეც გადაწყვეტილების მიმღები პერსონა ან ინჟინერი დააფუძნებს შემდეგ ნაბიჯებს.\nპასუხისმგებლობის ცენტრი: მონაცემებზე დაფუძნებული დასკვნის სიზუსტე და სანდოობა — DS-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ აგებული მოდელების შედეგებს და რჩევებს შეცდომაში არ შეყავდეს გადაწყვეტილების მიმღები.",
-                7: "ტიპიური პოზიციები: Junior Data Analyst/Junior Data Scientist-დან Mid Data Scientist-მდე, შემდეგ Senior, Lead და Staff/Principal დონეებამდე — ასევე სპეციალიზებული როლები: Machine Learning Engineer, Data Engineer და Research Scientist.\nინდუსტრიები და კონტექსტები: საფინანსო სექტორი, ჯანდაცვა, ელექტრონული კომერცია, მარკეტინგი, ლოგისტიკა და სამეცნიერო კვლევები.\nგანვითარების ტრაექტორია: Junior დონეზე მთავარი ამოცანაა მონაცემთა მომზადება და ბაზისური ანალიზი; AutoML-ისა და ხელოვნური ინტელექტის ანალიტიკური ასისტენტების გავრცელებასთან ერთად, აქცენტი თანდათან გადადის ჰიპოთეზის ფორმულირებასა და გენერირებული შედეგების კრიტიკულ შეფასებაზე. Mid-level ეტაპზე სტუდენტი დამოუკიდებლად ატარებს კვლევას ბოლომდე; Senior და მეტადრე Lead დონეზე იღებს მეთოდოლოგიურ გადაწყვეტილებებს; შემდგომში კარიერა იშლება ტექნიკურ ექსპერტიზაში ან მენეჯერულ მიმართულებაში."
+                7: "ტიპიური პოზიციები: Junior Data Analyst/Junior Data Scientist-დან Mid Data Scientist-მდე, შემდეგ Senior, Lead და Staff/Principal დონეებამდე — ასევე სპეციალიზებული როლები: Machine Learning Engineer, Data Engineer და Research Scientist.\nინდუსტრიები და კონტექსტები: საფინანსო სექტორი, ჯანდაცვა, ელექტრონული კომერცია, მარკეტინგი, ლოგისტიკა და სამეცნიერო კვლევები.\nგანვითარების ტრაექტორია: Junior დონეზე მთავარი ამოცანაა მონაცემთა მომზადება და ბაზისური ანალიზი; AutoML-ისა და ხელოვნური ინტელექტის ანალიტიკური ასისტენტების გავრცელთან ერთად, აქცენტი თანდათან გადადის ჰიპოთეზის ფორმულირებასა და გენერირებული შედეგების კრიტიკულ შეფასებაზე. Mid-level ეტაპზე სტუდენტი დამოუკიდებლად ატარებს კვლევას ბოლომდე; Senior და მეტადრე Lead დონეზე იღებს მეთოდოლოგიურ გადაწყვეტილებებს; შემდგომში კარიერა იშლება ტექნიკურ ექსპერტიზაში ან მენეჯერულ მიმართულებაში."
             }
         },
         "IS&BT": {
@@ -416,7 +446,7 @@
         },
         "Infra": {
             short: "Infra",
-            full: "Infra (IT Networks & Infrastructure) — ინფოტექნოლოგიების ქსელები და ინფრასტრუქტურა",
+            full: "Infra (IT Networks & Infrastructure) — საინფორმაციო ტექნოლოგიების ქსელები და ინფრასტრუქტურა",
             sections: {
                 1: "მე ვარ ინფრასტრუქტურის ინჟინერი — ვაგებ და ვმართავ იმ ტექნიკურ ფუძეს (ქსელები, სერვერები, Cloud რესურსები), რომელზეც ყველა სხვა სისტემა დგას. ჩემი მთავარი ამოცანაა, რომ ეს ფუძე ყოველთვის ხელმისაწვდომი და მასშტაბირებადი იყოს.\nმარტივად: მე ვაგებ პირობითად „ისეთ გზებსა და ხიდებს“, რომლებზეც ყველა სახის პროგრამული სისტემა მოძრაობს.",
                 2: "ცენტრალური კითხვა: როგორ ავაგო და შევინარჩუნო ინფრასტრუქტურა, რომელიც ხარვეზის გარეშე, უსაფრთხოდ და მასშტაბირებადად აწვდის რესურსს ყველა ლეგალურ სისტემას?\nშედარებითი პოზიციონირება: Cyber-ის სტუდენტისგან განსხვავებით, Infra-ს სტუდენტი ფოკუსირებულია საკუთრივ ინფრასტრუქტურის აშენებაზე, ექსპლუატაციასა და ხელმისაწვდომობაზე — უსაფრთხოება მისთვის ერთ-ერთი ასპექტია ბევრს შორის. თუმცა, AIOps-ის გავრცელებასთან ერთად, მისთვის მნიშვნელოვან უნარად ყალიბდება ხელოვნური ინტელექტის მიერ გენერირებული რეკომენდაციების სისწორის შეფასება.",
@@ -434,7 +464,7 @@
                 1: "მე ვარ კიბერუსაფრთხოების სპეციალისტი — ერთადერთი ინჟინერი ვარ, ვინც სისტემას ერთდროულად ორი კუთხით ხედავს: მცველის და თავდამსხმელის. ჩემი ამოცანაა სისტემის სუსტი წერტილი მანამდე ვიპოვო, სანამ მას სხვა გამოიყენებს.\nმარტივად: მე ვფიქრობ როგორც თავდამსხმელი, რათა ავაგო დაცვა, რომელსაც ჰაკერი ვერ გადალახავს.",
                 2: "ცენტრალური კითხვა: სად არის არსებული სისტემის სუსტი წერტილი, რომელსაც მოწინააღმდეგე გამოიყენებს, და როგორ ავაგო დაცვა მის წინააღმდეგ?\nშედარებითი პოზიციონირება: Infra-ს სპეციალისტისგან განსხვავებით, Cyber-ის სტუდენტი ვარაუდობს, რომ ინფრასტრუქტურა აქტიური თავდასხმის ობიექტი იქნება — მისი მოქმედება შეჯიბრებითია. დღეს უკვე მოწინააღმდეგეც ხშირად იყენებს ხელოვნურ ინტელექტს (მაგალითად ავტომატიზებული ფიშინგი, სკანირება), ამიტომ Cyber-ის სტუდენტმა უნდა გაითვალისწინოს დაცვის უახლესი მეთოდები.",
                 3: "ძირეული ამოცანები: სისუსტეების სკანირება და შეფასება, წვდომის კონტროლისა და ავთენტიფიკაციის კონფიგურირება, უსაფრთხოების ინციდენტების მონიტორინგი.\nგაფართოებული ამოცანები: ეთიკური ჰაკერინგი (Pentesting), კრიპტოგრაფიული სისტემების დიზაინი, ინციდენტებზე რეაგირება და ციფრული კრიმინალისტიკა. სულ უფრო მნიშვნელოვან ადგილს იკავებს ხელოვნური ინტელექტის სისტემების უსაფრთხოება (LLM Security) — prompt injection და jailbreak-ის წინააღმდეგ დაცვა.\nსისტემური კონტექსტი: უსაფრთხოების გუნდი იცავს სხვა ინჟინრების მიერ შექმნილ სისტემებს მარეგულირებელ მოთხოვნებთან კავშირში.",
-                4: "საქმიანობის ტიპი: Cybersecurity-ის სპეციალისტი იცავს — მუდმივად აფასებს საფრთხეს და აძლიერებს დაცვის ხაზს.\nაზროვნების ტიპი: დაპირისპირებითი აზროვნება — ყოველი სისტემა განიხილება იმ კუთხით, თუ როგორ შეიძლება მისი ბოროტად გამოყენება. ეს ვრცელდება ხელოვნური ინტელექტის სისტემებზეც. თუმცა მაინც ნუ დავიჯერებთ მითს, რომ „ამ სპეციალიზაციას ირჩევს ის, ვისთვისაც პარანოია პროფესიული სათნოებაა“.",
+                4: "საქმიანობის ტიპი: Cybersecurity-ის სპეციალისტი იცავს — მუდმივად აფასებს საფრთხეს და აძლიერებს დაცვის ხაზს.\nაზროვნების ტიპი: დაპირისპირებითი აზროვნება — ყოველი სისტემა განიხილება იმ კუთხით, თუ როგორ შეიძლება მისი ბოროტად გამოყენება. ეს ვრცელდება ხელოვნური ინტელექტის სისტემებზეც. თქვთანხმდეთ, რომ მითია მოსაზრება, თითქოს „ამ სპეციალიზაციას ირჩევს ის, ვისთვისაც პარანოია პროფესიული სათნოებაა“.",
                 5: "სისუსტეების შეფასების ანგარიში; პენტესტის შედეგების დოკუმენტი; დაცვის კონფიგურირება (firewall წესები, წვდომის პოლიტიკა); ინციდენტზე რეაგირების ანგარიში და ფორენზიკის დასკვნა.",
                 6: "საწყისი წერტილი: ჩაიბარებს მუშა სისტემას ან ინფრასტრუქტურას, რომლის უსაფრთხოების დონე გასაზომი და გასაძლიერებელია.\nსაბოლოო წერტილი: გადასცემს დაცვის ხარისხის შეფასებას, გამოვლენილ სისუსტეებს და კონკრეტულ რეკომენდაციებს.\nპასუხისმგებლობის ცენტრი: სისტემის გადარჩენადობა მოწინააღმდეგის წინაშე — ის პასუხისმგებელია, რომ შემოტევა დროულად იქნება შეკავებული.",
                 7: "ტიპიური პოზიციები: Junior SOC Analyst-დან Mid Security Engineer-მდე, Senior, Security Architect და CISO დონეებამდე. ასევე: Penetration Tester, Incident Responder, AI/LLM Security Specialist.\nინდუსტრიები: საბანკო სექტორი, სამთავრობო და თავდაცვითი სტრუქტურები, ჯანდაცვა, ტელეკომი და აუდიტორული კომპანიები.\nგანვითარების ტრაექტორია: Junior დონეზე ძირეული ამოცანაა მონიტორინგი; ახალი გამოწვევების გამო, სტუდენტისგან ადრეულად მოითხოვება ორმხრივი აზროვნება; დროთა განმავლობაში გადადის საფრთხის გლობალურ მოდელირებაზე."
@@ -470,7 +500,7 @@
 
     const sectionsInfo = {
         1: { short: "1.ვინ ვარ", full: "1. სპეციალიზაციის იდენტობა — «ვინ ვარ?»" },
-        2: { short: "2.სხვაობა", full: "2. სპეციალიზაციის მთავარი განმასხვავებელი" },
+        2: { short: "2.სხმარობა", full: "2. სპეციალიზაციის მთავარი განმასხვავებელი" },
         3: { short: "3.პრობლემები", full: "3. სპეციალისტის პრობლემური სივრცე" },
         4: { short: "4.ფიქრი&საქმე", full: "4. საქმიანობის ტიპი და აზროვნება" },
         5: { short: "5.პროდუქტი", full: "5. სპეციალისტის პროდუქტი" },
@@ -478,7 +508,6 @@
         7: { short: "7.კარიერა", full: "7. კარიერული პერსპექტივა" }
     };
 
-    // სიების დინამიკური გენერირება ადაპტური სტრუქტურით
     function initUI() {
         const specsGroup = document.getElementById('specsGroup');
         const sectionsGroup = document.getElementById('sectionsGroup');
@@ -578,25 +607,23 @@
         const specInfo = specialtiesData[currentItem.specKey];
         const secInfo = sectionsInfo[currentItem.sectionKey];
 
-        const titleShort = `${specInfo.short} — ${secInfo.short}`;
-        const titleFull = `${specInfo.full} | ${secInfo.full}`;
+        // ინფორმაციის გადანაწილება ახალი ორკომპონენტიანი სტრიქონების წესით
+        document.getElementById('pageTitleFullDisplay1').innerText = specInfo.full;
+        document.getElementById('pageTitleFullDisplay2').innerText = secInfo.full;
 
-        // ჩავტვირთოთ სათაურები განიერი და ვიწრო რეჟიმებისთვის
-        document.getElementById('pageTitleFullDisplay').innerText = titleFull;
-        document.getElementById('pageTitleShortDisplay').innerText = titleShort;
-        document.getElementById('pageTitleTooltip').innerText = titleFull;
+        document.getElementById('pageTitleShortDisplay1').innerText = specInfo.short;
+        document.getElementById('pageTitleShortDisplay2').innerText = secInfo.short;
         
-        // ტექსტის ჩატვირთვა
+        document.getElementById('pageTitleTooltip').innerHTML = specInfo.full + "<br><br>" + secInfo.full;
+        
         document.getElementById('pageContent').innerText = specInfo.sections[currentItem.sectionKey];
 
-        // ღილაკების მართვა
         document.getElementById('prevBtn').disabled = (currentIndex === 0);
         document.getElementById('nextBtn').disabled = (currentIndex === presentationQueue.length - 1);
         
         document.getElementById('prevBtn').style.opacity = (currentIndex === 0) ? "0.5" : "1";
         document.getElementById('nextBtn').style.opacity = (currentIndex === presentationQueue.length - 1) ? "0.5" : "1";
         
-        // სქროლის აწევა საწყის პოზიციაზე ყოველ გადასვლაზე
         document.querySelector('.view-card').scrollTop = 0;
     }
 
