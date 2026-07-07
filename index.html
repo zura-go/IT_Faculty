@@ -83,7 +83,7 @@ a{color:inherit;}
 /* ===================== top bar ===================== */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px clamp(16px,4vw,40px);
+  padding:10px clamp(16px,4vw,40px);
   gap:12px;
 }
 .topbar__brand{
@@ -99,15 +99,15 @@ a{color:inherit;}
 
 /* ===================== hero ===================== */
 .hero{
-  padding:clamp(20px,6vw,56px) clamp(16px,4vw,40px) clamp(16px,4vw,28px);
+  padding:clamp(4px,1.2vw,14px) clamp(16px,4vw,40px) clamp(8px,1.5vw,16px);
   text-align:center;
 }
 .hero__title{
   font-family:var(--font-head);
   font-weight:600;
-  font-size:clamp(30px,6vw,54px);
+  font-size:clamp(26px,5vw,42px);
   line-height:1.08;
-  margin:0 0 10px;
+  margin:0 0 14px;
   color:#FBF9F3;
   animation:riseIn .7s ease both;
 }
@@ -125,10 +125,10 @@ a{color:inherit;}
 /* ===================== selection screen ===================== */
 .selection{
   flex:1;
-  padding:8px clamp(16px,4vw,40px) 40px;
+  padding:0 clamp(16px,4vw,40px) 24px;
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:14px;
   max-width:1180px;
   width:100%;
   margin:0 auto;
@@ -137,7 +137,7 @@ a{color:inherit;}
   display:grid;
   grid-template-columns:7fr 3fr;
   gap:20px;
-  align-items:start;
+  align-items:stretch;
 }
 @media (max-width:680px){
   .panels{grid-template-columns:1fr;}
@@ -146,12 +146,16 @@ a{color:inherit;}
   background:var(--canvas-2);
   border:1px solid rgba(255,255,255,0.07);
   border-radius:var(--radius);
-  padding:18px 18px 20px;
+  padding:16px 16px 18px;
+  display:flex;
+  flex-direction:column;
+  height:100%;
 }
 .panel__head{
-  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-  margin-bottom:14px;
-  flex-wrap:wrap;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:10px;
 }
 .panel__title{
   font-family:var(--font-head);
@@ -165,6 +169,7 @@ a{color:inherit;}
   margin:2px 0 0;
 }
 .panel__all{
+  align-self:flex-start;
   font-family:var(--font-mono);
   font-size:11.5px;
   letter-spacing:0.06em;
@@ -184,7 +189,7 @@ a{color:inherit;}
 .chipgrid{
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:8px;
 }
 .chip{
   position:relative;
@@ -246,17 +251,17 @@ a{color:inherit;}
 
 /* CTA */
 .cta-row{
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  padding:10px 0 4px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:4px 0 2px;
 }
 .cta{
   font-family:var(--font-head);
   font-weight:600;
-  font-size:clamp(17px,2.6vw,21px);
+  font-size:clamp(16px,2.4vw,20px);
   background:var(--brass);
   color:#1B140A;
   border:none;
-  padding:15px 38px;
+  padding:13px 34px;
   border-radius:999px;
   cursor:pointer;
   box-shadow:var(--shadow);
@@ -414,7 +419,7 @@ a{color:inherit;}
 
 /* ===================== viewer screen ===================== */
 .viewer{
-  flex:1;
+  flex:0 0 auto;
   display:none;
   flex-direction:column;
   width:100%;
@@ -453,11 +458,21 @@ a{color:inherit;}
 }
 
 .viewer__scroll{
-  flex:1;
-  width:100%;
+  margin-top:var(--fixed-top-h);
+  height:calc(100vh - var(--fixed-top-h) - var(--fixed-bottom-h));
   max-width:var(--maxw);
-  margin:0 auto;
-  padding:calc(var(--fixed-top-h) + 16px) clamp(14px,4vw,40px) calc(var(--fixed-bottom-h) + 16px);
+  margin-left:auto;
+  margin-right:auto;
+  width:100%;
+  padding:14px clamp(14px,4vw,40px) 14px;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+@supports (height: 100dvh){
+  .viewer__scroll{
+    height:calc(100dvh - var(--fixed-top-h) - var(--fixed-bottom-h));
+  }
 }
 
 .info-btn{
@@ -511,7 +526,8 @@ a{color:inherit;}
   display:flex;flex-wrap:wrap;
   align-items:center;
   gap:10px 14px;
-  padding:0 0 18px;
+  padding:0 0 14px;
+  flex:0 0 auto;
 }
 .badge{
   position:relative;
@@ -558,6 +574,13 @@ a{color:inherit;}
 }
 .badge__sep{color:rgba(245,247,245,0.35);font-family:var(--font-head);font-size:18px;}
 
+.content-card-wrap{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
 .content-card{
   background:var(--paper);
   color:var(--ink);
@@ -565,7 +588,8 @@ a{color:inherit;}
   padding:clamp(20px,4vw,34px) clamp(20px,4vw,38px);
   box-shadow:var(--shadow);
   flex:1;
-  min-height:220px;
+  min-height:0;
+  overflow-y:auto;
 }
 .block{margin:0 0 20px;}
 .block:last-child{margin-bottom:0;}
@@ -624,7 +648,7 @@ a{color:inherit;}
   transition:border-color .15s, opacity .15s;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
-.nav-btn:hover:not(:disabled){border-color:var(--brass);}
+.nav-btn:hover:not(:disabled){border-color:var(--brass);color:var(--brass);}
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
 .nav-btn .arrow{font-family:var(--font-mono);}
 
@@ -637,13 +661,30 @@ footer.credit{
   text-align:center;
   font-size:11.5px;
   color:rgba(245,247,245,0.35);
-  padding:10px 0 26px;
+  padding:8px 0 18px;
 }
 
 @media (max-width:400px){
   .viewer__fixedtop-inner{gap:8px;padding-left:12px;padding-right:12px;}
   .viewer__fixedbottom-inner{gap:8px;padding-left:12px;padding-right:12px;}
   .restart-btn{padding:8px 10px;font-size:10.5px;}
+}
+
+/* compact vertical rhythm on wide (PC/Laptop) screens so the CTA fits without scrolling */
+@media (min-width:681px){
+  .chip__body{min-height:42px;padding:7px 14px;}
+  .panel{padding:14px 16px 16px;}
+  .panel__head{margin-bottom:8px;}
+  .panel__hint{font-size:11.5px;margin-top:1px;}
+}
+@media (min-width:681px) and (max-height:820px){
+  .topbar{padding:6px clamp(16px,4vw,40px);}
+  .hero{padding:2px clamp(16px,4vw,40px) 4px;}
+  .hero__title{font-size:clamp(22px,4vw,32px);margin-bottom:10px;}
+  .hero__slogan{font-size:12px;}
+  .selection{gap:10px;padding-bottom:16px;}
+  .chipgrid{gap:6px;}
+  .chip__body{min-height:38px;}
 }
 
 </style>
@@ -724,7 +765,9 @@ footer.credit{
         </span>
       </div>
 
-      <div class="content-card blueprint-frame" id="contentCard"></div>
+      <div class="content-card-wrap blueprint-frame">
+        <div class="content-card" id="contentCard"></div>
+      </div>
     </div>
 
     <div class="viewer__fixedbottom">
@@ -735,7 +778,7 @@ footer.credit{
     </div>
   </section>
 
-  <footer class="credit">IT ფაკულტეტი &middot; სპეციალიზაციების სახელმძღვანელო</footer>
+  <footer class="credit">IT ფაკულტეტი &middot; სპეციალიზაციების დახასიათება</footer>
 </div>
 
 <div class="modal-overlay" id="glossaryOverlay" role="dialog" aria-modal="true" aria-labelledby="glossaryTitle">
@@ -1029,7 +1072,7 @@ footer.credit{
     var blocks = CONTENT[item.spec][String(item.section)];
     blocks.forEach(function (b) { inner.appendChild(renderBlock(b)); });
     el.contentCard.appendChild(inner);
-    window.scrollTo(0, 0);
+    el.contentCard.scrollTop = 0;
 
     // progress
     var total = state.queue.length;
