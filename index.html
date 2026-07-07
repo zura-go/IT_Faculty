@@ -26,6 +26,8 @@
   --radius:16px;
   --radius-sm:10px;
   --maxw:920px;
+  --fixed-top-h:60px;
+  --fixed-bottom-h:82px;
   --font-head:'Noto Serif Georgian','Noto Serif',serif;
   --font-body:'Noto Sans Georgian','Noto Sans',sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,monospace;
@@ -133,10 +135,11 @@ a{color:inherit;}
 }
 .panels{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:7fr 3fr;
   gap:20px;
+  align-items:start;
 }
-@media (max-width:820px){
+@media (max-width:680px){
   .panels{grid-template-columns:1fr;}
 }
 .panel{
@@ -179,8 +182,8 @@ a{color:inherit;}
 .panel__all[aria-pressed="true"]{background:var(--brass);color:var(--canvas);}
 
 .chipgrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(150px,1fr));
+  display:flex;
+  flex-direction:column;
   gap:10px;
 }
 .chip{
@@ -197,13 +200,13 @@ a{color:inherit;}
 .chip__body{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px;
   background:rgba(255,255,255,0.04);
   border:1.5px solid rgba(255,255,255,0.14);
   border-radius:var(--radius-sm);
-  padding:10px 12px;
+  padding:10px 14px;
   transition:border-color .15s, background .15s, transform .1s;
-  min-height:56px;
+  min-height:50px;
 }
 .chip:hover .chip__body{border-color:rgba(255,255,255,0.32);}
 .chip input:focus-visible + .chip__body{outline:2px solid var(--brass);outline-offset:2px;}
@@ -234,35 +237,11 @@ a{color:inherit;}
 }
 .chip input:checked ~ .chip__body .chip__mark .check{opacity:1;transform:scale(1);}
 .chip__text{min-width:0;flex:1;}
-.chip__short{
-  display:none;
-  font-family:var(--font-mono);
-  font-weight:700;
-  font-size:13px;
-  color:#FBF9F3;
-  align-items:center;
-  gap:6px;
-}
 .chip__full{
   display:block;
-  font-size:13.5px;
-  line-height:1.3;
-  color:rgba(245,247,245,0.92);
-}
-.chip__infoicon{
-  font-family:var(--font-mono);
-  font-size:10px;
-  width:15px;height:15px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,0.5);
-  display:inline-flex;align-items:center;justify-content:center;
-  opacity:0.75;
-}
-
-/* narrow screens: show short codes + tap-to-reveal tooltip, hide full text */
-@media (max-width:680px){
-  .chip__full{display:none;}
-  .chip__short{display:inline-flex;}
+  font-size:14px;
+  line-height:1.35;
+  color:rgba(245,247,245,0.94);
 }
 
 /* CTA */
@@ -395,38 +374,127 @@ a{color:inherit;}
   margin:0;
 }
 
+/* glossary modal */
+.modal--glossary{
+  max-width:560px;
+  max-height:82vh;
+  display:flex;
+  flex-direction:column;
+}
+.glossary-scroll{
+  overflow-y:auto;
+  margin-top:6px;
+  padding-right:6px;
+}
+.glossary-section{margin-bottom:20px;}
+.glossary-section:last-child{margin-bottom:0;}
+.glossary-section__title{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin:0 0 10px;
+}
+.glossary-section dl{margin:0;}
+.glossary-section dt{
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:14.5px;
+  color:#FBF9F3;
+  margin:0 0 3px;
+}
+.glossary-section dd{
+  margin:0 0 12px;
+  font-size:13px;
+  line-height:1.5;
+  color:rgba(245,247,245,0.8);
+}
+.glossary-section dd:last-child{margin-bottom:0;}
+
 /* ===================== viewer screen ===================== */
 .viewer{
   flex:1;
   display:none;
   flex-direction:column;
-  padding:0 clamp(14px,4vw,40px) 30px;
-  max-width:var(--maxw);
   width:100%;
-  margin:0 auto;
 }
 .viewer.active{display:flex;}
-.viewer__bar{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 0 10px;
+
+.viewer__fixedtop{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:40;
+  background:rgba(19,42,70,0.94);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,0.09);
 }
+.viewer__fixedtop-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:12px clamp(14px,4vw,40px);
+  display:flex;align-items:center;gap:12px;
+}
+.viewer__fixedbottom{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:40;
+  background:rgba(19,42,70,0.94);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,0.09);
+}
+.viewer__fixedbottom-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:14px clamp(14px,4vw,40px);
+  display:flex;gap:12px;
+}
+
+.viewer__scroll{
+  flex:1;
+  width:100%;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:calc(var(--fixed-top-h) + 16px) clamp(14px,4vw,40px) calc(var(--fixed-bottom-h) + 16px);
+}
+
+.info-btn{
+  width:34px;height:34px;
+  flex:0 0 auto;
+  border-radius:50%;
+  background:rgba(255,255,255,0.13);
+  border:1.5px solid rgba(255,255,255,0.45);
+  color:#FBF9F3;
+  font-family:var(--font-head);
+  font-style:italic;
+  font-weight:700;
+  font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:border-color .15s, color .15s;
+}
+.info-btn:hover{border-color:var(--brass);color:var(--brass);}
+
 .restart-btn{
   font-family:var(--font-mono);
   font-size:12px;
   letter-spacing:0.04em;
-  background:none;
-  border:1px solid rgba(255,255,255,0.25);
-  color:rgba(245,247,245,0.85);
-  padding:7px 13px;
+  background:rgba(255,255,255,0.13);
+  border:1.5px solid rgba(255,255,255,0.45);
+  color:#FBF9F3;
+  padding:8px 14px;
   border-radius:999px;
   cursor:pointer;
   white-space:nowrap;
   transition:border-color .15s, color .15s;
 }
 .restart-btn:hover{border-color:var(--brass);color:var(--brass);}
-.progress-wrap{flex:1;display:flex;align-items:center;gap:10px;}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:10px;min-width:0;}
 .progress-track{
   flex:1;height:4px;background:rgba(255,255,255,0.14);border-radius:4px;overflow:hidden;
+  min-width:32px;
 }
 .progress-fill{
   height:100%;background:var(--brass);border-radius:4px;
@@ -443,7 +511,7 @@ a{color:inherit;}
   display:flex;flex-wrap:wrap;
   align-items:center;
   gap:10px 14px;
-  padding:10px 0 18px;
+  padding:0 0 18px;
 }
 .badge{
   position:relative;
@@ -478,6 +546,15 @@ a{color:inherit;}
   .badge__label-full{display:none;}
   .badge__label-short{display:inline-flex;}
   .badge{cursor:pointer;}
+}
+.badge__infoicon{
+  font-family:var(--font-mono);
+  font-size:10px;
+  width:15px;height:15px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.5);
+  display:inline-flex;align-items:center;justify-content:center;
+  opacity:0.75;
 }
 .badge__sep{color:rgba(245,247,245,0.35);font-family:var(--font-head);font-size:18px;}
 
@@ -533,23 +610,18 @@ a{color:inherit;}
 .content-card__fade{animation:fadeUp .28s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
-.viewer__nav{
-  display:flex;
-  gap:12px;
-  padding:20px 0 6px;
-}
 .nav-btn{
   flex:1;
   font-family:var(--font-head);
   font-weight:600;
   font-size:15px;
-  background:var(--canvas-2);
+  background:rgba(255,255,255,0.13);
   color:#FBF9F3;
-  border:1.5px solid rgba(255,255,255,0.18);
+  border:1.5px solid rgba(255,255,255,0.45);
   padding:13px 16px;
   border-radius:12px;
   cursor:pointer;
-  transition:border-color .15s, background .15s, opacity .15s;
+  transition:border-color .15s, opacity .15s;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
 .nav-btn:hover:not(:disabled){border-color:var(--brass);}
@@ -568,13 +640,20 @@ footer.credit{
   padding:10px 0 26px;
 }
 
+@media (max-width:400px){
+  .viewer__fixedtop-inner{gap:8px;padding-left:12px;padding-right:12px;}
+  .viewer__fixedbottom-inner{gap:8px;padding-left:12px;padding-right:12px;}
+  .restart-btn{padding:8px 10px;font-size:10.5px;}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 
-  <div class="topbar">
+  <div class="topbar" id="mainTopbar">
     <div class="topbar__brand"><span class="dot"></span> IT ფაკულტეტი</div>
+    <button type="button" class="info-btn" id="glossaryBtnTop" aria-label="ტერმინოლოგია">i</button>
   </div>
 
   <div id="heroBlock">
@@ -618,37 +697,56 @@ footer.credit{
   </main>
 
   <section id="viewerScreen" class="viewer" aria-live="polite">
-    <div class="viewer__bar">
-      <button type="button" class="restart-btn" id="restartBtn">↺ ავირჩიოთ თავიდან</button>
-      <div class="progress-wrap">
-        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-count" id="progressCount">1 / 1</span>
+
+    <div class="viewer__fixedtop">
+      <div class="viewer__fixedtop-inner">
+        <button type="button" class="restart-btn" id="restartBtn">↺ ავირჩიოთ თავიდან</button>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+          <span class="progress-count" id="progressCount">1 / 1</span>
+        </div>
+        <button type="button" class="info-btn" id="glossaryBtnViewer" aria-label="ტერმინოლოგია">i</button>
       </div>
     </div>
 
-    <div class="viewer__header">
-      <span class="badge" id="specBadge" tabindex="0">
-        <span class="badge__dot"></span>
-        <span class="badge__label-full"></span>
-        <span class="badge__label-short"><span class="txt"></span><span class="chip__infoicon">i</span></span>
-      </span>
-      <span class="badge__sep">·</span>
-      <span class="badge" id="sectionBadge" tabindex="0">
-        <span class="badge__dot"></span>
-        <span class="badge__label-full"></span>
-        <span class="badge__label-short"><span class="txt"></span><span class="chip__infoicon">i</span></span>
-      </span>
+    <div class="viewer__scroll">
+      <div class="viewer__header">
+        <span class="badge" id="specBadge" tabindex="0">
+          <span class="badge__dot"></span>
+          <span class="badge__label-full"></span>
+          <span class="badge__label-short"><span class="txt"></span><span class="badge__infoicon">i</span></span>
+        </span>
+        <span class="badge__sep">·</span>
+        <span class="badge" id="sectionBadge" tabindex="0">
+          <span class="badge__dot"></span>
+          <span class="badge__label-full"></span>
+          <span class="badge__label-short"><span class="txt"></span><span class="badge__infoicon">i</span></span>
+        </span>
+      </div>
+
+      <div class="content-card blueprint-frame" id="contentCard"></div>
     </div>
 
-    <div class="content-card blueprint-frame" id="contentCard"></div>
-
-    <div class="viewer__nav">
-      <button type="button" class="nav-btn" id="prevBtn"><span class="arrow">&larr;</span> წინა აღწერა</button>
-      <button type="button" class="nav-btn" id="nextBtn">შემდეგი აღწერა <span class="arrow">&rarr;</span></button>
+    <div class="viewer__fixedbottom">
+      <div class="viewer__fixedbottom-inner">
+        <button type="button" class="nav-btn" id="prevBtn"><span class="arrow">&larr;</span> წინა აღწერა</button>
+        <button type="button" class="nav-btn" id="nextBtn">შემდეგი აღწერა <span class="arrow">&rarr;</span></button>
+      </div>
     </div>
   </section>
 
   <footer class="credit">IT ფაკულტეტი &middot; სპეციალიზაციების სახელმძღვანელო</footer>
+</div>
+
+<div class="modal-overlay" id="glossaryOverlay" role="dialog" aria-modal="true" aria-labelledby="glossaryTitle">
+  <div class="modal modal--glossary">
+    <button type="button" class="modal__close" id="glossaryClose" aria-label="დახურვა">&times;</button>
+    <h3 class="modal__title" id="glossaryTitle">ტერმინოლოგია</h3>
+    <div class="glossary-scroll">
+      <div class="glossary-section" id="glossaryTerms"></div>
+      <div class="glossary-section" id="glossaryPositions"></div>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -672,7 +770,7 @@ footer.credit{
 <div class="tooltip" id="tooltip" role="tooltip"></div>
 
 <script id="app-data" type="application/json">
-{"specializations": [{"id": "DS", "short": "DS", "full": "DS (Data Science) — მონაცემთა მეცნიერება", "color": "#178F86"}, {"id": "ISBT", "short": "IS&BT", "full": "IS&BT (Information Systems & Business Tech) — ინფორმაციული სისტემები და ბიზნეს ტექნოლოგიები", "color": "#7C4FA0"}, {"id": "SE", "short": "SE", "full": "SE (Software Engineering) — პროგრამული უზრუნველყოფის ინჟინერია", "color": "#2F5FC4"}, {"id": "Infra", "short": "Infra", "full": "Infra (IT Networks & Infrastructure) — ინფოტექნოლოგიების ქსელები და ინფრასტრუქტურა", "color": "#4B6B80"}, {"id": "Cyber", "short": "Cyber", "full": "Cyber (CyberSecurity) — კიბერუსაფრთხოება", "color": "#B8362E"}, {"id": "CE", "short": "CE", "full": "CE (Computer Engineering) — კომპიუტერული ინჟინერია", "color": "#C97223"}, {"id": "RA", "short": "R&A", "full": "R&A (Robotics & Automation) — რობოტები და ავტომატიზაცია", "color": "#2F7D42"}], "sections": [{"id": 1, "short": "1. ვინ ვარ", "full": "1. სპეციალიზაციის იდენტობა — «ვინ ვარ?»"}, {"id": 2, "short": "2. სხვაობა", "full": "2. სპეციალიზაციის მთავარი განმასხვავებელი"}, {"id": 3, "short": "3. პრობლემები", "full": "3. სპეციალისტის პრობლემური სივრცე"}, {"id": 4, "short": "4. ფიქრი & საქმე", "full": "4. საქმიანობის ტიპი და აზროვნება"}, {"id": 5, "short": "5. პროდუქტი", "full": "5. სპეციალისტის პროდუქტი"}, {"id": 6, "short": "6. მოვალეობა", "full": "6. პასუხისმგებლობის ზონა"}, {"id": 7, "short": "7. კარიერა", "full": "7. კარიერული პერსპექტივა"}], "content": {"DS": {"1": [{"type": "p", "label": null, "text": "მე ვარ მონაცემთა მეცნიერი — ვმუშაობ დაუმუშავებელ, ხშირად ქაოტურ მონაცემებთან და მათგან გამოვყოფ ნიმუშებს, რომლებიც ბიზნესსა ან საზოგადოებას რეალურ გადაწყვეტილებებში ეხმარება. ჩემი იარაღია სტატისტიკა, მანქანური სწავლება და დიდი მონაცემების დამუშავების ტექნოლოგიები."}, {"type": "quote", "label": "მარტივად", "text": "მე „გადავთარგმნი“ რიცხვებს ისეთ ისტორიად, რომელსაც ორგანიზაცია გადაწყვეტილებების მისაღებად გამოიყენებს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "რა ამბავს მოგვითხრობს ერთი შეხედვით ქაოტური მონაცემები და როგორ ავაგო მოდელი, რომელიც მომავალს იწინასწარმეტყველებს?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "IS&BT-ს სტუდენტისგან განსხვავებით, რომელიც ბიზნეს პროცესს აწესრიგებს არსებული სისტემების დონეზე, DS-ის სტუდენტს არ აკმაყოფილებს არსებული პროცესები, აანალიზებს და მონაცემებიდან ახალ ცოდნას აგენერირებს, ქმნის მოდელს სისტემის სრულყოფისთვის. თანამედროვე ეტაპზე AI/LLM აგენტებსა და AutoML ხელსაწყოებს შეუძლიათ მონაცემთა საძიებო ანალიზი (EDA — Exploratory Data Analysis) და მოდელის შერჩევის ავტომატიზაცია, რის გამოც DS-ის სტუდენტის ღირებულება სულ უფრო გადადის ჰიპოთეზის ფორმულირებაზე, მონაცემთა ხარისხის კრიტიკულ შეფასებაზე და მიზეზ-შედეგობრივი დასკვნის გამოტანაზე."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "მონაცემთა „დასუფთავება“ და ანალიზისთვის მომზადება, სტატისტიკური ანალიზი, მანქანური სწავლების მოდელების შემუშავება და ვალიდაცია, შედეგების ვიზუალიზაცია გადაწყვეტილების მიმღებებისთვის."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "დიდი მონაცემების (Big Data) დამუშავების არქიტექტურები, ღრმა სწავლება (Deep Learning) რთული ნიმუშების ამოცნობისთვის, A/B ტესტირება და მიზეზობრივი დასკვნა (causal inference) ბიზნეს გადაწყვეტილებებში. აგრეთვე კოდირების AI-ასისტენტების (მაგ. Claude Code, OpenAI Codex ან ანალოგების) გამოყენება მონაცემთა დასუფთავების, მათი თავისებურების (feature) გენერირებისა და ანალიზის ავტომატიზაციისთვის, ასევე LLM-ზე დაფუძნებული ანალიტიკური აგენტების ორქესტრირება რთული, მრავალეტაპიანი კვლევითი სამუშაოსთვის."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "DS-ის სპეციალისტი მუშაობს პროდუქტის, ანალიტიკის ან კვლევის გუნდის ნაწილად — მისი მუშაობის შედეგები კვებავს ბიზნეს სტრატეგიის, საინჟინრო გუნდის ან მკვლევართა ჯგუფის გადაწყვეტილებებს."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "DS-ის სპეციალისტი იკვლევს და აანალიზებს — ის მუშაობს ჰიპოთეზის ფორმულირებიდან მის ემპირიულ შემოწმებამდე."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "ალბათური და სტატისტიკური აზროვნება — ყოველი დასკვნა ხასიათდება გაურკვევლობით, რომელსაც DS-ის სპეციალისტი ციფრებში ზომავს და ანგარიშგებაში გამჭვირვალედ წარმოაჩენს. AI-ხელსაწყოების გავრცელებასთან ერთად მზარდი მნიშვნელობა ენიჭება შეფასებით აზროვნებას — AI-ის მიერ გენერირებული მოდელის თუ დასკვნის სტატისტიკური სანდოობის, მიკერძოების (bias) და მცდარი/ჰალუცინირებული (hallucinated) დასკვნების კრიტიკული გადამოწმების უნარს."}], "5": [{"type": "list", "label": null, "text": "მანქანური სწავლების (ML) მოდელი ან მოდელების ნაკრები პროცესების იმიტაციისთვის; ანალიტიკური პანელი (dashboard) ან ანგარიში, რომელიც ბიზნეს გადაწყვეტილებას ამყარებს; მონაცემთა დამუშავების კონვეიერი (pipeline), რომელიც „ნედლ“ მონაცემებს გამორჩეული (extraction) სახით და გამოსადეგ ფორმატში გარდაქმნის."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "DS-ის სპეციალისტს აბარებენ ბიზნესის კვლევით ამოცანებს და ხშირად დაუმუშავებელ („ნედლ“), არასტრუქტურირებულ მონაცემებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს ვალიდირებულ (შემოწმებულ) მოდელს, დასკვნას ან ვიზუალიზებულ ანგარიშს, რომელზეც გადაწყვეტილების მიმღები პერსონა ან ინჟინერი დააფუძნებს შემდეგ ნაბიჯებს."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "მონაცემებზე დაფუძნებული დასკვნის სიზუსტე და სანდოობა — DS-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ აგებული მოდელების შედეგებს და რჩევებს შეცდომაში არ შეყავდეს გადაწყვეტილების მიმღები."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Data Analyst/Junior Data Scientist-დან (მონაცემთა დასუფთავება და ბაზისური ანალიზი მენტორის ზედამხედველობით) Mid Data Scientist-მდე (დამოუკიდებელი მოდელირება და ჰიპოთეზის ფორმულირება), შემდეგ Senior Data Scientist, Lead Data Scientist და Staff/Principal Data Scientist დონეებამდე — ასევე სპეციალიზებული როლები: Machine Learning Engineer, Data Engineer და Research Scientist."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "DS-ის სპეციალისტი მოთხოვნადია პრაქტიკულად ყველგან, სადაც მონაცემები გროვდება — საფინანსო სექტორი (რისკის მოდელირება, fraud detection ანუ თაღლითობის გამოვლენა), ჯანდაცვა, ელექტრონული კომერცია (რეკომენდაციის სისტემები), მარკეტინგი, ლოგისტიკა და სამეცნიერო კვლევები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე მთავარი ამოცანაა მონაცემთა მომზადება და ბაზისური ანალიზი; AutoML-ისა და AI-ანალიტიკური ასისტენტების გავრცელებასთან ერთად, აქცენტი თანდათან გადადის ჰიპოთეზის ფორმულირებასა და AI-გენერირებული შედეგების კრიტიკულ შეფასებაზე — ანუ ფუნდამენტური სტატისტიკური ცოდნა Junior დონეზეც სულ უფრო მნიშვნელოვანი ხდება, რათა შესაძლებელი იყოს ავტომატური ხელსაწყოს მიერ მოწოდებული შედეგის სანდოობის შეფასება; Mid-level ეტაპზე სტუდენტი დამოუკიდებლად ატარებს კვლევას ბოლომდე; Senior და მეტადრე Lead დონეზე იღებს მეთოდოლოგიურ გადაწყვეტილებებს და ხელმძღვანელობს გუნდს; შემდგომში კარიერა იშლება ტექნიკურ ექსპერტიზაში (Staff/Principal Data Scientist) ან მენეჯერულ მიმართულებაში (Head of Data Science/Analytics)."}]}, "ISBT": {"1": [{"type": "p", "label": null, "text": "მე ვარ ხიდი ბიზნესსა და ტექნოლოგიას შორის — ვაანალიზებ, როგორ მუშაობს ორგანიზაცია და ვაგებ ან ვაწესრიგებ ციფრულ სისტემებს, რომლებიც მის პროცესებს მართავენ. ჩემი სამუშაოა ERP (Enterprise Resource Planning — კომპანიის რესურსების დაგეგმვა/მართვა), CRM (Customer Relationship Management — კლიენტებთან ურთიერთობების მართვა) და სხვა არსებული კორპორაციული სისტემების კონფიგურირება, ინტეგრირება და მართვა ისე, რომ ბიზნესს ნამდვილად ემსახურონ. აგრეთვე ჩემი სამუშაოა ახალი პროგრამული პროდუქტის ინიციირება ორგანიზაციის საკეთილდღეოდ."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაქცევ ბიზნესის ამოცანებს მოწესრიგებულ ციფრულ სისტემად."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ უნდა მოეწყოს არსებული ბიზნეს პროცესი ციფრულ სისტემაში, რომ ის ეფექტური, მართვადი და მასშტაბირებადი იყოს?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "SE-ის სტუდენტისგან განსხვავებით, რომელიც ახალ პროგრამულ პროდუქტს აგებს ნულიდან, IS&BT-ის სტუდენტი ხშირად მუშაობს მზა კორპორაციულ სისტემებთან (ERP, CRM) — მისი ფოკუსია არა კოდირება, არამედ პროცესების მოდელის დაზუსტება, სისტემის კონფიგურირება და ბიზნეს ლოგიკასა და ტექნოლოგიას შორის თანხვედრის მოძებნა. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან ახალი ცოდნის გამოყვანაზე, არამედ არსებული პროცესების და DS-ისგან მიღებული მოდელების ციფრულად ორგანიზებაზე. გასათვალისწინებელია, რომ თანამედროვე კორპორაციული სისტემები თავადვე იყენებენ ჩაშენებულ AI აგენტებს (Microsoft Dynamics Copilot, Salesforce Agentforce, SAP Joule) — შესაბამისად, IS&BT-ის სპეციალისტის ამოცანაა არა მხოლოდ მოდულის კონფიგურირება, არამედ ამ ჩაშენებული AI ფუნქციების ბიზნეს ლოგიკასთან შეფარდების კონტროლი."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "ბიზნესის მხარესგან მოთხოვნების შეგროვება, ბიზნეს პროცესების მოდელების მომზადება იმპლემენტაციისთვის, ERP/CRM სისტემების კონფიგურირება და ინტეგრირება, ადამიან-კომპიუტერის ურთიერთქმედების და სამომხმარებლო გამოცდილების (HCI/UX — Human–Computer Interaction/User Experience) დიზაინის შექმნა, მოთხოვნების „თარგმნა“ ტექნიკური გუნდისთვის, რათა ბიზნეს ლოგიკა გამოყენებად პროდუქტად იქცეს."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "კომპანიის IT პროექტების მენეჯმენტი, არსებული სისტემის ციფრული ტრანსფორმაციის სტრატეგია, მონაცემთა მმართველობა (Data Governance) კორპორაციის დონეზე.\n\nაგრეთვე მოწინავე კომპანიაში/საწარმოში AI-ის გამოყენების მმართველობის (AI Governance) დანერგვა დაწყებული რუტინული/რობოტული პროცესების ავტომატიზაციით (RPA), შემდეგ ინტელექტუალური პროცესების ავტომატიზაციით (Intelligent Process Automation) და დამთავრებული სრული მასშტაბის ავტომატიზაციით (Hyperautomation)."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "IS&BT-ის სპეციალისტი მუშაობს ორგანიზაციის IT და ბიზნეს განყოფილებების გადასაკვეთზე — მისი გადაწყვეტილებები პირდაპირ ეხება კომპანიის ოპერაციულ ეფექტურობას და ციფრულ სტრატეგიას."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "IS&BT-ის სპეციალისტი აანალიზებს და აპროექტებს — ის ბიზნეს მოთხოვნას სისტემურ გადაწყვეტაში გარდაქმნის."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური აზროვნება — ორგანიზაცია ერთიან, ერთმანეთზე დამოკიდებულ პროცესთა ქსელად ესახება, სადაც ერთი ცვლილება მთელ სტრუქტურას ამოძრავებს. სისტემაში AI აგენტების ჩასმასთან ერთად სისტემური აზროვნება მოიცავს იმასაც, თუ როგორ ცვლის ერთი ავტომატიზებული გადაწყვეტილება მთლიანი პროცესის ქცევას."}], "5": [{"type": "list", "label": null, "text": "IT პროექტის გეგმა ან ციფრული ტრანსფორმაციის სტრატეგია; კონფიგურირებული ან ინტეგრირებული კორპორაციული სისტემა (ERP/CRM); BPMN დიაგრამა (Business Process Model and Notation — ბიზნეს პროცესის მოდელი და ნოტაცია); HCI/UX დიზაინის სქემა; ტექნიკური დავალება (Technical Specification), რომელსაც Software Engineer-ი იღებს პროგრამული უზრუნველყოფის შესაქმნელად."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "IS&BT-ის სპეციალისტი ჩაიბარებს არაოპტიმალურ ბიზნეს პროცესებს ან მათ არაფორმალურ აღწერას და ბიზნეს მხარის მოთხოვნებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "გადასცემს ორი ფორმით — (ა) მუშა, კონფიგურირებულ სისტემას, რომელიც ბიზნესის ყოველდღიურ ოპერაციებში ინტეგრირებულია, ან (ბ) ტექნიკურ დავალებას, რომელსაც Software Engineer იღებს ახალი პროგრამული პროდუქტის ასაგებად."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "ბიზნეს ლოგიკისა და ტექნოლოგიური გადაწყვეტის შესაბამისობა — IS&BT-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ შედგენილი ტექნიკური დავალება ან მოქმედი სისტემა ნამდვილად ემსახურებოდეს ბიზნესის მიზანს ნაცვლად უსარგებლო ტექნოლოგიური სირთულეებისა."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "ანალიტიკოსის Junior Business/Systems Analyst-დან (მოთხოვნების შეგროვება გამოცდილი კოლეგის ზედამხედველობით) Mid და Senior Business Analyst-მდე ან IT Consultant-ამდე (დამოუკიდებელი პროცესის დაპროექტება), შემდეგ Senior Consultant-ის, გადაწყვეტების არქიტექტორის (Solution Architect) და IT Manager/Director-ის დონემდე. ასევე არსებობს სპეციალიზებული როლები: ERP/CRM Consultant, პროცესების ავტომატიზაციის სპეციალისტი (Process Automation Specialist), პროდუქტის მფლობელი (Product Owner)."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "IS&BT-ის სპეციალისტი საჭიროა ნებისმიერ საშუალო ან მსხვილ ორგანიზაციაში, რომელსაც სჭირდება ციფრული ტრანსფორმაცია — საბანკო და დაზღვევის სექტორი, საცალო ვაჭრობა, წარმოება, საჯარო სექტორი და კონსალტინგური კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა ბიზნეს მოთხოვნების ანალიზი და დოკუმენტირება; AI-აგენტებითა და ჰიპერავტომატიზაციის ფუნქციებით აღჭურვილ ERP/CRM სისტემებში (Copilot, Agentforce და სხვა) სტუდენტისგან სულ უფრო ადრე მოითხოვება ჩაშენებული AI ფუნქციების კონფიგურირებისა და ბიზნეს ლოგიკასთან შეჯერების უნარი; Mid-level ეტაპზე აიწევს პროექტების დამოუკიდებლად მართვაზე; Senior დონეზე — საწარმოს მასშტაბის არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Solution/Enterprise Architect) ან მენეჯერულ (IT Director) მიმართულებებად."}]}, "SE": {"1": [{"type": "p", "label": null, "text": "მე ვარ პროგრამული უზრუნველყოფის ინჟინერი (Software Engineer) — ვქმნი პროგრამულ სისტემებს ნულიდან: ვიაზრებ რა დასმულ ამოცანას, ვაშენებ პროგრამულ კოდს და ვაბარებ პროგრამულ პროდუქტს, რომელიც საიმედოდ მუშაობს რეალურ მომხმარებლებთან რეალური დატვირთვის პირობებში.\n\nჩემი სამუშაოა პროგრამული კომპლექსის არქიტექტურა, მისი ცალკეული მოდულების, ვებ და მობილური აპლიკაციების პროგრამირება, მათი ტესტირება და გამართვა, თანხლება და შემდგომი განვითარება."}, {"type": "quote", "label": "მარტივად", "text": "საზოგადოდ მიწოდებენ პროგრამისტს და მე ვაქცევ იდეას ან ტექნიკურ დავალებას მუშა პროგრამულ პროდუქტად."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო პროგრამული სისტემა, რომელიც სწორად მუშაობს, მოხერხებულია მომხმარებლისთვის, მასშტაბირებადია, კითხვადია ჩემი კოლეგა-პროგრამისტებისთვის და მომავალში ადვილად გასაუმჯობესებელი?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "IS&BT-ის სტუდენტისგან განსხვავებით, რომელიც ბიზნეს ლოგიკას სისტემურ დონეზე აწესრიგებს და ხშირად მზა კორპორაციულ სისტემებს აკონფიგურირებს, SE-ის სტუდენტი დასმული ამოცანიდან გამომდინარე წერს კოდს ან ავალებს ამას AI-ის ასისტენტს და ქმნის მუშა პროგრამულ პროდუქტს ნულიდან ან შეაქვს ცვლილებები არსებულ მომუშავე სისტემაში. Infra-ს სტუდენტისგან განსხვავებით, მას ფოკუსი არა ინფრასტრუქტურის მორგებაზე აქვს პროგრამების ექსპლუატაციისას, არამედ საკუთრივ პროგრამული აპლიკაციის არქიტექტურის, ლოგიკისა და კოდის ხარისხზე."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "პროგრამული პროდუქტის დაპროექტება, კოდირების AI-ასისტენტების ეფექტურად გამოყენება, მუშა კოდის მიღება და კოდის/პროდუქტის განხილვაში (Code Review) ჩართულობა, ვებ და მობილური აპლიკაციების დეველოპმენტი, ტესტირება ავტომატურ რეჟიმში (unit, integration და სხვა ტესტები), ვერსიების კონტროლი და გუნდური თანაშრომლობა Software Engineering-ის განყოფილებაში."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "მასშტაბური სისტემების პროგრამული არქიტექტურა, DevOps პრაქტიკები (CI/CD — Continuous Integration / Continuous Delivery ან Deployment, უწყვეტი ინტეგრაცია / უწყვეტი მიწოდება ან განთავსება), მემკვიდრეობითი სისტემების (legacy systems) რეფაქტორინგი ან ჩანაცვლება, ასევე AI-ასისტენტებისთვის (Claude Code, OpenAI Codex ან ანალოგებს) დავალების პროფესიონალურად ფორმულირება, მათ მიერ გენერირებული კოდის გადამოწმება და საბოლოო ინტეგრაცია."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "SE-ის სპეციალისტი მუშაობს დეველოპერული გუნდის ნაწილად, ხშირად IS&BT-ის ჯგუფის ტექნიკურ დავალებას ან პროდუქტის მენეჯერის მოთხოვნებს იღებს შესასრულებლად, ხოლო მისი კოდი საბოლოოდ რეალური მომხმარებლების ხელში ხვდება."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "SE-ის სპეციალისტი აშენებს — ის აბსტრაქტულ ან დოკუმენტურ მოთხოვნას კონკრეტულ, მომუშავე სისტემად აქცევს."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "ლოგიკური და სტრუქტურული აზროვნება — პრობლემა იშლება მცირე, ერთმანეთთან დაკავშირებულ ლოგიკურ ბლოკებად, სადაც ყოველი ნაბიჯი ცალსახად გამომდინარეობს წინიდან. AI კოდის ასისტენტების გავრცელებასთან ერთად, მზარდი მნიშვნელობა ენიჭება შეფასებით (evaluative) აზროვნებას — გენერირებული გადაწყვეტილებების სისწორის, უსაფრთხოებისა და არქიტექტურული მართებულობის კრიტიკულად გადამოწმების უნარს."}], "5": [{"type": "list", "label": null, "text": "პროგრამული არქიტექტურის დიზაინის დოკუმენტი; მუშა, დატესტილი კოდი ან ვებ/მობილური აპლიკაცია; ავტომატური ტესტების კრებული; CI/CD pipeline (უწყვეტი ინტეგრაცია+მიწოდების კონვეიერი), რომელიც კოდის დეპლოიმენტს (სამუშაოდ განთავსებას) ავტომატიზებს."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "Software Engineer ჩაიბარებს ტექნიკურ დავალებას ან მოთხოვნების სპეციფიკაციას (ხშირად IS&BT-ის ჯგუფისგან ან ბიზნესის მხარესგან)."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს დატესტილ და მუშა (და შესაძლოა, CI/CD-ით დეპლოირებულ) პროგრამულ სისტემას, რომელიც მომხმარებლისთვის ან შემდეგი ეტაპის გუნდისთვის (DevOps/Infra-სთვის) მზადაა."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "კოდის სიწმინდე და საიმედოობა — SE-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ პროგრამულმა სისტემამ კორექტულად იმუშაოს ისე, როგორც განზრახული იყო, და არ მოხდეს მისი ავარიულად დასრულება რეალურ სამუშაო გარემოში."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Software Developer-დან (კოდის შექმნა მენტორის ზედამხედველობით) Software Engineer-მდე ან Senior Software Engineer-მდე (დამოუკიდებელი არქიტექტურული გადაწყვეტილებები), შემდეგ Tech Lead, Engineering Manager და Staff/Principal Engineer დონეებამდე. ასევე არსებობს Full-Stack, Backend, Frontend და Mobile Developer-ის სპეციალიზებული როლები."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "SE ერთ-ერთი ყველაზე უნივერსალური IT სპეციალიზაციაა — Software Engineer საჭიროა არა მხოლოდ ტექ-კომპანიებში, არამედ ყველგან, სადაც ციფრული პროდუქტი იქმნება: საფინანსო სექტორი (FinTech), ჯანდაცვა (HealthTech), ელექტრონული კომერცია, ტელეკომი, თამაშების ინდუსტრია და საჯარო სექტორი."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "პირველ 1-2 წელში (Junior Software Engineer) მთავარი ამოცანა თანდათან იცვლება — წმინდა, ხელით კოდის წერის ნაცვლად, აქცენტი მეტად გადადის კოდირების AI ასისტენტების (Claude Code, OpenAI Codex და სხვა) მიერ შემოთავაზებული გადაწყვეტების გააზრებაზე, გადამოწმებასა და არსებულ არქიტექტურაში ინტეგრირებაზე — ანუ Junior დონეზე უფრო ადრე მოითხოვება არქიტექტურული წიგნიერება და კოდის კრიტიკული შეფასების უნარი, თუმცა ფუნდამენტური უნარები (ალგორითმები, დებაგინგი, კოდის წაკითხვა) ისევ წინაპირობად რჩება ამის საიმედოდ შესასრულებლად; 2-4 წელში (Mid Software Engineer) სტუდენტი დამოუკიდებლად მუშაობს ცალკეულ ფუნქციონალზე ბოლომდე; 4-7 წელში (Senior) იღებს არქიტექტურულ გადაწყვეტილებებს და ხელმძღვანელობს code review-ებს, ხშირად — AI-გენერირებული კოდის ხარისხის კონტროლსაც; 7-10+ წელში კარიერა იშლება ორ მიმართულებად — ტექნიკური ექსპერტიზის გაღრმავება (Staff/Principal Engineer) ან მენეჯერული ხელმძღვანელობა (Tech Lead/Engineering Manager). მნიშვნელოვანია აღინიშნოს, რომ AI-ის პოტენციალის ზრდის ეპოქაში შრომით „ბაზარზე“ ცვლილებების შესაძლებლობაც იზრდება."}]}, "Infra": {"1": [{"type": "p", "label": null, "text": "მე ვარ ინფრასტრუქტურის ინჟინერი — ვაგებ და ვმართავ იმ ტექნიკურ ფუძეს (ქსელები, სერვერები, Cloud ანუ ღრუბლოვანი რესურსები), რომელზეც ყველა სხვა სისტემა დგას. ჩემი მთავარი ამოცანაა, რომ ეს ფუძე ყოველთვის ხელმისაწვდომი, სტაბილური და მასშტაბირებადი იყოს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაგებ პირობითად „ისეთ გზებსა და ხიდებს“ რომლებზეც ყველა სახის პროგრამული სისტემა მოძრაობს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო და შევინარჩუნო ინფრასტრუქტურა, რომელიც ხარვეზის გარეშე, უსაფრთხოდ და მასშტაბირებადად აწვდის რესურსს ყველა ლეგალურ სისტემას?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "Cyber-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ინფრასტრუქტურაში არსებული საფრთხეების აღმოჩენასა და მათგან დაცვაზე, Infra-ს სტუდენტი ფოკუსირებულია საკუთრივ ინფრასტრუქტურის აშენებაზე, ექსპლუატაციაზე და ხელმისაწვდომობაზე — უსაფრთხოება მისთვის ერთერთი ასპექტია ბევრს შორის (ხელმისაწვდომობასთან, წარმადობასთან და მასშტაბირებასთან ერთად) და არა ერთადერთი ცენტრალური. თუმცა, AIOps-ის (AI-ით გაძლიერებული მონიტორინგი და ანომალიის პრედიქტული დეტექციის) გავრცელებასთან ერთად, Infra-ს სტუდენტისთვის მნიშვნელოვან უნარად ყალიბდება AI-გენერირებული რეკომენდაციების სისწორის შეფასება."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "ქსელების დაგეგმვა და კონფიგურირება (Cisco-ს CCNA დონის ამოცანები), სერვერების კონფიგურირება და ოპერაციული სისტემების (Linux) ადმინისტრირება, Cloud რესურსების მართვა (მსგავსად AWS ან Azure)."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "Cloud სერვისის მოდელების (IaaS/PaaS/SaaS — Infrastructure/Platform/Software as a Service) დონეზე არქიტექტურის დაგეგმვა, ვირტუალიზაცია და კონტეინერიზაცია მასშტაბურ გარემოში, ინფრასტრუქტურის როგორც კოდის (IaC — Infrastructure as Code) პრაქტიკები, მაღალი ხელმისაწვდომობის (High Availability) და კატასტროფისგან აღდგენის (Disaster Recovery) არქიტექტურები. AIOps პლატფორმების (Datadog AI, New Relic AI) ამუშავება ტექნიკური ანომალიების პრედიქტული აღმოჩენისთვის და ახალი სიმძლავრეების დაგეგმვისთვის (capacity planning), ასევე AI-ის გამოყენება IaC სკრიპტების (Terraform/Ansible) გენერირებისა და ვალიდაციისთვის."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "Infra-ს სპეციალისტი მუშაობს IT ოპერაციების გუნდის ნაწილად — მისი მოღვაწეობა ფუნდამენტს ქმნის Software Engineer-ის მიერ მოწოდებული აპლიკაციების მუშაობისთვის და Cyber-ის ინჟინრისთვის უსაფრთხოების გასაკონტროლებლად."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "Infra-ს სპეციალისტი აშენებს და მართავს — Infra-ს სპეციალისტი ქმნის სისტემის ფუნქციონირების ფიზიკურ ან ვირტუალურ ფუძეს და მუდმივად უზრუნველყოფს მის გამართულობას."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური და პროცედურული აზროვნება — ყოველი კომპონენტი (სერვერი, ქსელი, საცავი) განიხილება ერთიანი, ერთმანეთზე დამოკიდებული მექანიზმის ნაწილებად, სადაც ერთ წერტილში ავარია მთლიან სისტემაზე სასტიკად მოქმედებს. ამასთან, ემატება ვალდებულება, რომ AI-გენერირებული განგაშები და რეკომენდაციები კრიტიკულად გადამოწმდეს ცრუ-დადებითი (false positive) შემთხვევების გამოსარიცხავად."}], "5": [{"type": "list", "label": null, "text": "კონფიგურირებული სერვერი და მუშა ქსელური ან Cloud ინფრასტრუქტურა (IaaS/PaaS/SaaS დონეზე); ინფრასტრუქტურის როგორც კოდის (IaC) სკრიპტები; მონიტორინგისა და განგაშის (alerting) სისტემა; კატასტროფისგან აღდგენის (Disaster Recovery) გეგმა და დოკუმენტაცია."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "Infra-ს სპეციალისტი ჩაიბარებს მოთხოვნას სისტემის ან აპლიკაციის ასამუშავებლად საჭირო რესურსებზე (სერვერი, ქსელი, Cloud გარემო)."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "გადასცემს მზა, კონფიგურირებულ სერვერსა და მუშა ინფრასტრუქტურულ გარემოს, სადაც Software Engineer-ის პროგრამა განთავსებას შეძლებს და სტაბილურად იმუშავებს."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის ხელმისაწვდომობა (Uptime — უპრობლემოდ მუშაობის დრო) — Infra-ს სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ ინფრასტრუქტურა არ ჩავარდეს და ყოველთვის ხელმისაწვდომი იყოს ექსპლუატაციაში მყოფი სისტემებისთვის."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior System/Network Administrator-დან (სერვერებისა და ქსელის მონიტორინგი ხელმძღვანელის თანდასწრებით) DevOps/System Engineer-მდე (დამოუკიდებელი ინფრასტრუქტურის მართვა), შემდეგ Senior DevOps/SRE Engineer, Infrastructure Architect და Head of Infrastructure/IT Operations დონეებამდე — ასევე არსებობს სპეციალიზებული როლები: Cloud Engineer, სისტემების საიმედოობის ინჟინერი (SRE — Site Reliability Engineer), Network Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "Infra-ს სპეციალისტი აუცილებელია ნებისმიერ ორგანიზაციაში, რომელსაც აქვს ციფრული სერვისი — ტელეკომი, ღრუბლოვანი სერვისების პროვაიდერები, ფინტექი, ელექტრონული კომერცია და მსხვილი კორპორაციების IT დეპარტამენტები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე მთავარი ამოცანაა მონიტორინგი და ინციდენტებზე საფეხურეობრივი რეაგირება; AIOps-ის გავრცელებასთან ერთად, სტუდენტისგან სულ უფრო ადრე მოითხოვება AI-გენერირებული განგაშების ინტერპრეტირებისა და root-cause ანალიზის უნარი — ავტომატური დეტექციის მიღმა მდებარე რეალური მიზეზის პოვნა; Mid-level ეტაპზე ეწევა ინფრასტრუქტურის დამოუკიდებლად დაგეგმვასა და IaC-ის წერას; Senior დონეზე — მაღალი ხელმისაწვდომობისა და მასშტაბირების არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Infrastructure/Cloud Architect) ან მენეჯერულ (Head of Infrastructure) მიმართულებებად."}]}, "Cyber": {"1": [{"type": "p", "label": null, "text": "მე ვარ კიბერუსაფრთხოების (Cybersecurity-ის) სპეციალისტი — ერთადერთი ინჟინერი ვარ, ვინც სისტემას ერთდროულად ორი კუთხით ხედავს: მცველის და თავდამსხმელის. ჩემი ამოცანაა სისტემის სუსტი წერტილი მანამდე ვიპოვო, სანამ მას სხვა გამოიყენებს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვფიქრობ როგორც თავდამსხმელი რათა ავაგო დაცვა, რომელსაც ჰაკერი ვერ გადალახავს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "სად არის არსებული სისტემის სუსტი წერტილი, რომელსაც მოწინააღმდეგე გამოიყენებს, და როგორ ავაგო დაცვა მის წინააღმდეგ?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "Infra-ს სტუდენტისგან განსხვავებით, რომელიც ინფრასტრუქტურას აგებს და მის ხელმისაწვდომობაზე ზრუნავს, Cyber-ის სტუდენტი ვარაუდობს, რომ ეს ინფრასტრუქტურა აქტიური თავდასხმის ობიექტი იქნება — მისი მოქმედება შეჯიბრებითია (მოწინააღმდეგის პერსპექტივიდან გამომდინარე), ხოლო Infra-ს სპეციალისტის მოქმედება ძირეულად ოპერაციულია (გამართულობაზე ფოკუსირებული). დღეს უკვე მოწინააღმდეგეც სულ უფრო ხშირად AI-ის იყენებს, მაგალითად AI-გენერირებული ფიშინგს (phishing), მოწყვლადობის ავტომატური სკანირებას, ამიტომ Cyber-ის სტუდენტმაც საჭიროა გაითვალისწინოს დაცვისა და თავდასხმის ორივე მხარეს AI-ით გაძლიერებული მეთოდები."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "სისუსტეების სკანირება და შეფასება, წვდომის კონტროლისა და ავთენტიფიკაციის სისტემების კონფიგურირება, უსაფრთხოების ინციდენტების მონიტორინგი."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "პენტესტინგი (Ethical Hacking) და წინსწრებით დაგეგმილი თავდასხმის სიმულაცია, კრიპტოგრაფიული სისტემების დიზაინი და ანალიზი, ინციდენტებზე რეაგირება (Incident Response) და ციფრული კრიმინალისტიკა (Forensics) მსხვილ ან კრიტიკულ შემოტევებზე. გაფართოებულ ამოცანებში სულ უფრო მნიშვნელოვან ადგილს იკავებს AI სისტემების უსაფრთხოება (LLM Security) — prompt injection-ის, adversarial machine learning-ისა და AI მოდელის jailbreak-ის წინააღმდეგ დაცვის მექანიზმების დაგეგმვა."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "Cyber-ის ინჟინერი მუშაობს უსაფრთხოების გუნდის ნაწილად — მისი მუშაობა იცავს Infra-ს მიერ აშენებულ სისტემებს და Software Engineer-ის მიერ შექმნილ აპლიკაციებს მოწინააღმდეგისგან, ხშირად საკანონმდებლო და მარეგულირებელ მოთხოვნებთან კავშირში."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "Cybersecurity-ის სპეციალისტი იცავს — კიბერუსაფრთხოების ინჟინერი მუდმივად აფასებს საფრთხეს და აგებს ან აძლიერებს დაცვის ხაზს შემოტევების წინააღმდეგ."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "დაპირისპირებითი (adversarial) აზროვნება — ყოველი სისტემა განიხილება არა მისი დანიშნულებიდან, არამედ იმ კუთხით, თუ როგორ შეიძლება მისი ბოროტად გამოყენება ან გატეხვა მოწინააღმდეგის მიერ და შესაბამისად როგორ დავუპირისპირდეთ მას. ეს ადვერსარიალური აზროვნება დღეს ვრცელდება თავად AI სისტემებზეც — Cyber-ის სპეციალისტმა უნდა იფიქროს, როგორ შეიძლება მოწინააღმდეგემ AI მოდელი თავად გაიტყუოს თავის მხარეს და ბოროტად გამოიყენოს."}, {"type": "aside", "label": null, "text": "თუმცა მაინც ნუ დავიჯერებთ, რომ „ამ სპეციალიზაციას ირჩევს ის, ვისთვისაც პარანოია პროფესიული სათნოებაა“."}], "5": [{"type": "list", "label": null, "text": "სისუსტეების შეფასების ანგარიში (Vulnerability Assessment Report); პენტესტის შედეგების დოკუმენტი თავდასხმის სცენარებითა და რეკომენდაციებით; დაცვის კონფიგურირება ან კონტროლის მექანიზმის შექმნა (firewall წესები, წვდომის პოლიტიკა); ინციდენტზე რეაგირების ანგარიში და ციფრული ფორენზიკის (Forensics) დასკვნა."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "კიბერუსაფრთხოების ინჟინერი ჩაიბარებს მუშა სისტემას ან ინფრასტრუქტურას, რომლის უსაფრთხოების დონე გასაზომი, შესამოწმებელი და გასაძლიერებელია."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს დაცვის ხარისხის შეფასებას, გამოვლენილი სისუსტეების ჩამონათვალს და კონკრეტულ რეკომენდაციას ან გამოსწორებულ კონფიგურაციას."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის გადარჩენადობა (Resilience) მოწინააღმდეგის წინაშე — CyberSecurity-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ შემოტევა იქნება დროულად აღმოჩენილი და შეკავებული ან თავიდანვე დაექვემდებარება აცილებას წინასწარ მიღებული ზომების შედეგად."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "უსაფრთხოების ოპერაციების ცენტრის დამწყები ანალიტიკოსი ანუ Junior SOC (Security Operations Center) Analyst-დან (განგაშების მონიტორინგი თავდაცვის ხელმძღვანელის ზედამხედველობით) Mid Security Engineer/Analyst-მდე (საფრთხის დამოუკიდებლად შეფასება), შემდეგ Senior Security Engineer, Security Architect და CISO (Chief Information Security Officer) დონეებამდე — ასევე სპეციალიზებული როლები: Penetration Tester/Red Teamer, Incident Responder, AI/LLM Security Specialist."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "Cyber-ის სპეციალისტი მოთხოვნადია ყველგან, სადაც დასაცავი მონაცემი ან სისტემა არსებობს — საბანკო და საფინანსო სექტორი, სამთავრობო და თავდაცვითი სტრუქტურები, ჯანდაცვა, ტელეკომი და კონსალტინგური/აუდიტორული კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა განგაშების მონიტორინგი და თავდასხმის საფეხურეობრივი ანალიზი; AI-ით გაძლიერებული შემოტევებისა და AI სისტემების უსაფრთხოების (LLM Security) მზარდი მნიშვნელობის გამო, სტუდენტისგან სულ უფრო ადრე მოითხოვება ორმხრივი — როგორც დამცველის, ისე მოწინააღმდეგის — პერსპექტივიდან აზროვნება; Mid-level ეტაპზე აიწევს დამოუკიდებლად ინციდენტებზე რეაგირებასა და საფრთხის მოდელირებაზე; Senior დონეზე — საწარმოს მასშტაბის უსაფრთხოების არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Security Architect/Principal) ან მენეჯერულ (CISO) მიმართულებებად."}]}, "CE": {"1": [{"type": "p", "label": null, "text": "მე ვარ კომპიუტერული ინჟინერი — ვმუშაობ იქ, სადაც პროგრამული უზრუნველყოფა შეხვდება ფიზიკურ მოწყობილობას. ვაკონფიგურირებ სერვერის აპარატურულ/პროგრამულ უზრუნველყოფას კომპანიების პრობლემებიდან გამომდინარე. ვაგებ ჩაშენებულ (embedded) სისტემებს — მცირე, სპეციალიზებულ კომპიუტერებს, რომლებიც სენსორებში, ჩიპებსა და მოწყობილობებში ამუშავდება, ვაპროექტებ ჭკვიანი, ქსელში ჩართული მოწყობილობების ერთიან IoT-ეკოსისტემებს (საგნების/ნივთების ინტერნეტი). მოკლედ, ჩემი ცოდნა ერთნაირად მოიცავს ელექტრონიკას და კოდს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვღებულობ ოპტიმალურ ტექნიკურ გადაწყვეტილებებს და ვაძლევ „ინტელექტს“ ფიზიკურ მოწყობილობებს და სისტემებს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაწყო კომპანიების ოპტიმალური კომპიუტერული კომპლექსი ან როგორ ავაგო სისტემა, რომელიც ფიზიკური რესურსების (ენერგია, მეხსიერება, დამუშავების სიჩქარე) მკაცრი შეზღუდვის პირობებში ამუშავდება?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "SE-ის სტუდენტისგან განსხვავებით, რომელიც კოდს ქმნის პლატფორმისთვის, სადაც რესურსები ნაკლებად შეზღუდულია, CE-ის სტუდენტი მუშაობს მკაცრად შეზღუდულ გარემოში. R&A-ის სტუდენტისგან განსხვავებით, ფოკუსი აქ არ არის მექანიკურ მოძრაობაზე, არამედ ჩიპის/მოწყობილობის არქიტექტურასა და დეტალური/„დაბალი“ დონის პროგრამულ-აპარატურულ ინტეგრაციაზე. AI-აქსელერატორების (NPU/TPU) გავრცელებასთან ერთად, CE-ის სტუდენტისთვის „მკაცრი შეზღუდვა“ სულ უფრო კონკრეტულად AI მოდელის ჩიპებზე გაშვების ოპტიმიზაციას გულისხმობს."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "სერვერების აპარატურულ/პროგრამული უზრუნველყოფის კონფიგურირება, ჩაშენებული სისტემების პროგრამირება (firmware), მიკროკონტროლერების კონფიგურირება, სენსორებთან და პერიფერიულ მოწყობილობებთან ინტერფეისის შექმნა."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "ოპტიმალური კომპიუტერული კომპლექსის დაპროექტება კომპანიებისთვის, აპარატურის (hardware) დიზაინი დეტალური დონის ოპტიმიზაციისთვის, სიგნალების ციფრული დამუშავება (DSP — Digital Signal Processing), „ჭკვიანი სახლის“ აგება, Edge AI-ის (პერიფერიული ხელოვნური ინტელექტის) მანქანური სწავლების მოდელების ოპტიმიზაცია და გაშვება AI-ჩიპებზე რესურსების მინიმალური ხარჯვით. აქ გამოიყენება AI-მოდელების სპეციალური (quantization და pruning) ტექნიკები რესურსდამზოგი გაშვებისთვის. გაფართოებულ ამოცანებში ასევე შედის AI-ის (Synopsys.ai, Cadence AI) გამოყენება ჩიპის/firmware-ის დაპროექტებაში."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "CE-ის სპეციალისტი მუშაობს პროდუქტის გუნდის ნაწილად, სადაც მისი ნაშრომი ან კომპანიის კომპლექსურ პროექტში ან ფიზიკურ მოწყობილობაში ინტეგრირდება — ავტომობილი, IoT სენსორი, სამედიცინო აპარატურა — და საბოლოოდ წარმოებაში გადადის."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "CE-ის სპეციალისტი აპროექტებს და აშენებს — ის ერთდროულად მუშაობს პროგრამული ლოგიკისა და ფიზიკური აპარატურის საზღვარზე."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "რესურსზე ორიენტირებული, ზუსტი ინჟინერული აზროვნება — ყოველი გადაწყვეტილება ფასდება ტექნიკის, ენერგიის, მეხსიერებისა და დროის მკაცრი ბალანსით."}], "5": [{"type": "list", "label": null, "text": "ჩაშენებული სისტემის firmware ან კონტროლერის კოდი; აპარატურულ-პროგრამული ინტეგრაციის სქემა; ოპტიმიზებული AI მოდელი, რომელიც ჩიპზე ამუშავდება; ტექნიკური დოკუმენტაცია მოწყობილობის არქიტექტურაზე, კომპიუტერული კომპლექსის ტექნიკური სპეციფიკაცია."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "CE-ის სპეციალისტი ჩაიბარებს სისტემის ტექნიკურ პირობებს, აპარატურის სპეციფიკაციას ან მოწყობილობის ფუნქციურ მოთხოვნებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს სისტემის საპროექტო დოკუმენტაციას ან მუშა firmware-ს ან ჩაშენებულ სისტემას, რომელიც მზადაა ინტეგრაციისთვის უფრო დიდ პროდუქტში ან მასობრივი წარმოებისთვის."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "დამკვეთის მოთხოვნების შესრულება და სისტემის საიმედოობა ფიზიკური შეზღუდვების პირობებში — CE-ის სპეციალისტი აგებს პასუხს იმაზე, რომ ტექნიკურმა კომპლექსმა თუ ცალკეულმა მოწყობილობამ იმუშაოს გამართულად გამოყოფილი რესურსის ფარგლებში."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Hardware/Embedded Engineer-დან (სქემების ტესტირება და firmware-ის გამართვა გამოცდილი ინჟინრის ხელმძღვანელობით) Mid Hardware/Embedded Systems Engineer-მდე (დამოუკიდებელი დიზაინი), შემდეგ Senior Hardware/Embedded Engineer, Hardware Architect და Head of Hardware Engineering-ის დონეებამდე. ასევე არსებობს სპეციალიზებული როლები: Firmware Engineer, IoT Engineer, FPGA/ASIC Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "CE-ის სპეციალისტი საჭიროა ფიზიკური პროდუქტის შემქმნელ ნებისმიერ ინდუსტრიაში — AI-ზე ორიენტირებული ელექტრონული პროდუქციის დამპროექტებელი და მწარმოებელი კომპანიები, ავტომობილების ინდუსტრია, IoT და „ჭკვიანი“ მოწყობილობების მწარმოებლები, სამედიცინო აპარატურის, ტელეკომუნიკაციური აღჭურვილობის და ნახევარ-გამტარული (Semiconductor) კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა არსებული სქემების ტესტირება და firmware-ის გამართვა; Mid-level ეტაპზე ეწევა დამოუკიდებლად სისტემის დიზაინს, AI-მოდელების ჩიპზე ოპტიმიზაციის (quantization/pruning) ოპერაციებს; Senior დონეზე — მუშაობს პროდუქტის (AI-აქსელერატორების NPU/TPU-ს ანალოგების) არქიტექტურულ გადაწყვეტილებებზე, უზრუნველყოფს პროექტებში აპარატურულ-პროგრამული ბალანსის დაცვას. შემდგომში კარიერა იშლება ტექნიკურ (Hardware/Chip Architect) ან მენეჯერულ (Head of Hardware) მიმართულებებად."}]}, "RA": {"1": [{"type": "p", "label": null, "text": "მე ვარ რობოტიკისა და ავტომატიზაციის ინჟინერი — ვაგებ სისტემებს, რომლებიც ფიზიკურ სამყაროში მოძრაობენ, აანალიზებენ გარემოს და მოქმედებენ ადამიანის უწყვეტი ჩარევის გარეშე. ჩემი სამუშაოა რობოტების პროგრამირება, ინდუსტრიული პროცესების ავტომატიზაცია და სისტემების აგება, რომლებიც აღიქვამენ გარემოს, ღებულობენ გადაწყვეტილებებს და მოქმედებენ."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაგებ „მექანიზმებს“ რომლებსაც საკუთარი თავის მართვა შეუძლიათ."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო სისტემა ან გავაწყო მექანიზმი, რომელიც ფიზიკურ გარემოს აღიქვამს, გადაწყვეტილებას იღებს და ზუსტად მოქმედებს რეალურ დროში?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "CE-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ჩიპისა და მოწყობილობის დეტალური დონის არქიტექტურაზე, R&A-ის სტუდენტი ფოკუსირებულია მთლიან სისტემაზე, რომელიც ფიზიკურად მოძრაობს და ურთიერთქმედებს გარემოსთან — აღქმა, გადაწყვეტილების მიღება და მექანიკური მოქმედება ერთიან ციკლში. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან მოდელის აგებაზე, არამედ იმ მოდელის ფიზიკურ ქმედებად გარდაქმნაზე. თანამედროვე მიდგომებში ეს „მოდელი“ სულ უფრო ხშირად ფუნდამენტური (foundation) AI მოდელია — ე.წ. Vision-Language-Action (VLA) მოდელები, რომლებიც ხედვას, ენას და ფიზიკურ მოქმედებას ერთ სისტემაში აერთიანებენ."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "რობოტების პროგრამირება (Robot Operating System — ROS-ის გამოყენებით), ინდუსტრიული კონტროლერების (PLC — Programmable Logic Controller) კონფიგურირება და პროგრამირება, სენსორებიდან მიღებული მონაცემების დამუშავება რეალურ დროში გადაწყვეტილების მისაღებად."}, {"type": "p", "label": "გაფართოებული ამოცანები (Industry 4.0)", "text": "SCADA (Supervisory Control And Data Acquisition) სისტემების დიზაინი მსხვილი ინდუსტრიული პროცესების მონიტორინგისა და კონტროლისთვის, Computer Vision-ის ინტეგრირება რობოტის ნავიგაციისთვის და ობიექტების ამოცნობისთვის, ავტონომიური სისტემების კოორდინირება მულტირობოტიან გარემოში, ნივთების ინდუსტრიული ინტერნეტის („IIoT — Industrial IoT & Building Automation“) და რობოტიზებული ხაზების ინტეგრირება ქარხნებში (Industry 4.0). გაფართოებულ ამოცანებში შედის ფიზიკური სამყაროს AI მოდელების (Physical AI) გამოყენება ამოცანის დაგეგმვისთვის (task planning) და განხორციელებისთვის (implementation), აგრეთვე ბუნებრივი ენით რობოტთან საიმედო თანამშრომლობის უზრუნველყოფა."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "R&A-ის სპეციალისტი მუშაობს საწარმოო, ლოგისტიკურ ან კვლევით გარემოში — მისი სისტემა ხშირად ინტეგრირდება უფრო ფართო საწარმოო ხაზში ან ავტონომიურ პლატფორმაში, სადაც უსაფრთხოება და ზუსტი მოქმედება კრიტიკულია."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "R&A-ის სპეციალისტი აპროექტებს და აშენებს — ის ქმნის სისტემას, რომელიც გარემოს აღქმიდან მოქმედებამდე უწყვეტ ციკლში მუშაობს."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური და რეალურ-დროში-ორიენტირებული აზროვნება — ყოველი გადაწყვეტილება განიხილება დროითი და ფიზიკური შეზღუდვების ფონზე, სადაც დაგვიანებული ან არაზუსტი მოქმედება უარყოფით ფიზიკურ შედეგს გამოიწვევს. დამატებითი ყურადღების ღირსია AI-ზე დაფუძნებული გადაწყვეტილების დროულად გადამოწმება მისი გადატანის წინ ფიზიკურ გარემოში."}], "5": [{"type": "list", "label": null, "text": "დაპროგრამებული რობოტული სისტემა (საწარმოო ხაზი ან ავტონომიური პლატფორმა); PLC-ზე დაფუძნებული ავტომატიზაციის გადაწყვეტა; SCADA მონიტორინგისა და კონტროლის სისტემა; ინტეგრირებული Computer Vision მოდული ნავიგაციისთვის ან ობიექტების ამოცნობისთვის."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "R&A-ის სპეციალისტი ჩაიბარებს ფიზიკური ამოცანის ან საწარმოო პროცესის სპეციფიკაციას, რომელიც ავტომატიზაციას ან რობოტიზებულ გადაწყვეტას მოითხოვს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს მუშა, ტესტირებულ რობოტულ ან ავტომატიზებულ სისტემას, რომელიც საწარმოო ხაზში ან რეალურ გარემოში ინტეგრაციისთვის მზადაა."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის ფიზიკური უსაფრთხოება და სიზუსტე — R&A სპეციალისტი აგებს პასუხს იმაზე, რომ ავტონომიური მოქმედება ზუსტად და უსაფრთხოდ შესრულდება."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Robotics/Automation Engineer-დან (არსებული რობოტული სისტემების ტესტირება და კალიბრაცია ხელმძღვანელის ზედამხედველობით) Mid Robotics Engineer-მდე (სისტემის დამოუკიდებლად დიზაინი და რობოტების სწავლება), შემდეგ Senior Robotics Engineer, Robotics/Automation Architect და Head of Robotics დონეებამდე — ასევე სპეციალიზებული როლები: Computer Vision Engineer, Controls Engineer, Industrial Automation Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "R&A-ის სპეციალისტი მოთხოვნადია წარმოებასა და ლოგისტიკაში (Industry 4.0), ავტომობილების ინდუსტრიაში (ავტონომიური მართვა), სამედიცინო რობოტიკაში, სოფლის მეურნეობაში, სამხედრო სფეროში და სამეცნიერო/კვლევით ლაბორატორიებში."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა არსებული სისტემის ტესტირება და კალიბრაცია; ფუნდამენტური AI მოდელების (Physical AI, VLA) გავრცელებასთან ერთად, მას უკვე მოეთხოვება ამ მოდელების გადამოწმება მათი გადატანის წინ ფიზიკურ გარემოში; Mid-level ეტაპზე ის ეწევა სისტემის დამოუკიდებლად ინტეგრაციას; Senior დონეზე ღებულობს საწარმოო ხაზის მასშტაბის არქიტექტურულ გადაწყვეტილებებს. შემდგომში კარიერა იშლება ტექნიკურ (Robotics Architect/Principal) ან მენეჯერულ (Head of Robotics/Automation) მიმართულებებად."}]}}}
+{"specializations": [{"id": "DS", "short": "DS", "full": "DS (Data Science) — მონაცემთა მეცნიერება", "color": "#178F86"}, {"id": "ISBT", "short": "IS&BT", "full": "IS&BT (Information Systems & Business Tech) — ინფორმაციული სისტემები და ბიზნეს ტექნოლოგიები", "color": "#7C4FA0"}, {"id": "SE", "short": "SE", "full": "SE (Software Engineering) — პროგრამული უზრუნველყოფის ინჟინერია", "color": "#2F5FC4"}, {"id": "Infra", "short": "Infra", "full": "Infra (IT Networks & Infrastructure) — ინფოტექნოლოგიების ქსელები და ინფრასტრუქტურა", "color": "#4B6B80"}, {"id": "Cyber", "short": "Cyber", "full": "Cyber (CyberSecurity) — კიბერუსაფრთხოება", "color": "#B8362E"}, {"id": "CE", "short": "CE", "full": "CE (Computer Engineering) — კომპიუტერული ინჟინერია", "color": "#C97223"}, {"id": "RA", "short": "R&A", "full": "R&A (Robotics & Automation) — რობოტები და ავტომატიზაცია", "color": "#2F7D42"}], "sections": [{"id": 1, "short": "1. ვინ ვარ", "full": "1. სპეციალიზაციის იდენტობა — «ვინ ვარ?»"}, {"id": 2, "short": "2. განსხვავება", "full": "2. სპეციალიზაციის მთავარი განმასხვავებელი"}, {"id": 3, "short": "3. პრობლემები", "full": "3. სპეციალისტის პრობლემური სივრცე"}, {"id": 4, "short": "4. ფიქრი & საქმე", "full": "4. საქმიანობის ტიპი და აზროვნება"}, {"id": 5, "short": "5. პროდუქტი", "full": "5. სპეციალისტის პროდუქტი"}, {"id": 6, "short": "6. პასუხისმგებლობა", "full": "6. პასუხისმგებლობის ზონა"}, {"id": 7, "short": "7. კარიერა", "full": "7. კარიერული პერსპექტივა"}], "content": {"DS": {"1": [{"type": "p", "label": null, "text": "მე ვარ მონაცემთა მეცნიერი — ვმუშაობ დაუმუშავებელ, ხშირად ქაოტურ მონაცემებთან და მათგან გამოვყოფ ნიმუშებს, რომლებიც ბიზნესსა ან საზოგადოებას რეალურ გადაწყვეტილებებში ეხმარება. ჩემი იარაღია სტატისტიკა, მანქანური სწავლება და დიდი მონაცემების დამუშავების ტექნოლოგიები."}, {"type": "quote", "label": "მარტივად", "text": "მე „გადავთარგმნი“ რიცხვებს ისეთ ისტორიად, რომელსაც ორგანიზაცია გადაწყვეტილებების მისაღებად გამოიყენებს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "რა ამბავს მოგვითხრობს ერთი შეხედვით ქაოტური მონაცემები და როგორ ავაგო მოდელი, რომელიც მომავალს იწინასწარმეტყველებს?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "IS&BT-ს სტუდენტისგან განსხვავებით, რომელიც ბიზნეს პროცესს აწესრიგებს არსებული სისტემების დონეზე, DS-ის სტუდენტს არ აკმაყოფილებს არსებული პროცესები, აანალიზებს და მონაცემებიდან ახალ ცოდნას აგენერირებს, ქმნის მოდელს სისტემის სრულყოფისთვის. თანამედროვე ეტაპზე AI/LLM აგენტებსა და AutoML ხელსაწყოებს შეუძლიათ მონაცემთა საძიებო ანალიზი (EDA — Exploratory Data Analysis) და მოდელის შერჩევის ავტომატიზაცია, რის გამოც DS-ის სტუდენტის ღირებულება სულ უფრო გადადის ჰიპოთეზის ფორმულირებაზე, მონაცემთა ხარისხის კრიტიკულ შეფასებაზე და მიზეზ-შედეგობრივი დასკვნის გამოტანაზე."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "მონაცემთა „დასუფთავება“ და ანალიზისთვის მომზადება, სტატისტიკური ანალიზი, მანქანური სწავლების მოდელების შემუშავება და ვალიდაცია, შედეგების ვიზუალიზაცია გადაწყვეტილების მიმღებებისთვის."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "დიდი მონაცემების (Big Data) დამუშავების არქიტექტურები, ღრმა სწავლება (Deep Learning) რთული ნიმუშების ამოცნობისთვის, A/B ტესტირება და მიზეზობრივი დასკვნა (causal inference) ბიზნეს გადაწყვეტილებებში. აგრეთვე კოდირების AI-ასისტენტების (მაგ. Claude Code, OpenAI Codex ან ანალოგების) გამოყენება მონაცემთა დასუფთავების, მათი თავისებურების (feature) გენერირებისა და ანალიზის ავტომატიზაციისთვის, ასევე LLM-ზე დაფუძნებული ანალიტიკური აგენტების ორქესტრირება რთული, მრავალეტაპიანი კვლევითი სამუშაოსთვის."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "DS-ის სპეციალისტი მუშაობს პროდუქტის, ანალიტიკის ან კვლევის გუნდის ნაწილად — მისი მუშაობის შედეგები კვებავს ბიზნეს სტრატეგიის, საინჟინრო გუნდის ან მკვლევართა ჯგუფის გადაწყვეტილებებს."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "DS-ის სპეციალისტი იკვლევს და აანალიზებს — ის მუშაობს ჰიპოთეზის ფორმულირებიდან მის ემპირიულ შემოწმებამდე."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "ალბათური და სტატისტიკური აზროვნება — ყოველი დასკვნა ხასიათდება გაურკვევლობით, რომელსაც DS-ის სპეციალისტი ციფრებში ზომავს და ანგარიშგებაში გამჭვირვალედ წარმოაჩენს. AI-ხელსაწყოების გავრცელებასთან ერთად მზარდი მნიშვნელობა ენიჭება შეფასებით აზროვნებას — AI-ის მიერ გენერირებული მოდელის თუ დასკვნის სტატისტიკური სანდოობის, მიკერძოების (bias) და მცდარი/ჰალუცინირებული (hallucinated) დასკვნების კრიტიკული გადამოწმების უნარს."}], "5": [{"type": "list", "label": null, "text": "მანქანური სწავლების (ML) მოდელი ან მოდელების ნაკრები პროცესების იმიტაციისთვის; ანალიტიკური პანელი (dashboard) ან ანგარიში, რომელიც ბიზნეს გადაწყვეტილებას ამყარებს; მონაცემთა დამუშავების კონვეიერი (pipeline), რომელიც „ნედლ“ მონაცემებს გამორჩეული (extraction) სახით და გამოსადეგ ფორმატში გარდაქმნის."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "DS-ის სპეციალისტს აბარებენ ბიზნესის კვლევით ამოცანებს და ხშირად დაუმუშავებელ („ნედლ“), არასტრუქტურირებულ მონაცემებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს ვალიდირებულ (შემოწმებულ) მოდელს, დასკვნას ან ვიზუალიზებულ ანგარიშს, რომელზეც გადაწყვეტილების მიმღები პერსონა ან ინჟინერი დააფუძნებს შემდეგ ნაბიჯებს."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "მონაცემებზე დაფუძნებული დასკვნის სიზუსტე და სანდოობა — DS-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ აგებული მოდელების შედეგებს და რჩევებს შეცდომაში არ შეყავდეს გადაწყვეტილების მიმღები."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Data Analyst/Junior Data Scientist-დან (მონაცემთა დასუფთავება და ბაზისური ანალიზი მენტორის ზედამხედველობით) Mid Data Scientist-მდე (დამოუკიდებელი მოდელირება და ჰიპოთეზის ფორმულირება), შემდეგ Senior Data Scientist, Lead Data Scientist და Staff/Principal Data Scientist დონეებამდე — ასევე სპეციალიზებული როლები: Machine Learning Engineer, Data Engineer და Research Scientist."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "DS-ის სპეციალისტი მოთხოვნადია პრაქტიკულად ყველგან, სადაც მონაცემები გროვდება — საფინანსო სექტორი (რისკის მოდელირება, fraud detection ანუ თაღლითობის გამოვლენა), ჯანდაცვა, ელექტრონული კომერცია (რეკომენდაციის სისტემები), მარკეტინგი, ლოგისტიკა და სამეცნიერო კვლევები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე მთავარი ამოცანაა მონაცემთა მომზადება და ბაზისური ანალიზი; AutoML-ისა და AI-ანალიტიკური ასისტენტების გავრცელებასთან ერთად, აქცენტი თანდათან გადადის ჰიპოთეზის ფორმულირებასა და AI-გენერირებული შედეგების კრიტიკულ შეფასებაზე — ანუ ფუნდამენტური სტატისტიკური ცოდნა Junior დონეზეც სულ უფრო მნიშვნელოვანი ხდება, რათა შესაძლებელი იყოს ავტომატური ხელსაწყოს მიერ მოწოდებული შედეგის სანდოობის შეფასება; Mid-level ეტაპზე სტუდენტი დამოუკიდებლად ატარებს კვლევას ბოლომდე; Senior და მეტადრე Lead დონეზე იღებს მეთოდოლოგიურ გადაწყვეტილებებს და ხელმძღვანელობს გუნდს; შემდგომში კარიერა იშლება ტექნიკურ ექსპერტიზაში (Staff/Principal Data Scientist) ან მენეჯერულ მიმართულებაში (Head of Data Science/Analytics)."}]}, "ISBT": {"1": [{"type": "p", "label": null, "text": "მე ვარ ხიდი ბიზნესსა და ტექნოლოგიას შორის — ვაანალიზებ, როგორ მუშაობს ორგანიზაცია და ვაგებ ან ვაწესრიგებ ციფრულ სისტემებს, რომლებიც მის პროცესებს მართავენ. ჩემი სამუშაოა ERP (Enterprise Resource Planning — კომპანიის რესურსების დაგეგმვა/მართვა), CRM (Customer Relationship Management — კლიენტებთან ურთიერთობების მართვა) და სხვა არსებული კორპორაციული სისტემების კონფიგურირება, ინტეგრირება და მართვა ისე, რომ ბიზნესს ნამდვილად ემსახურონ. აგრეთვე ჩემი სამუშაოა ახალი პროგრამული პროდუქტის ინიციირება ორგანიზაციის საკეთილდღეოდ."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაქცევ ბიზნესის ამოცანებს მოწესრიგებულ ციფრულ სისტემად."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ უნდა მოეწყოს არსებული ბიზნეს პროცესი ციფრულ სისტემაში, რომ ის ეფექტური, მართვადი და მასშტაბირებადი იყოს?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "SE-ის სტუდენტისგან განსხვავებით, რომელიც ახალ პროგრამულ პროდუქტს აგებს ნულიდან, IS&BT-ის სტუდენტი ხშირად მუშაობს მზა კორპორაციულ სისტემებთან (ERP, CRM) — მისი ფოკუსია არა კოდირება, არამედ პროცესების მოდელის დაზუსტება, სისტემის კონფიგურირება და ბიზნეს ლოგიკასა და ტექნოლოგიას შორის თანხვედრის მოძებნა. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან ახალი ცოდნის გამოყვანაზე, არამედ არსებული პროცესების და DS-ისგან მიღებული მოდელების ციფრულად ორგანიზებაზე. გასათვალისწინებელია, რომ თანამედროვე კორპორაციული სისტემები თავადვე იყენებენ ჩაშენებულ AI აგენტებს (Microsoft Dynamics Copilot, Salesforce Agentforce, SAP Joule) — შესაბამისად, IS&BT-ის სპეციალისტის ამოცანაა არა მხოლოდ მოდულის კონფიგურირება, არამედ ამ ჩაშენებული AI ფუნქციების ბიზნეს ლოგიკასთან შეფარდების კონტროლი."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "ბიზნესის მხარესგან მოთხოვნების შეგროვება, ბიზნეს პროცესების მოდელების მომზადება იმპლემენტაციისთვის, ERP/CRM სისტემების კონფიგურირება და ინტეგრირება, ადამიან-კომპიუტერის ურთიერთქმედების და სამომხმარებლო გამოცდილების (HCI/UX — Human–Computer Interaction/User Experience) დიზაინის შექმნა, მოთხოვნების „თარგმნა“ ტექნიკური გუნდისთვის, რათა ბიზნეს ლოგიკა გამოყენებად პროდუქტად იქცეს."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "კომპანიის IT პროექტების მენეჯმენტი, არსებული სისტემის ციფრული ტრანსფორმაციის სტრატეგია, მონაცემთა მმართველობა (Data Governance) კორპორაციის დონეზე.\n\nაგრეთვე მოწინავე კომპანიაში/საწარმოში AI-ის გამოყენების მმართველობის (AI Governance) დანერგვა დაწყებული რუტინული/რობოტული პროცესების ავტომატიზაციით (RPA), შემდეგ ინტელექტუალური პროცესების ავტომატიზაციით (Intelligent Process Automation) და დამთავრებული სრული მასშტაბის ავტომატიზაციით (Hyperautomation)."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "IS&BT-ის სპეციალისტი მუშაობს ორგანიზაციის IT და ბიზნეს განყოფილებების გადასაკვეთზე — მისი გადაწყვეტილებები პირდაპირ ეხება კომპანიის ოპერაციულ ეფექტურობას და ციფრულ სტრატეგიას."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "IS&BT-ის სპეციალისტი აანალიზებს და აპროექტებს — ის ბიზნეს მოთხოვნას სისტემურ გადაწყვეტაში გარდაქმნის."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური აზროვნება — ორგანიზაცია ერთიან, ერთმანეთზე დამოკიდებულ პროცესთა ქსელად ესახება, სადაც ერთი ცვლილება მთელ სტრუქტურას ამოძრავებს. სისტემაში AI აგენტების ჩასმასთან ერთად სისტემური აზროვნება მოიცავს იმასაც, თუ როგორ ცვლის ერთი ავტომატიზებული გადაწყვეტილება მთლიანი პროცესის ქცევას."}], "5": [{"type": "list", "label": null, "text": "IT პროექტის გეგმა ან ციფრული ტრანსფორმაციის სტრატეგია; კონფიგურირებული ან ინტეგრირებული კორპორაციული სისტემა (ERP/CRM); BPMN დიაგრამა (Business Process Model and Notation — ბიზნეს პროცესის მოდელი და ნოტაცია); HCI/UX დიზაინის სქემა; ტექნიკური დავალება (Technical Specification), რომელსაც Software Engineer-ი იღებს პროგრამული უზრუნველყოფის შესაქმნელად."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "IS&BT-ის სპეციალისტი ჩაიბარებს არაოპტიმალურ ბიზნეს პროცესებს ან მათ არაფორმალურ აღწერას და ბიზნეს მხარის მოთხოვნებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "გადასცემს ორი ფორმით — (ა) მუშა, კონფიგურირებულ სისტემას, რომელიც ბიზნესის ყოველდღიურ ოპერაციებში ინტეგრირებულია, ან (ბ) ტექნიკურ დავალებას, რომელსაც Software Engineer იღებს ახალი პროგრამული პროდუქტის ასაგებად."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "ბიზნეს ლოგიკისა და ტექნოლოგიური გადაწყვეტის შესაბამისობა — IS&BT-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ მის მიერ შედგენილი ტექნიკური დავალება ან მოქმედი სისტემა ნამდვილად ემსახურებოდეს ბიზნესის მიზანს ნაცვლად უსარგებლო ტექნოლოგიური სირთულეებისა."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "ანალიტიკოსის Junior Business/Systems Analyst-დან (მოთხოვნების შეგროვება გამოცდილი კოლეგის ზედამხედველობით) Mid და Senior Business Analyst-მდე ან IT Consultant-ამდე (დამოუკიდებელი პროცესის დაპროექტება), შემდეგ Senior Consultant-ის, გადაწყვეტების არქიტექტორის (Solution Architect) და IT Manager/Director-ის დონემდე. ასევე არსებობს სპეციალიზებული როლები: ERP/CRM Consultant, პროცესების ავტომატიზაციის სპეციალისტი (Process Automation Specialist), პროდუქტის მფლობელი (Product Owner)."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "IS&BT-ის სპეციალისტი საჭიროა ნებისმიერ საშუალო ან მსხვილ ორგანიზაციაში, რომელსაც სჭირდება ციფრული ტრანსფორმაცია — საბანკო და დაზღვევის სექტორი, საცალო ვაჭრობა, წარმოება, საჯარო სექტორი და კონსალტინგური კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა ბიზნეს მოთხოვნების ანალიზი და დოკუმენტირება; AI-აგენტებითა და ჰიპერავტომატიზაციის ფუნქციებით აღჭურვილ ERP/CRM სისტემებში (Copilot, Agentforce და სხვა) სტუდენტისგან სულ უფრო ადრე მოითხოვება ჩაშენებული AI ფუნქციების კონფიგურირებისა და ბიზნეს ლოგიკასთან შეჯერების უნარი; Mid-level ეტაპზე აიწევს პროექტების დამოუკიდებლად მართვაზე; Senior დონეზე — საწარმოს მასშტაბის არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Solution/Enterprise Architect) ან მენეჯერულ (IT Director) მიმართულებებად."}]}, "SE": {"1": [{"type": "p", "label": null, "text": "მე ვარ პროგრამული უზრუნველყოფის ინჟინერი (Software Engineer) — ვქმნი პროგრამულ სისტემებს ნულიდან: ვიაზრებ რა დასმულ ამოცანას, ვაშენებ პროგრამულ კოდს და ვაბარებ პროგრამულ პროდუქტს, რომელიც საიმედოდ მუშაობს რეალურ მომხმარებლებთან რეალური დატვირთვის პირობებში.\n\nჩემი სამუშაოა პროგრამული კომპლექსის არქიტექტურა, მისი ცალკეული მოდულების, ვებ და მობილური აპლიკაციების პროგრამირება, მათი ტესტირება და გამართვა, თანხლება და შემდგომი განვითარება."}, {"type": "quote", "label": "მარტივად", "text": "საზოგადოდ მიწოდებენ პროგრამისტს და მე ვაქცევ იდეას ან ტექნიკურ დავალებას მუშა პროგრამულ პროდუქტად."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო პროგრამული სისტემა, რომელიც სწორად მუშაობს, მოხერხებულია მომხმარებლისთვის, მასშტაბირებადია, კითხვადია ჩემი კოლეგა-პროგრამისტებისთვის და მომავალში ადვილად გასაუმჯობესებელი?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "IS&BT-ის სტუდენტისგან განსხვავებით, რომელიც ბიზნეს ლოგიკას სისტემურ დონეზე აწესრიგებს და ხშირად მზა კორპორაციულ სისტემებს აკონფიგურირებს, SE-ის სტუდენტი დასმული ამოცანიდან გამომდინარე წერს კოდს ან ავალებს ამას AI-ის ასისტენტს და ქმნის მუშა პროგრამულ პროდუქტს ნულიდან ან შეაქვს ცვლილებები არსებულ მომუშავე სისტემაში. Infra-ს სტუდენტისგან განსხვავებით, მას ფოკუსი არა ინფრასტრუქტურის მორგებაზე აქვს პროგრამების ექსპლუატაციისას, არამედ საკუთრივ პროგრამული აპლიკაციის არქიტექტურის, ლოგიკისა და კოდის ხარისხზე."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "პროგრამული პროდუქტის დაპროექტება, კოდირების AI-ასისტენტების ეფექტურად გამოყენება, მუშა კოდის მიღება და კოდის/პროდუქტის განხილვაში (Code Review) ჩართულობა, ვებ და მობილური აპლიკაციების დეველოპმენტი, ტესტირება ავტომატურ რეჟიმში (unit, integration და სხვა ტესტები), ვერსიების კონტროლი და გუნდური თანაშრომლობა Software Engineering-ის განყოფილებაში."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "მასშტაბური სისტემების პროგრამული არქიტექტურა, DevOps პრაქტიკები (CI/CD — Continuous Integration / Continuous Delivery ან Deployment, უწყვეტი ინტეგრაცია / უწყვეტი მიწოდება ან განთავსება), მემკვიდრეობითი სისტემების (legacy systems) რეფაქტორინგი ან ჩანაცვლება, ასევე AI-ასისტენტებისთვის (Claude Code, OpenAI Codex ან ანალოგებს) დავალების პროფესიონალურად ფორმულირება, მათ მიერ გენერირებული კოდის გადამოწმება და საბოლოო ინტეგრაცია."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "SE-ის სპეციალისტი მუშაობს დეველოპერული გუნდის ნაწილად, ხშირად IS&BT-ის ჯგუფის ტექნიკურ დავალებას ან პროდუქტის მენეჯერის მოთხოვნებს იღებს შესასრულებლად, ხოლო მისი კოდი საბოლოოდ რეალური მომხმარებლების ხელში ხვდება."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "SE-ის სპეციალისტი აშენებს — ის აბსტრაქტულ ან დოკუმენტურ მოთხოვნას კონკრეტულ, მომუშავე სისტემად აქცევს."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "ლოგიკური და სტრუქტურული აზროვნება — პრობლემა იშლება მცირე, ერთმანეთთან დაკავშირებულ ლოგიკურ ბლოკებად, სადაც ყოველი ნაბიჯი ცალსახად გამომდინარეობს წინიდან. AI კოდის ასისტენტების გავრცელებასთან ერთად, მზარდი მნიშვნელობა ენიჭება შეფასებით (evaluative) აზროვნებას — გენერირებული გადაწყვეტილებების სისწორის, უსაფრთხოებისა და არქიტექტურული მართებულობის კრიტიკულად გადამოწმების უნარს."}], "5": [{"type": "list", "label": null, "text": "პროგრამული არქიტექტურის დიზაინის დოკუმენტი; მუშა, დატესტილი კოდი ან ვებ/მობილური აპლიკაცია; ავტომატური ტესტების კრებული; CI/CD pipeline (უწყვეტი ინტეგრაცია+მიწოდების კონვეიერი), რომელიც კოდის დეპლოიმენტს (სამუშაოდ განთავსებას) ავტომატიზებს."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "Software Engineer ჩაიბარებს ტექნიკურ დავალებას ან მოთხოვნების სპეციფიკაციას (ხშირად IS&BT-ის ჯგუფისგან ან ბიზნესის მხარესგან)."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს დატესტილ და მუშა (და შესაძლოა, CI/CD-ით დეპლოირებულ) პროგრამულ სისტემას, რომელიც მომხმარებლისთვის ან შემდეგი ეტაპის გუნდისთვის (DevOps/Infra-სთვის) მზადაა."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "კოდის სიწმინდე და საიმედოობა — SE-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ პროგრამულმა სისტემამ კორექტულად იმუშაოს ისე, როგორც განზრახული იყო, და არ მოხდეს მისი ავარიულად დასრულება რეალურ სამუშაო გარემოში."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Software Developer-დან (კოდის შექმნა მენტორის ზედამხედველობით) Software Engineer-მდე ან Senior Software Engineer-მდე (დამოუკიდებელი არქიტექტურული გადაწყვეტილებები), შემდეგ Tech Lead, Engineering Manager და Staff/Principal Engineer დონეებამდე. ასევე არსებობს Full-Stack, Backend, Frontend და Mobile Developer-ის სპეციალიზებული როლები."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "SE ერთ-ერთი ყველაზე უნივერსალური IT სპეციალიზაციაა — Software Engineer საჭიროა არა მხოლოდ ტექ-კომპანიებში, არამედ ყველგან, სადაც ციფრული პროდუქტი იქმნება: საფინანსო სექტორი (FinTech), ჯანდაცვა (HealthTech), ელექტრონული კომერცია, ტელეკომი, თამაშების ინდუსტრია და საჯარო სექტორი."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "პირველ 1-2 წელში (Junior Software Engineer) მთავარი ამოცანა თანდათან იცვლება — წმინდა, ხელით კოდის წერის ნაცვლად, აქცენტი მეტად გადადის კოდირების AI ასისტენტების (Claude Code, OpenAI Codex და სხვა) მიერ შემოთავაზებული გადაწყვეტების გააზრებაზე, გადამოწმებასა და არსებულ არქიტექტურაში ინტეგრირებაზე — ანუ Junior დონეზე უფრო ადრე მოითხოვება არქიტექტურული წიგნიერება და კოდის კრიტიკული შეფასების უნარი, თუმცა ფუნდამენტური უნარები (ალგორითმები, დებაგინგი, კოდის წაკითხვა) ისევ წინაპირობად რჩება ამის საიმედოდ შესასრულებლად; 2-4 წელში (Mid Software Engineer) სტუდენტი დამოუკიდებლად მუშაობს ცალკეულ ფუნქციონალზე ბოლომდე; 4-7 წელში (Senior) იღებს არქიტექტურულ გადაწყვეტილებებს და ხელმძღვანელობს code review-ებს, ხშირად — AI-გენერირებული კოდის ხარისხის კონტროლსაც; 7-10+ წელში კარიერა იშლება ორ მიმართულებად — ტექნიკური ექსპერტიზის გაღრმავება (Staff/Principal Engineer) ან მენეჯერული ხელმძღვანელობა (Tech Lead/Engineering Manager). მნიშვნელოვანია აღინიშნოს, რომ AI-ის პოტენციალის ზრდის ეპოქაში შრომით „ბაზარზე“ ცვლილებების შესაძლებლობაც იზრდება."}]}, "Infra": {"1": [{"type": "p", "label": null, "text": "მე ვარ ინფრასტრუქტურის ინჟინერი — ვაგებ და ვმართავ იმ ტექნიკურ ფუძეს (ქსელები, სერვერები, Cloud ანუ ღრუბლოვანი რესურსები), რომელზეც ყველა სხვა სისტემა დგას. ჩემი მთავარი ამოცანაა, რომ ეს ფუძე ყოველთვის ხელმისაწვდომი, სტაბილური და მასშტაბირებადი იყოს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაგებ პირობითად „ისეთ გზებსა და ხიდებს“ რომლებზეც ყველა სახის პროგრამული სისტემა მოძრაობს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო და შევინარჩუნო ინფრასტრუქტურა, რომელიც ხარვეზის გარეშე, უსაფრთხოდ და მასშტაბირებადად აწვდის რესურსს ყველა ლეგალურ სისტემას?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "Cyber-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ინფრასტრუქტურაში არსებული საფრთხეების აღმოჩენასა და მათგან დაცვაზე, Infra-ს სტუდენტი ფოკუსირებულია საკუთრივ ინფრასტრუქტურის აშენებაზე, ექსპლუატაციაზე და ხელმისაწვდომობაზე — უსაფრთხოება მისთვის ერთერთი ასპექტია ბევრს შორის (ხელმისაწვდომობასთან, წარმადობასთან და მასშტაბირებასთან ერთად) და არა ერთადერთი ცენტრალური. თუმცა, AIOps-ის (AI-ით გაძლიერებული მონიტორინგი და ანომალიის პრედიქტული დეტექციის) გავრცელებასთან ერთად, Infra-ს სტუდენტისთვის მნიშვნელოვან უნარად ყალიბდება AI-გენერირებული რეკომენდაციების სისწორის შეფასება."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "ქსელების დაგეგმვა და კონფიგურირება (Cisco-ს CCNA დონის ამოცანები), სერვერების კონფიგურირება და ოპერაციული სისტემების (Linux) ადმინისტრირება, Cloud რესურსების მართვა (მსგავსად AWS ან Azure)."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "Cloud სერვისის მოდელების (IaaS/PaaS/SaaS — Infrastructure/Platform/Software as a Service) დონეზე არქიტექტურის დაგეგმვა, ვირტუალიზაცია და კონტეინერიზაცია მასშტაბურ გარემოში, ინფრასტრუქტურის როგორც კოდის (IaC — Infrastructure as Code) პრაქტიკები, მაღალი ხელმისაწვდომობის (High Availability) და კატასტროფისგან აღდგენის (Disaster Recovery) არქიტექტურები. AIOps პლატფორმების (Datadog AI, New Relic AI) ამუშავება ტექნიკური ანომალიების პრედიქტული აღმოჩენისთვის და ახალი სიმძლავრეების დაგეგმვისთვის (capacity planning), ასევე AI-ის გამოყენება IaC სკრიპტების (Terraform/Ansible) გენერირებისა და ვალიდაციისთვის."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "Infra-ს სპეციალისტი მუშაობს IT ოპერაციების გუნდის ნაწილად — მისი მოღვაწეობა ფუნდამენტს ქმნის Software Engineer-ის მიერ მოწოდებული აპლიკაციების მუშაობისთვის და Cyber-ის ინჟინრისთვის უსაფრთხოების გასაკონტროლებლად."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "Infra-ს სპეციალისტი აშენებს და მართავს — Infra-ს სპეციალისტი ქმნის სისტემის ფუნქციონირების ფიზიკურ ან ვირტუალურ ფუძეს და მუდმივად უზრუნველყოფს მის გამართულობას."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური და პროცედურული აზროვნება — ყოველი კომპონენტი (სერვერი, ქსელი, საცავი) განიხილება ერთიანი, ერთმანეთზე დამოკიდებული მექანიზმის ნაწილებად, სადაც ერთ წერტილში ავარია მთლიან სისტემაზე სასტიკად მოქმედებს. ამასთან, ემატება ვალდებულება, რომ AI-გენერირებული განგაშები და რეკომენდაციები კრიტიკულად გადამოწმდეს ცრუ-დადებითი (false positive) შემთხვევების გამოსარიცხავად."}], "5": [{"type": "list", "label": null, "text": "კონფიგურირებული სერვერი და მუშა ქსელური ან Cloud ინფრასტრუქტურა (IaaS/PaaS/SaaS დონეზე); ინფრასტრუქტურის როგორც კოდის (IaC) სკრიპტები; მონიტორინგისა და განგაშის (alerting) სისტემა; კატასტროფისგან აღდგენის (Disaster Recovery) გეგმა და დოკუმენტაცია."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "Infra-ს სპეციალისტი ჩაიბარებს მოთხოვნას სისტემის ან აპლიკაციის ასამუშავებლად საჭირო რესურსებზე (სერვერი, ქსელი, Cloud გარემო)."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "გადასცემს მზა, კონფიგურირებულ სერვერსა და მუშა ინფრასტრუქტურულ გარემოს, სადაც Software Engineer-ის პროგრამა განთავსებას შეძლებს და სტაბილურად იმუშავებს."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის ხელმისაწვდომობა (Uptime — უპრობლემოდ მუშაობის დრო) — Infra-ს სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ ინფრასტრუქტურა არ ჩავარდეს და ყოველთვის ხელმისაწვდომი იყოს ექსპლუატაციაში მყოფი სისტემებისთვის."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior System/Network Administrator-დან (სერვერებისა და ქსელის მონიტორინგი ხელმძღვანელის თანდასწრებით) DevOps/System Engineer-მდე (დამოუკიდებელი ინფრასტრუქტურის მართვა), შემდეგ Senior DevOps/SRE Engineer, Infrastructure Architect და Head of Infrastructure/IT Operations დონეებამდე — ასევე არსებობს სპეციალიზებული როლები: Cloud Engineer, სისტემების საიმედოობის ინჟინერი (SRE — Site Reliability Engineer), Network Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "Infra-ს სპეციალისტი აუცილებელია ნებისმიერ ორგანიზაციაში, რომელსაც აქვს ციფრული სერვისი — ტელეკომი, ღრუბლოვანი სერვისების პროვაიდერები, ფინტექი, ელექტრონული კომერცია და მსხვილი კორპორაციების IT დეპარტამენტები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე მთავარი ამოცანაა მონიტორინგი და ინციდენტებზე საფეხურეობრივი რეაგირება; AIOps-ის გავრცელებასთან ერთად, სტუდენტისგან სულ უფრო ადრე მოითხოვება AI-გენერირებული განგაშების ინტერპრეტირებისა და root-cause ანალიზის უნარი — ავტომატური დეტექციის მიღმა მდებარე რეალური მიზეზის პოვნა; Mid-level ეტაპზე ეწევა ინფრასტრუქტურის დამოუკიდებლად დაგეგმვასა და IaC-ის წერას; Senior დონეზე — მაღალი ხელმისაწვდომობისა და მასშტაბირების არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Infrastructure/Cloud Architect) ან მენეჯერულ (Head of Infrastructure) მიმართულებებად."}]}, "Cyber": {"1": [{"type": "p", "label": null, "text": "მე ვარ კიბერუსაფრთხოების (Cybersecurity-ის) სპეციალისტი — ერთადერთი ინჟინერი ვარ, ვინც სისტემას ერთდროულად ორი კუთხით ხედავს: მცველის და თავდამსხმელის. ჩემი ამოცანაა სისტემის სუსტი წერტილი მანამდე ვიპოვო, სანამ მას სხვა გამოიყენებს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვფიქრობ როგორც თავდამსხმელი რათა ავაგო დაცვა, რომელსაც ჰაკერი ვერ გადალახავს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "სად არის არსებული სისტემის სუსტი წერტილი, რომელსაც მოწინააღმდეგე გამოიყენებს, და როგორ ავაგო დაცვა მის წინააღმდეგ?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "Infra-ს სტუდენტისგან განსხვავებით, რომელიც ინფრასტრუქტურას აგებს და მის ხელმისაწვდომობაზე ზრუნავს, Cyber-ის სტუდენტი ვარაუდობს, რომ ეს ინფრასტრუქტურა აქტიური თავდასხმის ობიექტი იქნება — მისი მოქმედება შეჯიბრებითია (მოწინააღმდეგის პერსპექტივიდან გამომდინარე), ხოლო Infra-ს სპეციალისტის მოქმედება ძირეულად ოპერაციულია (გამართულობაზე ფოკუსირებული). დღეს უკვე მოწინააღმდეგეც სულ უფრო ხშირად AI-ის იყენებს, მაგალითად AI-გენერირებული ფიშინგს (phishing), მოწყვლადობის ავტომატური სკანირებას, ამიტომ Cyber-ის სტუდენტმაც საჭიროა გაითვალისწინოს დაცვისა და თავდასხმის ორივე მხარეს AI-ით გაძლიერებული მეთოდები."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "სისუსტეების სკანირება და შეფასება, წვდომის კონტროლისა და ავთენტიფიკაციის სისტემების კონფიგურირება, უსაფრთხოების ინციდენტების მონიტორინგი."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "პენტესტინგი (Ethical Hacking) და წინსწრებით დაგეგმილი თავდასხმის სიმულაცია, კრიპტოგრაფიული სისტემების დიზაინი და ანალიზი, ინციდენტებზე რეაგირება (Incident Response) და ციფრული კრიმინალისტიკა (Forensics) მსხვილ ან კრიტიკულ შემოტევებზე. გაფართოებულ ამოცანებში სულ უფრო მნიშვნელოვან ადგილს იკავებს AI სისტემების უსაფრთხოება (LLM Security) — prompt injection-ის, adversarial machine learning-ისა და AI მოდელის jailbreak-ის წინააღმდეგ დაცვის მექანიზმების დაგეგმვა."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "Cyber-ის ინჟინერი მუშაობს უსაფრთხოების გუნდის ნაწილად — მისი მუშაობა იცავს Infra-ს მიერ აშენებულ სისტემებს და Software Engineer-ის მიერ შექმნილ აპლიკაციებს მოწინააღმდეგისგან, ხშირად საკანონმდებლო და მარეგულირებელ მოთხოვნებთან კავშირში."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "Cybersecurity-ის სპეციალისტი იცავს — კიბერუსაფრთხოების ინჟინერი მუდმივად აფასებს საფრთხეს და აგებს ან აძლიერებს დაცვის ხაზს შემოტევების წინააღმდეგ."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "დაპირისპირებითი (adversarial) აზროვნება — ყოველი სისტემა განიხილება არა მისი დანიშნულებიდან, არამედ იმ კუთხით, თუ როგორ შეიძლება მისი ბოროტად გამოყენება ან გატეხვა მოწინააღმდეგის მიერ და შესაბამისად როგორ დავუპირისპირდეთ მას. ეს ადვერსარიალური აზროვნება დღეს ვრცელდება თავად AI სისტემებზეც — Cyber-ის სპეციალისტმა უნდა იფიქროს, როგორ შეიძლება მოწინააღმდეგემ AI მოდელი თავად გაიტყუოს თავის მხარეს და ბოროტად გამოიყენოს."}, {"type": "aside", "label": null, "text": "თუმცა მაინც ნუ დავიჯერებთ, რომ „ამ სპეციალიზაციას ირჩევს ის, ვისთვისაც პარანოია პროფესიული სათნოებაა“."}], "5": [{"type": "list", "label": null, "text": "სისუსტეების შეფასების ანგარიში (Vulnerability Assessment Report); პენტესტის შედეგების დოკუმენტი თავდასხმის სცენარებითა და რეკომენდაციებით; დაცვის კონფიგურირება ან კონტროლის მექანიზმის შექმნა (firewall წესები, წვდომის პოლიტიკა); ინციდენტზე რეაგირების ანგარიში და ციფრული ფორენზიკის (Forensics) დასკვნა."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "კიბერუსაფრთხოების ინჟინერი ჩაიბარებს მუშა სისტემას ან ინფრასტრუქტურას, რომლის უსაფრთხოების დონე გასაზომი, შესამოწმებელი და გასაძლიერებელია."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს დაცვის ხარისხის შეფასებას, გამოვლენილი სისუსტეების ჩამონათვალს და კონკრეტულ რეკომენდაციას ან გამოსწორებულ კონფიგურაციას."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის გადარჩენადობა (Resilience) მოწინააღმდეგის წინაშე — CyberSecurity-ის სპეციალისტი პირადად აგებს პასუხს იმაზე, რომ შემოტევა იქნება დროულად აღმოჩენილი და შეკავებული ან თავიდანვე დაექვემდებარება აცილებას წინასწარ მიღებული ზომების შედეგად."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "უსაფრთხოების ოპერაციების ცენტრის დამწყები ანალიტიკოსი ანუ Junior SOC (Security Operations Center) Analyst-დან (განგაშების მონიტორინგი თავდაცვის ხელმძღვანელის ზედამხედველობით) Mid Security Engineer/Analyst-მდე (საფრთხის დამოუკიდებლად შეფასება), შემდეგ Senior Security Engineer, Security Architect და CISO (Chief Information Security Officer) დონეებამდე — ასევე სპეციალიზებული როლები: Penetration Tester/Red Teamer, Incident Responder, AI/LLM Security Specialist."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "Cyber-ის სპეციალისტი მოთხოვნადია ყველგან, სადაც დასაცავი მონაცემი ან სისტემა არსებობს — საბანკო და საფინანსო სექტორი, სამთავრობო და თავდაცვითი სტრუქტურები, ჯანდაცვა, ტელეკომი და კონსალტინგური/აუდიტორული კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა განგაშების მონიტორინგი და თავდასხმის საფეხურეობრივი ანალიზი; AI-ით გაძლიერებული შემოტევებისა და AI სისტემების უსაფრთხოების (LLM Security) მზარდი მნიშვნელობის გამო, სტუდენტისგან სულ უფრო ადრე მოითხოვება ორმხრივი — როგორც დამცველის, ისე მოწინააღმდეგის — პერსპექტივიდან აზროვნება; Mid-level ეტაპზე აიწევს დამოუკიდებლად ინციდენტებზე რეაგირებასა და საფრთხის მოდელირებაზე; Senior დონეზე — საწარმოს მასშტაბის უსაფრთხოების არქიტექტურულ გადაწყვეტილებებზე. შემდგომში კარიერა იშლება ტექნიკურ (Security Architect/Principal) ან მენეჯერულ (CISO) მიმართულებებად."}]}, "CE": {"1": [{"type": "p", "label": null, "text": "მე ვარ კომპიუტერული ინჟინერი — ვმუშაობ იქ, სადაც პროგრამული უზრუნველყოფა შეხვდება ფიზიკურ მოწყობილობას. ვაკონფიგურირებ სერვერის აპარატურულ/პროგრამულ უზრუნველყოფას კომპანიების პრობლემებიდან გამომდინარე. ვაგებ ჩაშენებულ (embedded) სისტემებს — მცირე, სპეციალიზებულ კომპიუტერებს, რომლებიც სენსორებში, ჩიპებსა და მოწყობილობებში ამუშავდება, ვაპროექტებ ჭკვიანი, ქსელში ჩართული მოწყობილობების ერთიან IoT-ეკოსისტემებს (საგნების/ნივთების ინტერნეტი). მოკლედ, ჩემი ცოდნა ერთნაირად მოიცავს ელექტრონიკას და კოდს."}, {"type": "quote", "label": "მარტივად", "text": "მე ვღებულობ ოპტიმალურ ტექნიკურ გადაწყვეტილებებს და ვაძლევ „ინტელექტს“ ფიზიკურ მოწყობილობებს და სისტემებს."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაწყო კომპანიების ოპტიმალური კომპიუტერული კომპლექსი ან როგორ ავაგო სისტემა, რომელიც ფიზიკური რესურსების (ენერგია, მეხსიერება, დამუშავების სიჩქარე) მკაცრი შეზღუდვის პირობებში ამუშავდება?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "SE-ის სტუდენტისგან განსხვავებით, რომელიც კოდს ქმნის პლატფორმისთვის, სადაც რესურსები ნაკლებად შეზღუდულია, CE-ის სტუდენტი მუშაობს მკაცრად შეზღუდულ გარემოში. R&A-ის სტუდენტისგან განსხვავებით, ფოკუსი აქ არ არის მექანიკურ მოძრაობაზე, არამედ ჩიპის/მოწყობილობის არქიტექტურასა და დეტალური/„დაბალი“ დონის პროგრამულ-აპარატურულ ინტეგრაციაზე. AI-აქსელერატორების (NPU/TPU) გავრცელებასთან ერთად, CE-ის სტუდენტისთვის „მკაცრი შეზღუდვა“ სულ უფრო კონკრეტულად AI მოდელის ჩიპებზე გაშვების ოპტიმიზაციას გულისხმობს."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "სერვერების აპარატურულ/პროგრამული უზრუნველყოფის კონფიგურირება, ჩაშენებული სისტემების პროგრამირება (firmware), მიკროკონტროლერების კონფიგურირება, სენსორებთან და პერიფერიულ მოწყობილობებთან ინტერფეისის შექმნა."}, {"type": "p", "label": "გაფართოებული ამოცანები", "text": "ოპტიმალური კომპიუტერული კომპლექსის დაპროექტება კომპანიებისთვის, აპარატურის (hardware) დიზაინი დეტალური დონის ოპტიმიზაციისთვის, სიგნალების ციფრული დამუშავება (DSP — Digital Signal Processing), „ჭკვიანი სახლის“ აგება, Edge AI-ის (პერიფერიული ხელოვნური ინტელექტის) მანქანური სწავლების მოდელების ოპტიმიზაცია და გაშვება AI-ჩიპებზე რესურსების მინიმალური ხარჯვით. აქ გამოიყენება AI-მოდელების სპეციალური (quantization და pruning) ტექნიკები რესურსდამზოგი გაშვებისთვის. გაფართოებულ ამოცანებში ასევე შედის AI-ის (Synopsys.ai, Cadence AI) გამოყენება ჩიპის/firmware-ის დაპროექტებაში."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "CE-ის სპეციალისტი მუშაობს პროდუქტის გუნდის ნაწილად, სადაც მისი ნაშრომი ან კომპანიის კომპლექსურ პროექტში ან ფიზიკურ მოწყობილობაში ინტეგრირდება — ავტომობილი, IoT სენსორი, სამედიცინო აპარატურა — და საბოლოოდ წარმოებაში გადადის."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "CE-ის სპეციალისტი აპროექტებს და აშენებს — ის ერთდროულად მუშაობს პროგრამული ლოგიკისა და ფიზიკური აპარატურის საზღვარზე."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "რესურსზე ორიენტირებული, ზუსტი ინჟინერული აზროვნება — ყოველი გადაწყვეტილება ფასდება ტექნიკის, ენერგიის, მეხსიერებისა და დროის მკაცრი ბალანსით."}], "5": [{"type": "list", "label": null, "text": "ჩაშენებული სისტემის firmware ან კონტროლერის კოდი; აპარატურულ-პროგრამული ინტეგრაციის სქემა; ოპტიმიზებული AI მოდელი, რომელიც ჩიპზე ამუშავდება; ტექნიკური დოკუმენტაცია მოწყობილობის არქიტექტურაზე, კომპიუტერული კომპლექსის ტექნიკური სპეციფიკაცია."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "CE-ის სპეციალისტი ჩაიბარებს სისტემის ტექნიკურ პირობებს, აპარატურის სპეციფიკაციას ან მოწყობილობის ფუნქციურ მოთხოვნებს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს სისტემის საპროექტო დოკუმენტაციას ან მუშა firmware-ს ან ჩაშენებულ სისტემას, რომელიც მზადაა ინტეგრაციისთვის უფრო დიდ პროდუქტში ან მასობრივი წარმოებისთვის."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "დამკვეთის მოთხოვნების შესრულება და სისტემის საიმედოობა ფიზიკური შეზღუდვების პირობებში — CE-ის სპეციალისტი აგებს პასუხს იმაზე, რომ ტექნიკურმა კომპლექსმა თუ ცალკეულმა მოწყობილობამ იმუშაოს გამართულად გამოყოფილი რესურსის ფარგლებში."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Hardware/Embedded Engineer-დან (სქემების ტესტირება და firmware-ის გამართვა გამოცდილი ინჟინრის ხელმძღვანელობით) Mid Hardware/Embedded Systems Engineer-მდე (დამოუკიდებელი დიზაინი), შემდეგ Senior Hardware/Embedded Engineer, Hardware Architect და Head of Hardware Engineering-ის დონეებამდე. ასევე არსებობს სპეციალიზებული როლები: Firmware Engineer, IoT Engineer, FPGA/ASIC Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "CE-ის სპეციალისტი საჭიროა ფიზიკური პროდუქტის შემქმნელ ნებისმიერ ინდუსტრიაში — AI-ზე ორიენტირებული ელექტრონული პროდუქციის დამპროექტებელი და მწარმოებელი კომპანიები, ავტომობილების ინდუსტრია, IoT და „ჭკვიანი“ მოწყობილობების მწარმოებლები, სამედიცინო აპარატურის, ტელეკომუნიკაციური აღჭურვილობის და ნახევარ-გამტარული (Semiconductor) კომპანიები."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა არსებული სქემების ტესტირება და firmware-ის გამართვა; Mid-level ეტაპზე ეწევა დამოუკიდებლად სისტემის დიზაინს, AI-მოდელების ჩიპზე ოპტიმიზაციის (quantization/pruning) ოპერაციებს; Senior დონეზე — მუშაობს პროდუქტის (AI-აქსელერატორების NPU/TPU-ს ანალოგების) არქიტექტურულ გადაწყვეტილებებზე, უზრუნველყოფს პროექტებში აპარატურულ-პროგრამული ბალანსის დაცვას. შემდგომში კარიერა იშლება ტექნიკურ (Hardware/Chip Architect) ან მენეჯერულ (Head of Hardware) მიმართულებებად."}]}, "RA": {"1": [{"type": "p", "label": null, "text": "მე ვარ რობოტიკისა და ავტომატიზაციის ინჟინერი — ვაგებ სისტემებს, რომლებიც ფიზიკურ სამყაროში მოძრაობენ, აანალიზებენ გარემოს და მოქმედებენ ადამიანის უწყვეტი ჩარევის გარეშე. ჩემი სამუშაოა რობოტების პროგრამირება, ინდუსტრიული პროცესების ავტომატიზაცია და სისტემების აგება, რომლებიც აღიქვამენ გარემოს, ღებულობენ გადაწყვეტილებებს და მოქმედებენ."}, {"type": "quote", "label": "მარტივად", "text": "მე ვაგებ „მექანიზმებს“ რომლებსაც საკუთარი თავის მართვა შეუძლიათ."}], "2": [{"type": "p", "label": "ცენტრალური კითხვა", "text": "როგორ ავაგო სისტემა ან გავაწყო მექანიზმი, რომელიც ფიზიკურ გარემოს აღიქვამს, გადაწყვეტილებას იღებს და ზუსტად მოქმედებს რეალურ დროში?"}, {"type": "p", "label": "შედარებითი პოზიციონირება", "text": "CE-ის სტუდენტისგან განსხვავებით, რომელიც ფოკუსირებულია ჩიპისა და მოწყობილობის დეტალური დონის არქიტექტურაზე, R&A-ის სტუდენტი ფოკუსირებულია მთლიან სისტემაზე, რომელიც ფიზიკურად მოძრაობს და ურთიერთქმედებს გარემოსთან — აღქმა, გადაწყვეტილების მიღება და მექანიკური მოქმედება ერთიან ციკლში. DS-ის სტუდენტისგან განსხვავებით, აქცენტი არ არის მონაცემებიდან მოდელის აგებაზე, არამედ იმ მოდელის ფიზიკურ ქმედებად გარდაქმნაზე. თანამედროვე მიდგომებში ეს „მოდელი“ სულ უფრო ხშირად ფუნდამენტური (foundation) AI მოდელია — ე.წ. Vision-Language-Action (VLA) მოდელები, რომლებიც ხედვას, ენას და ფიზიკურ მოქმედებას ერთ სისტემაში აერთიანებენ."}], "3": [{"type": "p", "label": "ძირეული ამოცანები", "text": "რობოტების პროგრამირება (Robot Operating System — ROS-ის გამოყენებით), ინდუსტრიული კონტროლერების (PLC — Programmable Logic Controller) კონფიგურირება და პროგრამირება, სენსორებიდან მიღებული მონაცემების დამუშავება რეალურ დროში გადაწყვეტილების მისაღებად."}, {"type": "p", "label": "გაფართოებული ამოცანები (Industry 4.0)", "text": "SCADA (Supervisory Control And Data Acquisition) სისტემების დიზაინი მსხვილი ინდუსტრიული პროცესების მონიტორინგისა და კონტროლისთვის, Computer Vision-ის ინტეგრირება რობოტის ნავიგაციისთვის და ობიექტების ამოცნობისთვის, ავტონომიური სისტემების კოორდინირება მულტირობოტიან გარემოში, ნივთების ინდუსტრიული ინტერნეტის („IIoT — Industrial IoT & Building Automation“) და რობოტიზებული ხაზების ინტეგრირება ქარხნებში (Industry 4.0). გაფართოებულ ამოცანებში შედის ფიზიკური სამყაროს AI მოდელების (Physical AI) გამოყენება ამოცანის დაგეგმვისთვის (task planning) და განხორციელებისთვის (implementation), აგრეთვე ბუნებრივი ენით რობოტთან საიმედო თანამშრომლობის უზრუნველყოფა."}, {"type": "p", "label": "სისტემური კონტექსტი", "text": "R&A-ის სპეციალისტი მუშაობს საწარმოო, ლოგისტიკურ ან კვლევით გარემოში — მისი სისტემა ხშირად ინტეგრირდება უფრო ფართო საწარმოო ხაზში ან ავტონომიურ პლატფორმაში, სადაც უსაფრთხოება და ზუსტი მოქმედება კრიტიკულია."}], "4": [{"type": "p", "label": "საქმიანობის ტიპი", "text": "R&A-ის სპეციალისტი აპროექტებს და აშენებს — ის ქმნის სისტემას, რომელიც გარემოს აღქმიდან მოქმედებამდე უწყვეტ ციკლში მუშაობს."}, {"type": "p", "label": "აზროვნების ტიპი", "text": "სისტემური და რეალურ-დროში-ორიენტირებული აზროვნება — ყოველი გადაწყვეტილება განიხილება დროითი და ფიზიკური შეზღუდვების ფონზე, სადაც დაგვიანებული ან არაზუსტი მოქმედება უარყოფით ფიზიკურ შედეგს გამოიწვევს. დამატებითი ყურადღების ღირსია AI-ზე დაფუძნებული გადაწყვეტილების დროულად გადამოწმება მისი გადატანის წინ ფიზიკურ გარემოში."}], "5": [{"type": "list", "label": null, "text": "დაპროგრამებული რობოტული სისტემა (საწარმოო ხაზი ან ავტონომიური პლატფორმა); PLC-ზე დაფუძნებული ავტომატიზაციის გადაწყვეტა; SCADA მონიტორინგისა და კონტროლის სისტემა; ინტეგრირებული Computer Vision მოდული ნავიგაციისთვის ან ობიექტების ამოცნობისთვის."}], "6": [{"type": "p", "label": "საწყისი წერტილი", "text": "R&A-ის სპეციალისტი ჩაიბარებს ფიზიკური ამოცანის ან საწარმოო პროცესის სპეციფიკაციას, რომელიც ავტომატიზაციას ან რობოტიზებულ გადაწყვეტას მოითხოვს."}, {"type": "p", "label": "საბოლოო წერტილი", "text": "ის გადასცემს მუშა, ტესტირებულ რობოტულ ან ავტომატიზებულ სისტემას, რომელიც საწარმოო ხაზში ან რეალურ გარემოში ინტეგრაციისთვის მზადაა."}, {"type": "p", "label": "პასუხისმგებლობის ცენტრი", "text": "სისტემის ფიზიკური უსაფრთხოება და სიზუსტე — R&A სპეციალისტი აგებს პასუხს იმაზე, რომ ავტონომიური მოქმედება ზუსტად და უსაფრთხოდ შესრულდება."}], "7": [{"type": "p", "label": "ტიპიური პოზიციები", "text": "Junior Robotics/Automation Engineer-დან (არსებული რობოტული სისტემების ტესტირება და კალიბრაცია ხელმძღვანელის ზედამხედველობით) Mid Robotics Engineer-მდე (სისტემის დამოუკიდებლად დიზაინი და რობოტების სწავლება), შემდეგ Senior Robotics Engineer, Robotics/Automation Architect და Head of Robotics დონეებამდე — ასევე სპეციალიზებული როლები: Computer Vision Engineer, Controls Engineer, Industrial Automation Engineer."}, {"type": "p", "label": "ინდუსტრიები და კონტექსტები", "text": "R&A-ის სპეციალისტი მოთხოვნადია წარმოებასა და ლოგისტიკაში (Industry 4.0), ავტომობილების ინდუსტრიაში (ავტონომიური მართვა), სამედიცინო რობოტიკაში, სოფლის მეურნეობაში, სამხედრო სფეროში და სამეცნიერო/კვლევით ლაბორატორიებში."}, {"type": "p", "label": "განვითარების ტრაექტორია", "text": "Junior დონეზე ძირეული ამოცანაა არსებული სისტემის ტესტირება და კალიბრაცია; ფუნდამენტური AI მოდელების (Physical AI, VLA) გავრცელებასთან ერთად, მას უკვე მოეთხოვება ამ მოდელების გადამოწმება მათი გადატანის წინ ფიზიკურ გარემოში; Mid-level ეტაპზე ის ეწევა სისტემის დამოუკიდებლად ინტეგრაციას; Senior დონეზე ღებულობს საწარმოო ხაზის მასშტაბის არქიტექტურულ გადაწყვეტილებებს. შემდგომში კარიერა იშლება ტექნიკურ (Robotics Architect/Principal) ან მენეჯერულ (Head of Robotics/Automation) მიმართულებებად."}]}}, "glossary": {"terms": [{"term": "AI (Artificial Intelligence)", "def": "ხელოვნური ინტელექტი"}, {"term": "LLM (Large Language Model)", "def": "დიდი ენობრივი მოდელი (ენის დიდი მოდელი)"}], "positions": [{"term": "Junior", "def": "დამწყები სპეციალისტი, რომელსაც ჯერ კიდევ სჭირდება ზედამხედველობა და ხელმძღვანელობა."}, {"term": "Mid / Middle", "def": "საშუალო დონის სპეციალისტი; უკვე დამოუკიდებლად მუშაობს და ამოცანებს ძირითადად თვითონ წყვეტს."}, {"term": "Senior", "def": "გამოცდილი სპეციალისტი; რთულ ამოცანებს წყვეტს, სხვებს ეხმარება და პროექტის ხარისხზე დიდ გავლენას ახდენს."}, {"term": "Lead", "def": "გუნდის ტექნიკური ლიდერი; ხშირად ახდენს დავალებების პრიორიტეტიზაციას და ტექნიკურ მიმართულებას აყალიბებს."}, {"term": "Staff", "def": "ძლიერი senior+ სპეციალისტი, რომელიც გავლენას ახდენს ერთდროულად რამდენიმე გუნდზე."}, {"term": "Principal", "def": "კიდევ უფრო მაღალი ინდივიდუალური ტექნიკური როლია; ხშირად მისგან მოდის არქიტექტურის გადაწყვეტა, სტრატეგია, რთულ სისტემებზე კონტროლი."}, {"term": "Manager", "def": "ხშირად არატექნიკური სპეციალისტი, ადამიანების და პროცესების მართვაზეა ფოკუსირებული (პერსონალის მიღება, სამუშაოს დაგეგმვა, შესრულების კონტროლი, დასრულებული პროდუქტის ჩაბარება)."}]}}
 </script>
 <script>
 (function () {
@@ -719,7 +817,14 @@ footer.credit{
     contentCard: document.getElementById("contentCard"),
     prevBtn: document.getElementById("prevBtn"),
     nextBtn: document.getElementById("nextBtn"),
-    tooltip: document.getElementById("tooltip")
+    tooltip: document.getElementById("tooltip"),
+    mainTopbar: document.getElementById("mainTopbar"),
+    glossaryBtnTop: document.getElementById("glossaryBtnTop"),
+    glossaryBtnViewer: document.getElementById("glossaryBtnViewer"),
+    glossaryOverlay: document.getElementById("glossaryOverlay"),
+    glossaryClose: document.getElementById("glossaryClose"),
+    glossaryTerms: document.getElementById("glossaryTerms"),
+    glossaryPositions: document.getElementById("glossaryPositions")
   };
 
   // ---------- helpers ----------
@@ -768,25 +873,6 @@ footer.credit{
     el.tooltip.classList.remove("show");
     tooltipOpenFor = null;
   }
-  function attachTooltip(node, fullText) {
-    node.addEventListener("mouseenter", function () {
-      if (window.matchMedia("(hover: hover)").matches) showTooltip(node, fullText);
-    });
-    node.addEventListener("mouseleave", function () {
-      if (window.matchMedia("(hover: hover)").matches) hideTooltip();
-    });
-    node.addEventListener("click", function (ev) {
-      ev.stopPropagation();
-      if (tooltipOpenFor === node) { hideTooltip(); }
-      else { showTooltip(node, fullText); }
-    });
-    node.addEventListener("keydown", function (ev) {
-      if (ev.key === "Enter" || ev.key === " ") {
-        ev.preventDefault();
-        if (tooltipOpenFor === node) { hideTooltip(); } else { showTooltip(node, fullText); }
-      }
-    });
-  }
   document.addEventListener("click", function () { hideTooltip(); });
   document.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") hideTooltip();
@@ -795,8 +881,6 @@ footer.credit{
   // ---------- build selection chips ----------
   function buildChip(kind, item) {
     var label = el_("label", "chip");
-    var short = kind === "spec" ? item.short : item.short;
-    var full = item.full;
     label.style.setProperty("--accent", kind === "spec" ? item.color : "#8A94A6");
 
     var idVal = item.id; // string for specs, number for sections
@@ -812,13 +896,7 @@ footer.credit{
     mark.appendChild(check);
 
     var text = el_("span", "chip__text");
-    var shortSpan = el_("span", "chip__short");
-    shortSpan.appendChild(document.createTextNode(short));
-    var infoIcon = el_("span", "chip__infoicon", "i");
-    shortSpan.appendChild(infoIcon);
-    var fullSpan = el_("span", "chip__full", escapeHtml(full));
-
-    text.appendChild(shortSpan);
+    var fullSpan = el_("span", "chip__full", escapeHtml(item.full));
     text.appendChild(fullSpan);
 
     body.appendChild(mark);
@@ -826,9 +904,6 @@ footer.credit{
 
     label.appendChild(input);
     label.appendChild(body);
-
-    // tooltip only meaningfully needed on narrow screens (short visible there)
-    attachTooltip(shortSpan, full);
 
     input.addEventListener("change", function () {
       if (kind === "spec") {
@@ -968,6 +1043,7 @@ footer.credit{
   function showViewer() {
     el.heroBlock.style.display = "none";
     el.selectionScreen.style.display = "none";
+    el.mainTopbar.style.display = "none";
     el.viewerScreen.classList.add("active");
     state.idx = 0;
     renderCurrent();
@@ -977,6 +1053,7 @@ footer.credit{
     el.viewerScreen.classList.remove("active");
     el.heroBlock.style.display = "";
     el.selectionScreen.style.display = "";
+    el.mainTopbar.style.display = "";
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 
@@ -991,6 +1068,7 @@ footer.credit{
   document.addEventListener("keydown", function (ev) {
     if (!el.viewerScreen.classList.contains("active")) return;
     if (el.modalOverlay.classList.contains("open")) return;
+    if (el.glossaryOverlay.classList.contains("open")) return;
     if (ev.key === "ArrowLeft") { el.prevBtn.click(); }
     if (ev.key === "ArrowRight") { el.nextBtn.click(); }
   });
@@ -1048,6 +1126,32 @@ footer.credit{
       state.queue = buildQueue(null);
       showViewer();
     }
+  });
+
+  // ---------- glossary modal ----------
+  function renderGlossaryGroup(container, title, items) {
+    container.appendChild(el_("p", "glossary-section__title", escapeHtml(title)));
+    var dl = document.createElement("dl");
+    items.forEach(function (it) {
+      dl.appendChild(el_("dt", null, escapeHtml(it.term)));
+      dl.appendChild(el_("dd", null, escapeHtml(it.def)));
+    });
+    container.appendChild(dl);
+  }
+  if (DATA.glossary) {
+    renderGlossaryGroup(el.glossaryTerms, "ძირითადი ტერმინები", DATA.glossary.terms);
+    renderGlossaryGroup(el.glossaryPositions, "პოზიციები სამსახურში", DATA.glossary.positions);
+  }
+  function openGlossary() { el.glossaryOverlay.classList.add("open"); }
+  function closeGlossary() { el.glossaryOverlay.classList.remove("open"); }
+  el.glossaryBtnTop.addEventListener("click", openGlossary);
+  el.glossaryBtnViewer.addEventListener("click", openGlossary);
+  el.glossaryClose.addEventListener("click", closeGlossary);
+  el.glossaryOverlay.addEventListener("click", function (ev) {
+    if (ev.target === el.glossaryOverlay) closeGlossary();
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && el.glossaryOverlay.classList.contains("open")) closeGlossary();
   });
 
   // ---------- init ----------
