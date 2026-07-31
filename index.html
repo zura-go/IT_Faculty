@@ -733,7 +733,7 @@ footer.credit{
 
     <div class="cta-row">
       <button type="button" class="cta" id="goBtn" disabled>აბა ვნახოთ!</button>
-      <p class="cta-hint" id="goHint">აირჩიეთ სულ ცოტა ერთი სპეციალიზაცია და ერთი სექცია</p>
+      <p class="cta-hint" id="goHint">აირჩიეთ სულ ცოტა ერთი სპეციალიზაცია და ერთი აღწერის სექცია</p>
     </div>
   </main>
 
@@ -796,15 +796,15 @@ footer.credit{
   <div class="modal">
     <button type="button" class="modal__close" id="modalCancel" aria-label="დახურვა">&times;</button>
     <h3 class="modal__title" id="modalTitle">პრიორიტეტულად განვიხილოთ:</h3>
-    <p class="modal__sub">რამდენიმე სპეციალიზაცია და რამდენიმე სექციაა არჩეული — რომელი მიმართულებით მოვაწყოთ თანმიმდევრობა?</p>
+    <p class="modal__sub">თქვენ აირჩიეთ რამდენიმე სპეციალიზაცია და რამდენიმე აღწერის სექცია —<br>მაშასადამე შემდგომი განხილვა შესაძლებელია ერთერთი მიმართულებით:</p>
     <div class="modal__options">
       <button type="button" class="modal__option" id="optSpec">
-        <p class="modal__option-title">სპეციალიზაციები</p>
-        <p class="modal__option-desc">ჯერ ერთი სპეციალობის ყველა არჩეული სექცია, შემდეგ — მომდევნო სპეციალობა.</p>
+        <p class="modal__option-title">სპეციალიზაციების მიხედვით —</p>
+        <p class="modal__option-desc">ჯერ ვეცნობით ერთი სპეციალობის აღწერის ყველა არჩეულ სექციას,<br>შემდეგ გადავდივართ მომდევნო სპეციალობების განხილვაზე.</p>
       </button>
       <button type="button" class="modal__option" id="optSection">
-        <p class="modal__option-title">აღწერის სექციები</p>
-        <p class="modal__option-desc">ჯერ ერთი სექციის მიხედვით შევადაროთ ყველა არჩეული სპეციალიზაცია, შემდეგ — მომდევნო სექცია.</p>
+        <p class="modal__option-title">აღწერის სექციების მიხედვით —</p>
+        <p class="modal__option-desc">ჯერ ერთი კუთხით ვადარებთ ერთმანეთს ყველა არჩეულ სპეციალობას, შემდეგ გადავდივართ შედარებაზე აღწერების მომდევნო სექციის საფუძველზე.</p>
       </button>
     </div>
   </div>
@@ -1006,7 +1006,7 @@ footer.credit{
     if (ok) {
       el.goHint.textContent = "";
     } else {
-      el.goHint.textContent = "აირჩიეთ სულ ცოტა ერთი სპეციალიზაცია და ერთი სექცია";
+      el.goHint.textContent = "აირჩიეთ სულ ცოტა ერთი სპეციალიზაცია და ერთი აღწერის სექცია";
     }
   }
 
